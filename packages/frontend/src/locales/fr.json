@@ -1,0 +1,18 @@
+{
+  "recipe": {
+    "author": "par",
+    "quantity": "personne | personnes",
+    "time": "minute | minutes",
+    "notes": "Notes",
+    "ingredients": "Ingrédients",
+    "tags": "Tags"
+  },
+  "app": {
+    "explore": "Explorer",
+    "home": "Accueil",
+    "myRecipes": "Mes recettes"
+  },
+  "search": {
+    "label": "Rechercher"
+  }
+}

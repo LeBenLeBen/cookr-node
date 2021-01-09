@@ -1,0 +1,35 @@
+{
+  "name": "@cookr/frontend",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Cookr frontend based on Vue",
+  "license": "MIT",
+  "author": "Benoît Burgener",
+  "scripts": {
+    "postinstall": "node scripts/patch-apollo.js",
+    "dev": "vite",
+    "build": "vite build",
+    "generate:sprite": "node scripts/generate-svg-sprite.js"
+  },
+  "dependencies": {
+    "@apollo/client": "^3.3.6",
+    "@vue/apollo-composable": "^4.0.0-alpha.12",
+    "chusho": "^0.2.0-beta.3",
+    "graphql": "^15.4.0",
+    "graphql-tag": "^2.11.0",
+    "ikonate": "^1.1.1",
+    "tailwindcss": "2.0.2",
+    "vue": "^3.0.5",
+    "vue-i18n": "^9.0.0-rc.1",
+    "vue-router": "^4.0.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.2.1",
+    "@vitejs/plugin-vue": "^1.0.3",
+    "@vue/compiler-sfc": "^3.0.5",
+    "autoprefixer": "^9.8.6",
+    "postcss": "^7.0.35",
+    "vite": "^2.0.0-beta.2",
+    "vite-plugin-components": "^0.6.1"
+  }
+}

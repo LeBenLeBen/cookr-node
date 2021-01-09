@@ -1,0 +1,21 @@
+{
+  "name": "cookr",
+  "private": true,
+  "version": "0.0.0",
+  "description": "A cooking recipes management app",
+  "license": "MIT",
+  "author": "Benoît Burgener",
+  "scripts": {
+    "postinstall": "lerna bootstrap",
+    "validate": "eslint . --ext .js,.vue --ignore-path .gitignore",
+    "format": "npm run validate -- --fix"
+  },
+  "devDependencies": {
+    "eslint": "^7.17.0",
+    "eslint-config-prettier": "^7.1.0",
+    "eslint-plugin-prettier": "^3.3.0",
+    "eslint-plugin-vue": "^7.4.0",
+    "lerna": "^3.20.2",
+    "prettier": "^2.2.1"
+  }
+}

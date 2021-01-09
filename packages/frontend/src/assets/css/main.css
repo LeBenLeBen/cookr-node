@@ -1,0 +1,48 @@
+@tailwind base;
+
+@layer base {
+  h1 {
+    @apply font-display text-5xl leading-none;
+  }
+
+  a {
+    @apply text-primary-500;
+  }
+
+  a:hover,
+  a:focus {
+    @apply text-primary-800;
+  }
+
+  a,
+  button,
+  input {
+    transition: all 0.15s ease-out;
+  }
+}
+
+@tailwind components;
+
+@tailwind utilities;
+
+.container {
+  @apply max-w-5xl;
+  @apply mx-auto;
+  @apply px-4;
+
+  @screen md {
+    @apply px-6;
+  }
+
+  @screen lg {
+    @apply px-8;
+  }
+}
+
+.icon {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
