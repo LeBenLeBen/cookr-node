@@ -13,6 +13,7 @@
     "myRecipes": "Mes recettes"
   },
   "search": {
-    "label": "Rechercher"
+    "label": "Rechercher",
+    "results": "Résultats de la recherche"
   }
 }

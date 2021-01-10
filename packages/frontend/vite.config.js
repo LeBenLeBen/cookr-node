@@ -13,8 +13,6 @@ export default {
   plugins: [
     vue(),
     ViteComponents({
-      dirs: ['src/components'],
-      extensions: ['vue', 'js'],
       libraries: [{ name: 'chusho', entries: ['CIcon'] }],
     }),
   ],
@@ -27,6 +25,7 @@ export default {
     include: [
       '@apollo/client/core',
       'vue-i18n/dist/vue-i18n.runtime.esm-bundler.js',
+      'algoliasearch/lite',
     ],
   },
 };

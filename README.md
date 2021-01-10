@@ -8,6 +8,7 @@ This app is configured to use some third-party services by default:
 
 - Amazon AWS S3: to store file uploads
 - Imgix: to optimize and operate on images (crop, resize, optimizations, …)
+- Algolia: to search recipes
 
 ## Packages
 

@@ -14,17 +14,19 @@
   "dependencies": {
     "@apollo/client": "^3.3.6",
     "@vue/apollo-composable": "^4.0.0-alpha.12",
+    "@vueuse/core": "^4.0.5",
+    "algoliasearch": "^4.8.3",
     "chusho": "^0.2.0-beta.3",
     "graphql": "^15.4.0",
     "graphql-tag": "^2.11.0",
     "ikonate": "^1.1.1",
+    "scroll-into-view-if-needed": "^2.2.26",
     "tailwindcss": "2.0.2",
     "vue": "^3.0.5",
     "vue-i18n": "^9.0.0-rc.1",
     "vue-router": "^4.0.2"
   },
   "devDependencies": {
-    "@tailwindcss/forms": "^0.2.1",
     "@vitejs/plugin-vue": "^1.0.3",
     "@vue/compiler-sfc": "^3.0.5",
     "autoprefixer": "^9.8.6",

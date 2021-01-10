@@ -5,6 +5,11 @@
     @apply font-display text-5xl leading-none;
   }
 
+  *:focus {
+    outline: none !important;
+    @apply ring-2 ring-primary-500;
+  }
+
   a {
     @apply text-primary-500;
   }
@@ -17,7 +22,13 @@
   a,
   button,
   input {
-    transition: all 0.15s ease-out;
+    transition-property: color, background, border, box-shadow;
+    transition-duration: 0.15s;
+    transition-timing-function: ease-out;
+  }
+
+  input[type='search']::-webkit-search-cancel-button {
+    display: none;
   }
 }
 

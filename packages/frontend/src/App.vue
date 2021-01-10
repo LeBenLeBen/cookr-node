@@ -11,21 +11,7 @@
       </div>
 
       <div class="col-start-2 col-span-5 self-center">
-        <label for="search" class="sr-only">{{ $t('search.label') }}</label>
-        <div class="relative text-alt-400 -mx-4">
-          <div
-            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
-          >
-            <CIcon id="search" :scale="1.5" />
-          </div>
-          <input
-            id="search"
-            name="search"
-            class="appearance-none block w-full pl-14 pr-4 py-3 border border-transparent rounded-full bg-transparent placeholder-alt-400 outline-none focus:outline-none focus:bg-white focus:ring-0 focus:border-transparent focus:text-alt-800 sm:text-lg"
-            :placeholder="$t('search.label')"
-            type="search"
-          />
-        </div>
+        <Search />
       </div>
 
       <div class="col-start-0 col-span-1 row-start-2">

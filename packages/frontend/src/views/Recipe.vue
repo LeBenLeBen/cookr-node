@@ -80,19 +80,7 @@
           <h2 class="mb-3 text-alt-600 font-bold text-sm uppercase">
             {{ $t('recipe.tags') }}
           </h2>
-          <ul>
-            <li
-              v-for="(tag, i) in recipe.tags"
-              :key="i"
-              class="inline mr-2 mb-2"
-            >
-              <span
-                class="py-1 px-3 text-sm font-medium bg-alt-200 rounded-full"
-              >
-                {{ tag.title }}
-              </span>
-            </li>
-          </ul>
+          <TagsList :tags="recipe.tags.map((t) => t.title)" />
         </div>
       </aside>
     </div>
@@ -138,7 +126,7 @@ export default {
           }
         }
       `,
-      { slug: props.slug }
+      () => ({ slug: props.slug })
     );
 
     return {
