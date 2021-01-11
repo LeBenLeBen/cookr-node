@@ -24,7 +24,6 @@ export function crop(imageUrl, options) {
   options = Object.assign(
     {
       fit: 'crop',
-      crop: 'entropy',
     },
     options
   );

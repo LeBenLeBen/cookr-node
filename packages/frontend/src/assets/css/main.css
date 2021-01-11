@@ -2,7 +2,20 @@
 
 @layer base {
   h1 {
-    @apply font-display text-5xl leading-none;
+    @apply font-display text-3xl leading-tight;
+
+    @screen sm {
+      @apply text-4xl;
+      @apply leading-none;
+    }
+
+    @screen lg {
+      @apply text-5xl;
+    }
+  }
+
+  * {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   }
 
   *:focus {
@@ -41,12 +54,16 @@
   @apply mx-auto;
   @apply px-4;
 
-  @screen md {
+  @screen sm {
     @apply px-6;
   }
 
-  @screen lg {
+  @screen md {
     @apply px-8;
+  }
+
+  @screen lg {
+    @apply px-10;
   }
 }
 

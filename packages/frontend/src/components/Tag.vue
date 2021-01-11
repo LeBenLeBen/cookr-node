@@ -1,5 +1,7 @@
 <template>
-  <span class="py-1 px-3 text-sm font-medium bg-alt-200 rounded-full">
+  <span
+    class="py-1 px-3 text-xs sm:text-sm font-medium bg-alt-200 rounded-full"
+  >
     {{ label }}
   </span>
 </template>

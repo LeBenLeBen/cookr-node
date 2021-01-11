@@ -13,7 +13,12 @@ export default {
   plugins: [
     vue(),
     ViteComponents({
-      libraries: [{ name: 'chusho', entries: ['CIcon'] }],
+      libraries: [
+        {
+          name: 'chusho',
+          entries: ['CIcon', 'CBtn', 'CToggle', 'CToggleBtn', 'CToggleContent'],
+        },
+      ],
     }),
   ],
   build: {

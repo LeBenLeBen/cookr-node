@@ -1,32 +1,28 @@
 <template>
   <div
-    v-if="open && results.length"
-    class="fixed inset-0 z-30 bg-alt-500 bg-opacity-70"
+    v-if="isOpen && query"
+    class="fixed inset-0 z-30 bg-alt-800 bg-opacity-95"
   ></div>
-  <div
-    v-clickOutside="() => (open = false)"
-    class="relative z-40"
-    role="search"
-  >
+  <div v-clickOutside="close" class="relative z-40" role="search">
     <label for="search" class="sr-only">{{ $t('search.label') }}</label>
     <div
-      class="relative text-alt-400 -mx-4"
+      class="relative text-alt-400 lg:-mx-4"
       role="combobox"
-      :aria-expanded="open ? 'true' : 'false'"
+      :aria-expanded="isOpen ? 'true' : 'false'"
       aria-owns="search-results"
       aria-haspopup="listbox"
     >
       <div
-        class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+        class="absolute inset-y-0 left-0 pl-2 md:pl-3 flex items-center pointer-events-none"
       >
-        <CIcon id="search" :scale="1.5" />
+        <CIcon id="search" :scale="1.25" class="md:w-8 md:h-8" />
       </div>
       <input
         id="search"
         ref="searchInput"
         v-model.trim="query"
         name="search"
-        class="appearance-none block w-full pl-14 pr-4 py-3 placeholder-alt-400 focus:text-alt-800 sm:text-lg rounded-full bg-alt-50 focus:bg-white border border-transparent focus:border-transparent"
+        class="appearance-none block w-full pl-10 md:pl-12 pr-4 py-2 md:py-3 placeholder-alt-400 focus:text-alt-800 md:text-lg rounded-full bg-alt-50 focus:bg-white border border-transparent focus:border-transparent"
         :placeholder="$t('search.label')"
         autocomplete="off"
         type="search"
@@ -35,33 +31,29 @@
             ? `search-result-${indexHighlighted}`
             : ''
         "
-        @focus="() => (open = true)"
-        @blur="() => (open = false)"
+        @focus="open"
+        @blur="handleBlur"
         @keydown="handleKeydown"
       />
       <div
-        v-show="!open"
+        v-show="!isOpen"
         class="hidden lg:block py-1 px-2 absolute right-5 top-1/2 leading-tight transform -translate-y-1/2 rounded border border-alt-200"
       >
         ⌘ K
       </div>
     </div>
 
-    <ul
+    <div
       id="search-results"
-      aria-labelledby="#search-results-title"
-      role="listbox"
-      class="search-results absolute top-full mt-3 w-full overflow-x-hidden overflow-y-auto bg-alt-100 rounded-lg shadow-xl divide-y divide-alt-200"
-      :class="{ hidden: !open || !results.length }"
-      @click="reset"
+      class="search-results absolute top-full mt-3 w-full overflow-x-hidden overflow-y-auto bg-white rounded-lg shadow-xl"
+      :class="{ hidden: !isOpen || !query }"
     >
-      <li
-        role="presentation"
-        class="flex items-center justify-between py-3 px-5"
+      <header
+        class="flex items-center justify-between py-3 px-5 sticky top-0 bg-white border-b-2 border-alt-200"
       >
         <div
           id="search-results-title"
-          class="text-sm uppercase text-alt-600 font-bold"
+          class="text-xs sm:text-sm uppercase text-alt-600 font-bold"
         >
           {{ $t('search.results') }}
         </div>
@@ -74,32 +66,47 @@
             loading="lazy"
           />
         </a>
-      </li>
-      <li
-        v-for="(result, index) in results"
-        :id="`search-result-${index}`"
-        :key="result.id"
+      </header>
+
+      <ul
+        v-if="results.length"
+        aria-labelledby="#search-results-title"
+        role="listbox"
+        class="divide-y divide-alt-200"
+        @click="reset"
       >
-        <router-link
-          :to="{ name: 'recipe', params: { slug: result.slug } }"
-          class="flex items-center py-3 pr-4 pl-5 text-alt-800 hover:text-alt-800 hover:bg-white"
-          :class="{ 'bg-white': index == indexHighlighted }"
+        <li
+          v-for="(result, index) in results"
+          :id="`search-result-${index}`"
+          :key="result.id"
         >
-          <div class="flex-grow">
-            <div class="text-lg font-bold">
-              {{ result.title }}
+          <router-link
+            :to="{ name: 'recipe', params: { slug: result.slug } }"
+            class="flex items-center py-3 pr-4 pl-5 text-alt-800 hover:text-alt-800 hover:bg-alt-100"
+            :class="{ 'bg-alt-100': index == indexHighlighted }"
+          >
+            <div class="flex-grow">
+              <div class="mb-1 text-lg leading-tight font-bold">
+                {{ result.title }}
+              </div>
+              <RecipeAuthor
+                :username="result.author"
+                class="text-sm text-alt-600"
+              />
             </div>
-            <RecipeAuthor
-              :username="result.author"
-              class="text-sm text-alt-600"
-            />
-          </div>
-          <div>
-            <TagsList :tags="result.tags" />
-          </div>
-        </router-link>
-      </li>
-    </ul>
+            <div>
+              <TagsList :tags="result.tags" class="justify-items-end" />
+            </div>
+          </router-link>
+        </li>
+      </ul>
+      <div v-else-if="isLoading" class="py-4 px-5 text-alt-500">
+        {{ $t('common.loading') }}
+      </div>
+      <div v-else class="py-4 px-5 text-alt-500">
+        {{ $t('search.empty') }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -108,10 +115,19 @@ import algoliasearch from 'algoliasearch/lite';
 import { ref, watch } from 'vue';
 import { clickOutside } from 'chusho';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import { useDebounceFn, useEventListener } from '@vueuse/core';
+import { debouncedWatch, useEventListener } from '@vueuse/core';
 
 export default {
   directives: { clickOutside },
+
+  props: {
+    isOpen: {
+      type: Boolean,
+      required: true,
+    },
+  },
+
+  emits: ['update:isOpen'],
 
   setup() {
     const client = algoliasearch(
@@ -120,17 +136,25 @@ export default {
     );
     const index = client.initIndex(import.meta.env.VITE_ALGOLIA_INDEX);
     const searchInput = ref(null);
-    const open = ref(false);
+    const isLoading = ref(false);
     const query = ref(null);
     const results = ref([]);
     const indexHighlighted = ref(null);
 
     watch(
       () => query.value,
-      useDebounceFn(async (query) => {
+      () => {
+        isLoading.value = true;
+      }
+    );
+
+    debouncedWatch(
+      () => query.value,
+      async (query) => {
         if (!query) {
           results.value = [];
           indexHighlighted.value = null;
+          isLoading.value = false;
           return;
         }
 
@@ -138,7 +162,9 @@ export default {
           hitsPerPage: 10,
         });
         results.value = hits;
-      }, 300)
+        isLoading.value = false;
+      },
+      { debounce: 300 }
     );
 
     useEventListener(document, 'keydown', (e) => {
@@ -148,7 +174,7 @@ export default {
     });
 
     return {
-      open,
+      isLoading,
       query,
       results,
       indexHighlighted,
@@ -157,6 +183,20 @@ export default {
   },
 
   methods: {
+    open() {
+      this.$emit('update:isOpen', true);
+    },
+
+    close() {
+      this.$emit('update:isOpen', false);
+    },
+
+    handleBlur() {
+      if (!this.query) {
+        this.close();
+      }
+    },
+
     handleKeydown(e) {
       switch (e.key) {
         case 'ArrowDown': {
@@ -182,11 +222,11 @@ export default {
 
         case 'Enter': {
           e.preventDefault();
-          const { slug } = this.results[this.indexHighlighted];
+          const slug = this.results?.[this.indexHighlighted]?.slug;
           if (slug) {
             this.$router.push({ name: 'recipe', params: { slug } });
+            this.reset();
           }
-          this.reset();
           break;
         }
 
@@ -215,7 +255,7 @@ export default {
       this.query = '';
       this.results = [];
       this.indexHighlighted = null;
-      this.open = false;
+      this.close();
       document.activeElement.blur();
     },
   },
@@ -224,6 +264,10 @@ export default {
 
 <style>
 .search-results {
-  max-height: 60vh;
+  max-height: 250px;
+
+  @screen md {
+    max-height: 440px;
+  }
 }
 </style>

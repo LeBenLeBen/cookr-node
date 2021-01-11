@@ -15,6 +15,8 @@ createSvgSpritesheet({
   iconsCatalogSrc: path.resolve(__dirname, '../node_modules/ikonate/icons'),
   selectedSvgs: [
     'book.svg',
+    'close.svg',
+    'hamburger.svg',
     'home-alt2.svg',
     'people.svg',
     'search.svg',

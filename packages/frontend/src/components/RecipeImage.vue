@@ -1,6 +1,13 @@
 <template>
   <div class="bg-alt-200 overflow-hidden">
-    <img :src="imageUrl" :width="width" :height="height" alt="" />
+    <img
+      :src="imageUrl"
+      :width="width"
+      :height="height"
+      alt=""
+      class="min-w-full min-h-full object-cover"
+      loading="lazy"
+    />
   </div>
 </template>
 
