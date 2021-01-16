@@ -1,7 +1,7 @@
 <template>
   <h1 class="mb-5">{{ username }}</h1>
-  <ul v-if="user && user.recipes" class="space-y-4">
-    <li v-for="recipe in user.recipes" :key="recipe.id">
+  <ul v-if="recipes" class="space-y-4">
+    <li v-for="recipe in recipes" :key="recipe.id">
       <RecipeListItem v-bind="recipe" />
     </li>
   </ul>
@@ -22,22 +22,20 @@ export default {
   setup(props) {
     const { result } = useQuery(
       gql`
-        query getUserByUsername($username: String!) {
-          users(where: { username: $username }) {
-            recipes {
-              title
-              slug
-              time
-              quantity
-              image {
-                hash
-                ext
-              }
+        query getRecipesForUser($username: String!) {
+          recipes(where: { author: { username: $username } }) {
+            title
+            slug
+            time
+            quantity
+            image {
+              hash
+              ext
             }
           }
         }
       `,
-      { username: props.username }
+      () => ({ username: props.username })
     );
 
     return {
@@ -46,8 +44,8 @@ export default {
   },
 
   computed: {
-    user() {
-      return this.result?.users?.[0];
+    recipes() {
+      return this.result?.recipes;
     },
   },
 };

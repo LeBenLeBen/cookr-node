@@ -8,7 +8,7 @@ import ViteComponents from 'vite-plugin-components';
  */
 export default {
   alias: {
-    '/@': path.resolve(__dirname, 'src'),
+    '@': path.resolve(__dirname, 'src'),
   },
   plugins: [
     vue(),
@@ -16,7 +16,15 @@ export default {
       libraries: [
         {
           name: 'chusho',
-          entries: ['CIcon', 'CBtn', 'CToggle', 'CToggleBtn', 'CToggleContent'],
+          entries: [
+            'CAlert',
+            'CBtn',
+            'CIcon',
+            'CCollapse',
+            'CCollapseBtn',
+            'CCollapseContent',
+            'CPicture',
+          ],
         },
       ],
     }),
@@ -29,6 +37,7 @@ export default {
   optimizeDeps: {
     include: [
       '@apollo/client/core',
+      '@apollo/client/link/error',
       'vue-i18n/dist/vue-i18n.runtime.esm-bundler.js',
       'algoliasearch/lite',
     ],

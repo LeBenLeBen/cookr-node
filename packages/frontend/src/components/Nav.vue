@@ -1,5 +1,5 @@
 <template>
-  <nav class="sticky top-8">
+  <nav class="sticky top-8 space-y-8">
     <div v-for="(group, i) in menu" :key="i">
       <div class="mb-3 uppercase font-bold text-sm text-alt-500">
         {{ group.label }}

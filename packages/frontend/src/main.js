@@ -13,6 +13,29 @@ createApp(App)
   .use(i18n)
   .use(Chusho, {
     components: {
+      alert: {
+        class: ({ variant }) => {
+          return [
+            'block py-3 px-4 rounded',
+            {
+              'bg-red-100 text-red-700': variant?.includes('error'),
+            },
+          ];
+        },
+      },
+      btn: {
+        class: ({ variant }) => {
+          return [
+            'inline-block ring-offset-2 ring-offset-alt-100',
+            {
+              'py-3 px-5 text-white font-bold bg-primary-500 rounded-lg': variant?.includes(
+                'primary'
+              ),
+              'block w-full': variant?.includes('block'),
+            },
+          ];
+        },
+      },
       icon: {
         spriteUrl,
         class: 'icon',

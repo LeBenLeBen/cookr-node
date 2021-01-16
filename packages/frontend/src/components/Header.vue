@@ -1,5 +1,5 @@
 <template>
-  <CToggle
+  <CCollapse
     v-model="menuIsOpen"
     class="sticky md:relative top-0 py-3 sm:py-4 mb-4 bg-alt-100"
     :class="{ 'shadow-md md:shadow-none': windowScroll.y.value > 0 }"
@@ -24,11 +24,14 @@
             </router-link>
           </div>
 
-          <div class="flex-grow md:col-start-2 md:col-span-5">
+          <div class="flex-grow flex items-center md:col-start-2 md:col-span-5">
             <Search
               :is-open="searchIsOpen"
               @update:isOpen="(val) => (searchIsOpen = val)"
             />
+            <div class="ml-8 hidden md:block">
+              <CurrentUser />
+            </div>
           </div>
 
           <div
@@ -38,17 +41,17 @@
             }"
             class="md:hidden flex-shrink-0"
           >
-            <CToggleBtn
+            <CCollapseBtn
               class="flex items-center justify-center w-10 h-10 p-1 hover:bg-alt-200 rounded-md"
             >
               <CIcon id="hamburger" :scale="1.5" />
-            </CToggleBtn>
+            </CCollapseBtn>
           </div>
         </div>
       </div>
     </header>
 
-    <CToggleContent
+    <CCollapseContent
       class="md:hidden flex flex-col items-center justify-center p-8 fixed inset-0 z-40 text-center bg-alt-800 bg-opacity-95"
       :transition="{
         enterActiveClass: 'transition ease-out duration-100',
@@ -60,11 +63,15 @@
       }"
       @click="() => (menuIsOpen = false)"
     >
-      <CToggleBtn
-        class="absolute top-3 right-4 flex items-center justify-center w-10 h-10 p-1 text-alt-200 hover:text-white hover:bg-alt-200 rounded-md"
+      <CurrentUser
+        class="absolute top-3 left-4 text-alt-200 hover:text-white"
+      />
+
+      <CCollapseBtn
+        class="absolute top-3 right-4 flex items-center justify-center w-10 h-10 p-1 text-alt-200 hover:text-white hover:bg-alt-900 rounded-md"
       >
         <CIcon id="close" :scale="1.5" />
-      </CToggleBtn>
+      </CCollapseBtn>
 
       <div v-for="(group, i) in menu" :key="i">
         <div class="mb-3 uppercase font-bold text-sm text-alt-500">
@@ -100,8 +107,8 @@
           </li>
         </ul>
       </div>
-    </CToggleContent>
-  </CToggle>
+    </CCollapseContent>
+  </CCollapse>
 </template>
 
 <script>

@@ -30,3 +30,22 @@ export function crop(imageUrl, options) {
 
   return `${imageUrl}${objectToUrlParams(options)}`;
 }
+
+export function hdpiSources(imageUrl, options) {
+  return [
+    {
+      srcset: `${crop(imageUrl, options)}, ${crop(imageUrl, {
+        ...options,
+        dpr: 2,
+      })} 2x`,
+      type: 'image/webp',
+    },
+    {
+      srcset: `${crop(imageUrl, {
+        ...options,
+        format: 'webp',
+      })}, ${crop(imageUrl, { ...options, format: 'webp', dpr: 2 })} 2x`,
+      type: 'image/jpg',
+    },
+  ];
+}

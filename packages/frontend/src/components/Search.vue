@@ -3,10 +3,10 @@
     v-if="isOpen && query"
     class="fixed inset-0 z-30 bg-alt-800 bg-opacity-95"
   ></div>
-  <div v-clickOutside="close" class="relative z-40" role="search">
+  <div v-clickOutside="close" class="relative z-40 w-full" role="search">
     <label for="search" class="sr-only">{{ $t('search.label') }}</label>
     <div
-      class="relative text-alt-400 lg:-mx-4"
+      class="relative max-w-xs text-alt-400"
       role="combobox"
       :aria-expanded="isOpen ? 'true' : 'false'"
       aria-owns="search-results"
@@ -22,7 +22,7 @@
         ref="searchInput"
         v-model.trim="query"
         name="search"
-        class="appearance-none block w-full pl-10 md:pl-12 pr-4 py-2 md:py-3 placeholder-alt-400 focus:text-alt-800 md:text-lg rounded-full bg-alt-50 focus:bg-white border border-transparent focus:border-transparent"
+        class="appearance-none block w-full pl-10 md:pl-12 pr-4 py-2 placeholder-alt-400 focus:text-alt-800 md:text-lg rounded-full bg-transparent focus:bg-white border-2 border-alt-200 focus:border-transparent"
         :placeholder="$t('search.label')"
         autocomplete="off"
         type="search"
@@ -37,7 +37,7 @@
       />
       <div
         v-show="!isOpen"
-        class="hidden lg:block py-1 px-2 absolute right-5 top-1/2 leading-tight transform -translate-y-1/2 rounded border border-alt-200"
+        class="hidden lg:block py-1 px-2 absolute right-5 top-1/2 leading-tight transform -translate-y-1/2 rounded border border-alt-200 pointer-events-none"
       >
         ⌘ K
       </div>
@@ -170,6 +170,7 @@ export default {
     useEventListener(document, 'keydown', (e) => {
       if (e.metaKey && e.key === 'k') {
         searchInput.value?.focus();
+        e.preventDefault();
       }
     });
 

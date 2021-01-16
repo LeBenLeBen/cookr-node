@@ -60,8 +60,17 @@
       "configurable": false
     },
     "recipes": {
-      "via": "author",
-      "collection": "recipe"
+      "collection": "recipe",
+      "via": "author"
+    },
+    "avatar": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images"
+      ],
+      "plugin": "upload",
+      "required": false
     }
   }
 }
