@@ -1,15 +1,13 @@
 <template>
   <h1 class="mb-5">{{ username }}</h1>
-  <ul v-if="recipes" class="space-y-4">
-    <li v-for="recipe in recipes" :key="recipe.id">
-      <RecipeListItem v-bind="recipe" />
-    </li>
-  </ul>
+  <RecipesList :recipes="result?.recipes" :loading="loading" />
 </template>
 
 <script>
 import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
+
+import { recipeCardFragment } from '@/services/fragments';
 
 export default {
   props: {
@@ -20,33 +18,22 @@ export default {
   },
 
   setup(props) {
-    const { result } = useQuery(
+    const { result, loading } = useQuery(
       gql`
         query getRecipesForUser($username: String!) {
           recipes(where: { author: { username: $username } }) {
-            title
-            slug
-            time
-            quantity
-            image {
-              hash
-              ext
-            }
+            ...RecipeCard
           }
         }
+        ${recipeCardFragment}
       `,
       () => ({ username: props.username })
     );
 
     return {
       result,
+      loading,
     };
-  },
-
-  computed: {
-    recipes() {
-      return this.result?.recipes;
-    },
   },
 };
 </script>
