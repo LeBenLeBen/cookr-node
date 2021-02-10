@@ -8,17 +8,15 @@ import {
 } from '@apollo/client/core';
 import { onError } from '@apollo/client/link/error';
 
-const errorLink = onError(({ graphQLErrors, operation, forward }) => {
+const errorLink = onError(({ graphQLErrors }) => {
   if (graphQLErrors) {
     graphQLErrors.map(({ message }) => {
-      if (message === 'Invalid token.') {
+      if (message === 'Invalid token.' || message === 'Forbidden') {
         store.setCurrentUser(null);
         router.replace({ name: 'login' });
       }
     });
   }
-
-  return forward(operation);
 });
 
 const httpLink = createHttpLink({

@@ -1,7 +1,7 @@
 <template>
   <CBtn
     v-if="currentUser"
-    class="flex items-center font-medium"
+    class="flex items-center font-medium rounded-full"
     :title="$t('auth.logout')"
     @click.prevent="confirm"
   >

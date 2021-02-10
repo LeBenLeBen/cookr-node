@@ -48,6 +48,8 @@ import gql from 'graphql-tag';
 import router from '../router';
 import store from '../store';
 
+import { currentUserFragment } from '../services/fragments';
+
 export default {
   setup() {
     const errors = ref(null);
@@ -57,21 +59,15 @@ export default {
         mutation login($input: UsersPermissionsLoginInput!) {
           login(input: $input) {
             user {
-              email
-              username
-              user {
-                avatar {
-                  hash
-                  ext
-                }
-              }
+              ...CurrentUser
             }
           }
         }
+        ${currentUserFragment}
       `,
       () => ({
         variables: {
-          input: input,
+          input,
         },
       })
     );

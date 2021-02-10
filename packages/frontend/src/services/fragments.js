@@ -16,3 +16,17 @@ export const recipeCardFragment = gql`
     }
   }
 `;
+
+export const currentUserFragment = gql`
+  fragment CurrentUser on UsersPermissionsMe {
+    id
+    email
+    username
+    user {
+      avatar {
+        hash
+        ext
+      }
+    }
+  }
+`;
