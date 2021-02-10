@@ -11,8 +11,7 @@ export default {
 <template>
   <div class="p-3 bg-alt-50 rounded-xl">
     <ContentLoader
-      :width="320"
-      :height="320"
+      view-box="0 0 320 320"
       :speed="2"
       primary-color="#F5F2F8"
       secondary-color="#E7DFEC"
@@ -24,8 +23,7 @@ export default {
       <rect x="0" y="295" rx="3" ry="3" width="240" height="25" />
     </ContentLoader>
     <ContentLoader
-      :width="698"
-      :height="120"
+      view-box="0 0 698 120"
       :speed="2"
       primary-color="#F5F2F8"
       secondary-color="#E7DFEC"

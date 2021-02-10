@@ -29,17 +29,17 @@ export default {
       ],
     }),
   ],
-  build: {
-    rollupOptions: {
-      external: ['react'],
-    },
-  },
   optimizeDeps: {
+    exclude: ['graphql'],
     include: [
       '@apollo/client/core',
+      '@apollo/client/link/core/from',
       '@apollo/client/link/error',
       'vue-i18n/dist/vue-i18n.runtime.esm-bundler.js',
       'algoliasearch/lite',
+      'scroll-into-view-if-needed',
+      'vue-content-loader',
+      '@vueform/multiselect',
     ],
   },
 };

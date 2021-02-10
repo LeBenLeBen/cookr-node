@@ -1,12 +1,9 @@
 import router from '@/router';
 import store from '@/store';
-import {
-  from,
-  ApolloClient,
-  createHttpLink,
-  InMemoryCache,
-} from '@apollo/client/core';
+import { ApolloClient, InMemoryCache } from '@apollo/client/core';
+import { from } from '@apollo/client/link/core/from';
 import { onError } from '@apollo/client/link/error';
+import { createUploadLink } from 'apollo-upload-client';
 
 const errorLink = onError(({ graphQLErrors }) => {
   if (graphQLErrors) {
@@ -19,7 +16,7 @@ const errorLink = onError(({ graphQLErrors }) => {
   }
 });
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
   uri: `${import.meta.env.VITE_API_ORIGIN}/graphql`,
   credentials: 'include',
 });
