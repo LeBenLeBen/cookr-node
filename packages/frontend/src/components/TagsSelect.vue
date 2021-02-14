@@ -1,0 +1,181 @@
+<template>
+  <Multiselect
+    :model-value="modelValue"
+    :options="tags"
+    mode="tags"
+    searchable
+    @change="(val) => $emit('update:modelValue', val)"
+  />
+</template>
+
+<script>
+import Multiselect from '@vueform/multiselect';
+import gql from 'graphql-tag';
+import { useQuery } from '@vue/apollo-composable';
+import { computed } from 'vue';
+
+export default {
+  components: {
+    Multiselect,
+  },
+
+  props: {
+    modelValue: {
+      type: Array,
+      default: () => [],
+    },
+  },
+
+  emits: ['update:modelValue'],
+
+  setup() {
+    const { result } = useQuery(
+      gql`
+        query allTags {
+          tags {
+            id
+            title
+          }
+        }
+      `
+    );
+
+    return {
+      tags: computed(() => {
+        return (
+          result?.value?.tags?.map((tag) => ({
+            value: tag.id,
+            label: tag.title,
+          })) ?? []
+        );
+      }),
+    };
+  },
+};
+</script>
+
+<style lang="postcss">
+.multiselect {
+  position: relative;
+}
+
+.multiselect.is-searchable {
+  cursor: auto;
+}
+
+.multiselect-input {
+  @apply flex items-center w-full px-3 relative border border-alt-300 bg-white rounded-lg cursor-pointer;
+  min-height: 50px;
+}
+
+.multiselect-input::before {
+  content: '';
+
+  position: absolute;
+  right: 12px;
+  top: 50%;
+
+  border-color: theme('colors.alt.500') transparent transparent;
+  border-style: solid;
+  border-width: 5px 5px 0;
+
+  transform: translateY(-50%);
+  transition: transform 0.3s;
+}
+
+.is-open .multiselect-input {
+  @apply ring-2 ring-primary-400 ring-offset-2 ring-offset-alt-100;
+}
+
+.is-open .multiselect-input::before {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.is-tags .multiselect-search {
+  flex-grow: 1;
+}
+
+.is-tags .multiselect-search input {
+  @apply mb-2 ml-2 ring-0;
+  flex-grow: 1;
+  min-width: 100%;
+}
+
+.multiselect-tags {
+  @apply flex flex-wrap items-center w-full h-full justify-start mt-2 pr-8;
+}
+
+.multiselect-tag {
+  @apply flex items-center pl-3 mr-2 mb-2 overflow-hidden text-xs sm:text-sm font-medium whitespace-nowrap bg-alt-200 rounded-full;
+}
+
+.multiselect-tag i {
+  @apply ml-2;
+  cursor: pointer;
+}
+
+.multiselect-tag i::before {
+  content: '✗';
+  @apply flex items-center py-1 pr-3 pl-1 text-alt-500 not-italic;
+}
+
+.multiselect-tag i:hover::before {
+  @apply text-alt-800;
+}
+
+.multiselect-options {
+  @apply mt-2 bg-white border border-alt-300 rounded-lg shadow-lg;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 100;
+
+  max-height: 160px;
+  overflow: scroll;
+}
+
+.multiselect-option {
+  @apply flex py-2 px-4 text-alt-600;
+}
+
+.multiselect-option.is-pointed {
+  @apply text-alt-800 bg-alt-100;
+}
+
+.is-tags .multiselect-option.is-selected {
+  color: #999;
+  background: transparent;
+}
+
+.multiselect-no-options,
+.multiselect-no-results {
+  display: flex;
+  padding: 10px 12px;
+  color: #777;
+}
+
+.multiselect-enter-active {
+  transition: all 0.15s ease;
+}
+
+.multiselect-leave-active {
+  transition: all 0s;
+}
+
+.multiselect-enter,
+.multiselect-leave-active {
+  opacity: 0;
+}
+
+.multiselect-loading-enter-active,
+.multiselect-loading-leave-active {
+  transition: opacity 0.4s ease-in-out;
+  opacity: 1;
+}
+
+.multiselect-loading-enter,
+.multiselect-loading-leave-active {
+  opacity: 0;
+}
+</style>

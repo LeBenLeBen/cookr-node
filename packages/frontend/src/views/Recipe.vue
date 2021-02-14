@@ -139,8 +139,8 @@ export default {
     },
 
     steps() {
-      return this.recipe?.steps.length
-        ? this.recipe?.steps.split(/\r?\n/).filter((s) => !!s.trim())
+      return this.recipe?.steps?.length
+        ? this.recipe.steps.split(/\r?\n/).filter((s) => !!s.trim())
         : [];
     },
   },

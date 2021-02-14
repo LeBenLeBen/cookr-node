@@ -31,6 +31,14 @@ const router = createRouter({
       },
     },
     {
+      path: '/recipes/new',
+      name: 'new-recipe',
+      component: () => import('./views/RecipeForm.vue'),
+      meta: {
+        layout: 'AppLayout',
+      },
+    },
+    {
       path: '/recipes/:slug',
       name: 'recipe',
       component: () => import('./views/Recipe.vue'),

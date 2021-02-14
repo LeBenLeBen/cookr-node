@@ -14,7 +14,7 @@
 
   <form class="space-y-6" @submit.prevent="login">
     <FormGroup required>
-      <Label for="identifier">{{ $t('auth.email') }}</Label>
+      <Label for="identifier" class="mb-2">{{ $t('auth.email') }}</Label>
       <Input
         id="identifier"
         v-model="input.identifier"
@@ -25,7 +25,7 @@
       />
     </FormGroup>
     <FormGroup required>
-      <Label for="password">{{ $t('auth.password') }}</Label>
+      <Label for="password" class="mb-2">{{ $t('auth.password') }}</Label>
       <Input
         id="password"
         v-model="input.password"

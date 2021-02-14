@@ -1,11 +1,23 @@
 {
   "recipe": {
+    "title": "Titre",
     "author": "par",
     "quantity": "personne | personnes",
     "time": "minute | minutes",
     "notes": "Notes",
     "ingredients": "Ingrédients",
-    "tags": "Tags"
+    "amount": "Quantité",
+    "label": "Libellé",
+    "tags": "Tags",
+    "steps": "Étapes",
+    "new": {
+      "title": "Nouvelle recette",
+      "addIngredient": "Ajouter un ingrédient",
+      "time": "Temps",
+      "quantity": "Quantité",
+      "image": "Image",
+      "submit": "Créer la recette"
+    }
   },
   "app": {
     "explore": "Explorer",

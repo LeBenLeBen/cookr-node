@@ -1,5 +1,16 @@
 <template>
-  <h1 class="mb-5">{{ username }}</h1>
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="mr-4">{{ username }}</h1>
+
+    <CBtn
+      variant="primary"
+      :to="{ name: 'new-recipe' }"
+      class="inline-flex items-center"
+    >
+      <CIcon id="plus" class="-m-1 text-primary-200" />
+      <div class="hidden sm:block ml-3">{{ $t('recipe.new.title') }}</div>
+    </CBtn>
+  </div>
   <RecipesList :recipes="result?.recipes" :loading="loading" />
 </template>
 

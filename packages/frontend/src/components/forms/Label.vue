@@ -1,5 +1,5 @@
 <template>
-  <label class="block mb-2 font-medium">
+  <label class="block font-medium">
     <slot />
     <abbr
       v-if="attrs.required"

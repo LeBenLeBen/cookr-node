@@ -22,6 +22,7 @@ createSvgSpritesheet({
     'search.svg',
     'timer.svg',
     'person.svg',
+    'plus.svg',
   ],
   save: true,
 });

@@ -6,7 +6,6 @@ import chushoConfig from '../chusho.config.js';
 import router from './router';
 import i18n from './i18n';
 import apolloClient from './services/apolloClient.js';
-import './rules.js';
 import App from './App.vue';
 
 import './assets/css/main.css';

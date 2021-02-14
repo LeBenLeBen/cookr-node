@@ -1,5 +1,5 @@
 <template>
-  <input
+  <textarea
     :value="modelValue"
     class="block w-full py-3 px-5 border border-alt-300 bg-white rounded-lg shadow-inner ring-offset-2 ring-offset-alt-100"
     v-bind="attrs"
@@ -13,7 +13,7 @@ import { inject } from 'vue';
 export default {
   props: {
     modelValue: {
-      type: [String, Number],
+      type: String,
       default: '',
     },
     required: {
