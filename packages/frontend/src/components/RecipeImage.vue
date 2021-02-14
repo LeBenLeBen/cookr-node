@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-alt-200 overflow-hidden">
-    <img
-      :src="imageUrl"
+  <div class="overflow-hidden">
+    <CPicture
+      v-bind="picture"
       :width="width"
       :height="height"
       alt=""
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { crop, imageUrl } from '../helpers/images.js';
+import { crop, hdpiSources, imageUrl } from '../helpers/images.js';
 import recipePlaceholder from '../assets/images/recipe-placeholder.svg';
 
 export default {
@@ -32,15 +32,20 @@ export default {
   },
 
   computed: {
-    imageUrl() {
+    picture() {
       const url = imageUrl(this.image);
-
+      const cropOptions = {
+        w: this.width,
+        h: this.height,
+      };
       return url
-        ? crop(url, {
-            w: this.width,
-            h: this.height,
-          })
-        : recipePlaceholder;
+        ? {
+            src: crop(url, cropOptions),
+            sources: hdpiSources(url, cropOptions),
+          }
+        : {
+            src: recipePlaceholder,
+          };
     },
   },
 };

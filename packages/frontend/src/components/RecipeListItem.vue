@@ -7,7 +7,7 @@
       :image="image"
       width="180"
       height="120"
-      class="w-full sm:w-auto flex-shrink-0 rounded-lg"
+      class="w-full sm:w-auto flex-shrink-0 rounded-lg bg-alt-100"
     />
 
     <div class="flex flex-col mt-4 sm:mt-0 md:mt-2 mx-1 sm:ml-5 sm:mr-0">
