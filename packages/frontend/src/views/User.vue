@@ -32,7 +32,10 @@ export default {
     const { result, loading } = useQuery(
       gql`
         query getRecipesForUser($username: String!) {
-          recipes(where: { author: { username: $username } }) {
+          recipes(
+            where: { author: { username: $username } }
+            sort: "title:asc"
+          ) {
             ...RecipeCard
           }
         }
