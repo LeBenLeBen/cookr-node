@@ -1,4 +1,10 @@
-@tailwind base;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import './components/container.css';
+@import './components/icon.css';
+@import './components/multiselect.css';
 
 @layer base {
   h1 {
@@ -52,39 +58,4 @@
   abbr[title] {
     text-decoration: none;
   }
-}
-
-@tailwind components;
-
-@tailwind utilities;
-
-.container {
-  @apply w-full;
-  @apply max-w-5xl;
-  @apply mx-auto;
-  @apply px-4;
-
-  @screen sm {
-    @apply px-6;
-  }
-
-  @screen md {
-    @apply px-8;
-  }
-
-  @screen lg {
-    @apply px-10;
-  }
-}
-
-.container-xs {
-  @apply max-w-sm;
-}
-
-.icon {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2px;
-  stroke-linecap: round;
-  stroke-linejoin: round;
 }

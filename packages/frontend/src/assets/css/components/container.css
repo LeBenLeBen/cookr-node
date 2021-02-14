@@ -1,0 +1,22 @@
+.container {
+  @apply w-full;
+  @apply max-w-5xl;
+  @apply mx-auto;
+  @apply px-4;
+
+  @screen sm {
+    @apply px-6;
+  }
+
+  @screen md {
+    @apply px-8;
+  }
+
+  @screen lg {
+    @apply px-10;
+  }
+}
+
+.container-xs {
+  @apply max-w-sm;
+}
