@@ -8,8 +8,10 @@ import WindiCSS from 'vite-plugin-windicss';
  * @type {import('vite').UserConfig}
  */
 export default {
-  alias: {
-    '@': path.resolve(__dirname, 'src'),
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+    },
   },
   plugins: [
     vue(),
