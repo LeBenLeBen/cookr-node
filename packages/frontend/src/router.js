@@ -48,6 +48,15 @@ const router = createRouter({
       },
     },
     {
+      path: '/tags/:slug',
+      name: 'tag',
+      component: () => import('./views/Tag.vue'),
+      props: true,
+      meta: {
+        layout: 'AppLayout',
+      },
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('./views/Login.vue'),

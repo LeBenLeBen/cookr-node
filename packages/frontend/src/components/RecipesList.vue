@@ -2,7 +2,7 @@
   <ul v-if="recipes.length || loading" class="space-y-4">
     <template v-if="recipes.length">
       <li v-for="recipe in recipes" :key="recipe.id">
-        <RecipeListItem v-bind="recipe" :username="recipe.author.username" />
+        <RecipeListItem v-bind="recipe" :username="recipe.author?.username" />
       </li>
     </template>
     <template v-if="loading">
@@ -11,6 +11,9 @@
       </li>
     </template>
   </ul>
+  <div v-else class="text-alt-500">
+    {{ $t('recipes.empty') }}
+  </div>
 </template>
 
 <script>

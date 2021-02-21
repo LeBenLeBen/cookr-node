@@ -20,7 +20,7 @@
         :image="recipe.image"
         width="792"
         height="528"
-        class="md:rounded-xl"
+        class="md:rounded-xl bg-alt-200"
       />
     </div>
 
@@ -79,7 +79,7 @@
           <h2 class="mb-3 text-alt-600 font-bold text-sm uppercase">
             {{ $t('recipe.tags') }}
           </h2>
-          <TagsList :tags="recipe.tags.map((t) => t.title)" />
+          <TagsList :tags="recipe.tags" />
         </div>
       </div>
     </div>
@@ -117,6 +117,7 @@ export default {
             }
             tags {
               title
+              slug
             }
             image {
               hash

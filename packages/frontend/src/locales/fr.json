@@ -19,9 +19,12 @@
       "submit": "Créer la recette"
     }
   },
+  "recipes": {
+    "empty": "Aucune recette à afficher."
+  },
   "home": {
     "title": "Accueil",
-    "recentlyAdded": "Dernières nouveautés"
+    "recentlyAdded": "Dernières recettes"
   },
   "app": {
     "explore": "Explorer",

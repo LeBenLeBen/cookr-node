@@ -5,6 +5,11 @@
     {{ $t('home.recentlyAdded') }}
   </h2>
   <RecipesCarousel :recipes="result?.recipes" :loading="loading" />
+
+  <template v-if="result?.tags.length">
+    <hr class="my-8" />
+    <TagsList :tags="result?.tags" />
+  </template>
 </template>
 
 <script>
@@ -16,9 +21,13 @@ import { recipeCardFragment } from '@/services/fragments';
 export default {
   setup() {
     const { result, loading } = useQuery(gql`
-      query getMostRecentRecipes {
+      query getHome {
         recipes(limit: 5, sort: "created_at:asc") {
           ...RecipeCard
+        }
+        tags(sort: "title") {
+          title
+          slug
         }
       }
       ${recipeCardFragment}
