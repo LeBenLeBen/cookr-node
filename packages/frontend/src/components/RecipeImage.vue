@@ -5,7 +5,7 @@
       :width="width"
       :height="height"
       alt=""
-      class="min-w-full min-h-full object-cover"
+      class="min-w-full min-h-full object-cover bg-alt-200"
       loading="lazy"
     />
   </div>
