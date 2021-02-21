@@ -3,6 +3,7 @@
     <h1 class="h1 mr-4">{{ username }}</h1>
 
     <CBtn
+      v-if="isCurrentUser"
       variant="primary"
       :to="{ name: 'new-recipe' }"
       class="inline-flex items-center"
@@ -15,9 +16,11 @@
 </template>
 
 <script>
+import { computed } from 'vue';
 import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 
+import store from '@/store';
 import { recipeCardFragment } from '@/services/fragments';
 
 export default {
@@ -47,6 +50,9 @@ export default {
     return {
       result,
       loading,
+      isCurrentUser: computed(
+        () => props.username === store.state.currentUser.username
+      ),
     };
   },
 };
