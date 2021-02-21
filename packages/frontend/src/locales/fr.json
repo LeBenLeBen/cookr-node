@@ -19,6 +19,10 @@
       "submit": "Créer la recette"
     }
   },
+  "home": {
+    "title": "Accueil",
+    "recentlyAdded": "Dernières nouveautés"
+  },
   "app": {
     "explore": "Explorer",
     "home": "Accueil",
