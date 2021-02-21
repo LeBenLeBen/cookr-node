@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center justify-between mb-6">
-    <h1 class="mr-4">{{ username }}</h1>
+    <h1 class="h1 mr-4">{{ username }}</h1>
 
     <CBtn
       variant="primary"

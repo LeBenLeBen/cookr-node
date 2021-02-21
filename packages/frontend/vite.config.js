@@ -2,6 +2,7 @@ const path = require('path');
 
 import vue from '@vitejs/plugin-vue';
 import ViteComponents from 'vite-plugin-components';
+import WindiCSS from 'vite-plugin-windicss';
 
 /**
  * @type {import('vite').UserConfig}
@@ -27,6 +28,14 @@ export default {
           ],
         },
       ],
+    }),
+    WindiCSS({
+      preflight: {
+        enableAll: true,
+      },
+      scan: {
+        include: ['./chusho.config.js'],
+      },
     }),
   ],
   optimizeDeps: {

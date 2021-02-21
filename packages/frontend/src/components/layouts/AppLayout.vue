@@ -7,7 +7,7 @@
         <Nav :menu="menu" />
       </div>
 
-      <main class="min-w-full md:col-start-2 md:col-span-5">
+      <main class="min-w-full md:col-start-2 md:col-span-3">
         <slot />
       </main>
     </div>

@@ -15,7 +15,7 @@ export default {
     btn: {
       class: ({ variant }) => {
         return [
-          'inline-block ring-offset-2 ring-offset-alt-100',
+          'inline-flex items-center justify-center ring-offset-2 ring-offset-alt-100',
           {
             'py-3 px-4 sm:px-5 shadow':
               variant?.includes('default') || variant?.includes('primary'),

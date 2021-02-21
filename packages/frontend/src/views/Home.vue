@@ -1,9 +1,7 @@
 <template>
-  <h1 class="sr-only">{{ $t('home.title') }}</h1>
+  <h1 class="h1 sr-only">{{ $t('home.title') }}</h1>
 
-  <h2
-    class="mb-4 font-display text-2xl font-bold md:text-3xl text-alt-700 leading-tight"
-  >
+  <h2 class="h2 mb-4">
     {{ $t('home.recentlyAdded') }}
   </h2>
   <RecipesCarousel :recipes="result?.recipes" :loading="loading" />

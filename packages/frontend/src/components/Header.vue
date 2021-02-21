@@ -24,7 +24,7 @@
             </router-link>
           </div>
 
-          <div class="flex-grow flex items-center md:col-start-2 md:col-span-5">
+          <div class="flex-grow flex items-center md:col-start-2 md:col-span-3">
             <Search
               :is-open="searchIsOpen"
               @update:isOpen="(val) => (searchIsOpen = val)"

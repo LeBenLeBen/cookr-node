@@ -1,7 +1,7 @@
 <template>
   <template v-if="recipe">
     <header class="mb-6 md:mb-8">
-      <h1 class="mb-1 sm:mb-2 md:mb-3">{{ recipe.title }}</h1>
+      <h1 class="h1 mb-1 sm:mb-2 md:mb-3">{{ recipe.title }}</h1>
       <ul class="flex flex-wrap items-center text-alt-600">
         <li class="w-full mb-2 sm:w-auto sm:mb-0 mr-6">
           <RecipeAuthor :username="recipe.author.username" />

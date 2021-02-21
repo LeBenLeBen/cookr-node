@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="mb-6 md:mb-8">{{ $t('recipe.new.title') }}</h1>
+    <h1 class="h1 mb-6 md:mb-8">{{ $t('recipe.new.title') }}</h1>
 
     <Form
       ref="form"
@@ -60,11 +60,7 @@
             </li>
           </ul>
 
-          <CBtn
-            variant="default"
-            class="mt-4 flex items-center"
-            @click="addItem"
-          >
+          <CBtn variant="default" class="mt-4" @click="addItem">
             <CIcon id="plus" class="-my-1 -ml-1 mr-2 text-alt-600" />
             {{ $t('recipe.new.addIngredient') }}
           </CBtn>

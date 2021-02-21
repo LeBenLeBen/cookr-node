@@ -8,6 +8,7 @@ import i18n from './i18n';
 import apolloClient from './services/apolloClient.js';
 import App from './App.vue';
 
+import 'windi.css';
 import './assets/css/main.css';
 
 createApp(App)

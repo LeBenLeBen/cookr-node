@@ -11,7 +11,7 @@
     />
 
     <div class="flex flex-col mt-4 sm:mt-0 md:mt-2 mx-1 sm:ml-5 sm:mr-0">
-      <h2 class="mb-1 font-display text-2xl text-alt-700 leading-tight">
+      <h2 class="h2 mb-1">
         {{ title }}
       </h2>
 
