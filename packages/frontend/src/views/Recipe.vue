@@ -1,16 +1,30 @@
 <template>
   <template v-if="recipe">
-    <header class="mb-6 md:mb-8">
-      <h1 class="h1 mb-1 sm:mb-2 md:mb-3">{{ recipe.title }}</h1>
-      <ul class="flex flex-wrap items-center text-alt-600">
-        <li class="w-full mb-2 sm:w-auto sm:mb-0 mr-6">
-          <RecipeAuthor :username="recipe.author.username" />
-        </li>
-        <li v-if="recipe.time" class="inline-flex items-center mr-6">
-          <RecipeTime :time="recipe.time" />
-        </li>
-        <li v-if="recipe.quantity" class="inline-flex items-center mr-6">
-          <RecipeQuantity :quantity="recipe.quantity" />
+    <header class="flex space-x-2 mb-6 md:mb-8">
+      <div class="flex-grow">
+        <h1 class="h1 mb-1 sm:mb-2 md:mb-3">{{ recipe.title }}</h1>
+        <ul class="flex flex-wrap items-center text-alt-600">
+          <li class="w-full mb-2 sm:w-auto sm:mb-0 mr-6">
+            <RecipeAuthor :username="recipe.author.username" />
+          </li>
+          <li v-if="recipe.time" class="inline-flex items-center mr-6">
+            <RecipeTime :time="recipe.time" />
+          </li>
+          <li v-if="recipe.quantity" class="inline-flex items-center mr-6">
+            <RecipeQuantity :quantity="recipe.quantity" />
+          </li>
+        </ul>
+      </div>
+      <ul class="flex flex-col justify-end items-end space-y-2">
+        <li>
+          <CBtn
+            variant="link"
+            class="text-sm font-bold align-middle"
+            @click="confirmToDelete"
+          >
+            <span class="hidden md:inline">{{ $t('common.delete') }}</span>
+            <CIcon id="bin" class="md:ml-2 text-alt-500" />
+          </CBtn>
         </li>
       </ul>
     </header>
@@ -87,8 +101,10 @@
 </template>
 
 <script>
-import { useQuery } from '@vue/apollo-composable';
+import { useQuery, useMutation, useResult } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
+import router from '@/router';
+import store from '@/store';
 
 export default {
   props: {
@@ -103,6 +119,7 @@ export default {
       gql`
         query getRecipeBySlug($slug: String!) {
           recipes(where: { slug: $slug }) {
+            id
             title
             author {
               username
@@ -126,23 +143,62 @@ export default {
           }
         }
       `,
-      () => ({ slug: props.slug })
+      () => ({ slug: props.slug }),
+      {
+        fetchPolicy: 'network-only',
+      }
     );
 
+    const recipe = useResult(result, null, (data) => data.recipes?.[0]);
+
+    const { mutate: deleteRecipe, onDone: onDeleteDone } = useMutation(
+      gql`
+        mutation deleteRecipe($id: ID!) {
+          deleteRecipe(input: { where: { id: $id } }) {
+            recipe {
+              id
+            }
+          }
+        }
+      `,
+      () => ({
+        update: (cache, { data: { deleteRecipe } }) => {
+          cache.evict({ id: cache.identify(deleteRecipe.recipe) });
+          cache.gc();
+        },
+      })
+    );
+
+    onDeleteDone(() => {
+      router.replace({
+        name: 'user',
+        params: { username: store.state.currentUser.username },
+      });
+    });
+
     return {
-      result,
+      recipe,
+      deleteRecipe,
     };
   },
 
   computed: {
-    recipe() {
-      return this.result?.recipes?.[0];
-    },
-
     steps() {
       return this.recipe?.steps?.length
         ? this.recipe.steps.split(/\r?\n/).filter((s) => !!s.trim())
         : [];
+    },
+  },
+
+  methods: {
+    confirmToDelete() {
+      if (
+        confirm(
+          'Êtes-vous sûr·e de vouloir supprimer cette recette? Cette action est irréversible.'
+        )
+      ) {
+        this.deleteRecipe({ id: this.recipe.id });
+      }
     },
   },
 };

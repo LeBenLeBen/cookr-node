@@ -27,6 +27,9 @@ export default {
             'text-white hover:text-white focus:text-white font-bold leading-tight bg-primary-500 hover:bg-primary-600 rounded-lg shadow': variant?.includes(
               'primary'
             ),
+            'text-alt-600 hover:text-alt-800 rounded': variant?.includes(
+              'link'
+            ),
             'block w-full': variant?.includes('block'),
           },
         ];

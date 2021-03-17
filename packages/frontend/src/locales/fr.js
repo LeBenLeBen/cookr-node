@@ -54,6 +54,7 @@ export default {
   common: {
     loading: 'Chargement…',
     loadMore: 'Afficher plus',
+    delete: 'Supprimer',
   },
   forms: {
     rules: {

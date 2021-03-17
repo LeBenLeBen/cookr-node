@@ -27,6 +27,8 @@ createSvgSpritesheet({
     'chevron-up.svg',
     'restaurant.svg',
     'controls.svg',
+    'bin.svg',
+    'edit.svg',
   ],
   save: true,
 });
