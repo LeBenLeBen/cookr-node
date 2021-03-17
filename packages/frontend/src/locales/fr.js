@@ -57,7 +57,9 @@ export default {
   },
   forms: {
     rules: {
-      required: 'Champ requis',
+      required: 'Ce champ est requis',
+      integer: 'Doit être un nombre entier',
+      minValue: 'La valeur minimale est {value}',
     },
   },
   auth: {

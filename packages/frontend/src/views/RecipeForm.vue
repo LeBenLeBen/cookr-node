@@ -91,7 +91,7 @@
                 v-bind="field"
                 min="0"
                 step="5"
-                type="number"
+                type="text"
                 inputmode="numeric"
               />
             </Field>
@@ -116,7 +116,7 @@
                 id="quantity"
                 v-bind="field"
                 min="1"
-                type="number"
+                type="text"
                 inputmode="numeric"
               />
             </Field>
@@ -178,7 +178,6 @@ import deburr from 'lodash/deburr';
 import kebabCase from 'lodash/kebabCase';
 import omitBy from 'lodash/omitBy';
 import isNil from 'lodash/isNil';
-import { object, mixed } from 'yup';
 
 import router from '@/router';
 import store from '@/store';
@@ -190,9 +189,11 @@ export default {
   },
 
   setup() {
-    const schema = object({
-      title: mixed().required(),
-    });
+    const schema = {
+      title: 'required',
+      time: 'integer|min_value:1',
+      quantity: 'integer|min_value:1',
+    };
 
     const image = ref(null);
     const input = reactive({

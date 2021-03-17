@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.3.11",
+    "@vee-validate/rules": "^4.2.2",
     "@vue/apollo-composable": "^4.0.0-alpha.12",
     "@vueform/multiselect": "^1.3.2",
     "@vueuse/core": "^4.3.1",
@@ -24,12 +25,11 @@
     "ikonate": "^1.1.1",
     "lodash": "^4.17.21",
     "scroll-into-view-if-needed": "^2.2.27",
-    "vee-validate": "^4.1.14",
+    "vee-validate": "^4.2.2",
     "vue": "^3.0.5",
     "vue-content-loader": "^2.0.0",
     "vue-i18n": "^9.0.0-rc.5",
-    "vue-router": "^4.0.2",
-    "yup": "^0.32.9"
+    "vue-router": "^4.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.1.5",
