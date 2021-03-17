@@ -3,17 +3,11 @@
   @apply max-w-5xl;
   @apply mx-auto;
   @apply px-4;
+}
 
-  @screen sm {
+@screen sm {
+  .container {
     @apply px-6;
-  }
-
-  @screen md {
-    @apply px-8;
-  }
-
-  @screen lg {
-    @apply px-10;
   }
 }
 

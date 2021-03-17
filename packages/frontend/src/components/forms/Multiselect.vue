@@ -1,3 +1,26 @@
+<template>
+  <div class="relative">
+    <RawMultiselect v-bind="$attrs" />
+    <CIcon
+      id="chevron-down"
+      class="absolute top-1/2 right-3 -mt-3 text-alt-500"
+    />
+  </div>
+</template>
+
+<script>
+import RawMultiselect from '@vueform/multiselect';
+
+export default {
+  name: 'Multiselect',
+
+  components: {
+    RawMultiselect,
+  },
+};
+</script>
+
+<style lang="postcss">
 .multiselect {
   position: relative;
 }
@@ -7,31 +30,12 @@
 }
 
 .multiselect-input {
-  @apply flex items-center w-full px-3 relative border border-alt-300 bg-white rounded-lg cursor-pointer;
+  @apply flex items-center w-full px-3 relative border border-alt-300 bg-white shadow-inner rounded-lg cursor-pointer;
   min-height: 50px;
-}
-
-.multiselect-input::before {
-  content: '';
-
-  position: absolute;
-  right: 12px;
-  top: 50%;
-
-  border-color: theme('colors.alt.500') transparent transparent;
-  border-style: solid;
-  border-width: 5px 5px 0;
-
-  transform: translateY(-50%);
-  transition: transform 0.3s;
 }
 
 .is-open .multiselect-input {
   @apply ring-2 ring-primary-400 ring-offset-2 ring-offset-alt-100;
-}
-
-.is-open .multiselect-input::before {
-  transform: translateY(-50%) rotate(180deg);
 }
 
 .is-tags .multiselect-search {
@@ -121,3 +125,4 @@
 .multiselect-loading-leave-active {
   opacity: 0;
 }
+</style>

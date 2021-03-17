@@ -30,6 +30,18 @@ export default {
               to: { name: 'home' },
             },
             {
+              label: this.$t('app.browse'),
+              icon: 'restaurant',
+              to: {
+                name: 'recipes',
+              },
+            },
+          ],
+        },
+        {
+          label: this.$t('app.mySpace'),
+          items: [
+            {
               label: this.$t('app.myRecipes'),
               icon: 'book',
               to: {

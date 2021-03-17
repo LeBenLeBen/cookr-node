@@ -23,6 +23,10 @@ createSvgSpritesheet({
     'timer.svg',
     'person.svg',
     'plus.svg',
+    'chevron-down.svg',
+    'chevron-up.svg',
+    'restaurant.svg',
+    'controls.svg',
   ],
   save: true,
 });

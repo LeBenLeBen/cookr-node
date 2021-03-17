@@ -1,6 +1,6 @@
 <template>
   <ul>
-    <li v-for="tag in tags" :key="tag.slug" class="inline-flex mr-2 my-1">
+    <li v-for="(tag, i) in tags" :key="i" class="inline-flex mr-2 my-1">
       <Tag v-bind="tag" />
     </li>
   </ul>

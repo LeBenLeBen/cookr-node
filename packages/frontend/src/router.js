@@ -48,6 +48,14 @@ const router = createRouter({
       },
     },
     {
+      path: '/recipes',
+      name: 'recipes',
+      component: () => import('./views/Recipes.vue'),
+      meta: {
+        layout: 'AppLayout',
+      },
+    },
+    {
       path: '/tags/:slug',
       name: 'tag',
       component: () => import('./views/Tag.vue'),

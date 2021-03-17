@@ -95,7 +95,14 @@
               />
             </div>
             <div>
-              <TagsList :tags="result.tags" class="justify-items-end" />
+              <TagsList
+                :tags="
+                  result.tags.map((t) => ({
+                    title: t,
+                  }))
+                "
+                class="justify-items-end"
+              />
             </div>
           </router-link>
         </li>
@@ -263,7 +270,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="postcss">
 .search-results {
   max-height: 250px;
 

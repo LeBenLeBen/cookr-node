@@ -9,16 +9,11 @@
 </template>
 
 <script>
-import Multiselect from '@vueform/multiselect';
 import gql from 'graphql-tag';
 import { useQuery } from '@vue/apollo-composable';
 import { computed } from 'vue';
 
 export default {
-  components: {
-    Multiselect,
-  },
-
   props: {
     modelValue: {
       type: Array,
