@@ -1,8 +1,7 @@
 <template>
   <CCollapse
     v-model="menuIsOpen"
-    class="sticky md:relative top-0 py-3 sm:py-4 mb-4 sm:mb-6 md:mb-8 bg-white transition duration-200"
-    :class="{ 'shadow-md md:shadow-none': windowScroll.y.value > 0 }"
+    class="sticky md:relative top-0 py-3 sm:py-4 mb-4 sm:mb-6 md:mb-8 bg-white transition duration-200 border-b border-alt-200"
   >
     <header>
       <div class="container">
@@ -112,7 +111,6 @@
 
 <script>
 import { ref } from 'vue';
-import { useWindowScroll } from '@vueuse/core';
 
 export default {
   props: {
@@ -126,7 +124,6 @@ export default {
     return {
       searchIsOpen: ref(false),
       menuIsOpen: ref(false),
-      windowScroll: useWindowScroll(),
     };
   },
 };
