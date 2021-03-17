@@ -1,20 +1,22 @@
 <template>
   <router-link
     :to="{ name: 'recipe', params: { slug: slug } }"
-    class="flex flex-col h-full text-alt-800 hover:text-alt-800 rounded-lg"
+    class="overflow-hidden flex flex-col h-full text-alt-800 hover:text-alt-800 bg-alt-50 hover:bg-white rounded-xl border-b border-alt-200"
   >
     <RecipeImage
       :image="image"
       width="288"
       height="192"
-      class="w-full sm:w-auto flex-shrink-0 rounded-lg bg-alt-200"
+      class="w-full sm:w-auto flex-shrink-0 bg-alt-200 bg-opacity-75"
     />
 
-    <h2
-      class="mt-2 mx-2 font-display text-lg font-medium text-alt-700 overflow-hidden overflow-ellipsis whitespace-nowrap"
-    >
-      {{ title }}
-    </h2>
+    <div class="py-2 px-4">
+      <h2
+        class="font-display text-lg font-medium text-alt-700 overflow-hidden overflow-ellipsis whitespace-nowrap"
+      >
+        {{ title }}
+      </h2>
+    </div>
   </router-link>
 </template>
 

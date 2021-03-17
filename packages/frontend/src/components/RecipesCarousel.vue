@@ -43,7 +43,7 @@ export default {
 
 <style>
 .carousel-wrapper {
-  height: 228px;
+  height: 237px;
 }
 
 .carousel {

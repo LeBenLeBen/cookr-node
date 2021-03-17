@@ -1,16 +1,16 @@
 <template>
   <router-link
     :to="{ name: 'recipe', params: { slug: slug } }"
-    class="flex flex-col sm:flex-row p-3 text-alt-800 hover:text-alt-800 bg-alt-50 hover:bg-white rounded-xl"
+    class="overflow-hidden flex flex-col sm:flex-row text-alt-800 hover:text-alt-800 bg-alt-50 hover:bg-white rounded-xl border-b border-alt-200 ring-offset-2"
   >
     <RecipeImage
       :image="image"
-      width="180"
-      height="120"
-      class="w-full sm:w-auto flex-shrink-0 rounded-lg bg-alt-100"
+      width="200"
+      height="150"
+      class="w-full sm:w-auto flex-shrink-0 bg-alt-200 bg-opacity-75"
     />
 
-    <div class="flex flex-col mt-4 sm:mt-0 md:mt-2 mx-1 sm:ml-5 sm:mr-0">
+    <div class="flex flex-col p-4 sm:px-5 lg:py-5 lg:px-6 w-full">
       <h2 class="h2 mb-1">
         {{ title }}
       </h2>
@@ -22,7 +22,7 @@
       />
 
       <ul
-        class="flex text-alt-600 text-sm md:text-base leading-none pt-1 mt-auto"
+        class="flex items-end text-alt-600 text-sm md:text-base leading-none pt-1 mt-auto"
       >
         <li v-if="time" class="mr-4 sm:mr-6">
           <RecipeTime :time="time" />
@@ -37,6 +37,8 @@
 
 <script>
 export default {
+  inheritAttrs: false,
+
   props: {
     title: {
       type: String,
