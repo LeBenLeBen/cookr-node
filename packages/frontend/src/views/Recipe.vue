@@ -108,6 +108,10 @@ import store from '@/store';
 
 export default {
   props: {
+    id: {
+      type: String,
+      required: true,
+    },
     slug: {
       type: String,
       required: true,
@@ -117,8 +121,8 @@ export default {
   setup(props) {
     const { result } = useQuery(
       gql`
-        query getRecipeBySlug($slug: String!) {
-          recipes(where: { slug: $slug }) {
+        query getRecipe($id: ID!) {
+          recipe(id: $id) {
             id
             title
             author {
@@ -143,13 +147,13 @@ export default {
           }
         }
       `,
-      () => ({ slug: props.slug }),
+      () => ({ id: props.id }),
       {
         fetchPolicy: 'network-only',
       }
     );
 
-    const recipe = useResult(result, null, (data) => data.recipes?.[0]);
+    const recipe = useResult(result, null, (data) => data.recipe);
 
     const { mutate: deleteRecipe, onDone: onDeleteDone } = useMutation(
       gql`

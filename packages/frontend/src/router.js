@@ -39,7 +39,7 @@ const router = createRouter({
       },
     },
     {
-      path: '/recipes/:slug',
+      path: '/recipes/:id(\\d+)-:slug',
       name: 'recipe',
       component: () => import('./views/Recipe.vue'),
       props: true,

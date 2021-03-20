@@ -81,7 +81,10 @@
           :key="result.id"
         >
           <router-link
-            :to="{ name: 'recipe', params: { slug: result.slug } }"
+            :to="{
+              name: 'recipe',
+              params: { id: result.id, slug: result.slug },
+            }"
             class="flex items-center py-3 pr-4 pl-5 text-alt-800 hover:text-alt-800 hover:bg-alt-100"
             :class="{ 'bg-alt-100': index == indexHighlighted }"
           >
@@ -230,9 +233,11 @@ export default {
 
         case 'Enter': {
           e.preventDefault();
-          const slug = this.results?.[this.indexHighlighted]?.slug;
-          if (slug) {
-            this.$router.push({ name: 'recipe', params: { slug } });
+          const result = this.results?.[this.indexHighlighted];
+          const id = result?.id;
+          const slug = result?.slug;
+          if (id && slug) {
+            this.$router.push({ name: 'recipe', params: { id, slug } });
             this.reset();
           }
           break;

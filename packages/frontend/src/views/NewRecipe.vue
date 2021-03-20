@@ -58,6 +58,7 @@ export default {
         mutation createRecipe($input: createRecipeInput) {
           createRecipe(input: $input) {
             recipe {
+              id
               slug
             }
           }
@@ -69,6 +70,7 @@ export default {
       router.push({
         name: 'recipe',
         params: {
+          id: result.data.createRecipe.recipe.id,
           slug: result.data.createRecipe.recipe.slug,
         },
       });
