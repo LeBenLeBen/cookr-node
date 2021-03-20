@@ -281,7 +281,7 @@ export default {
     prepareToSave() {
       let data = omitBy(this.input, isNil);
       data = omitBy(data, (i) => typeof i === 'string' && i.trim() === '');
-      data.ingredients = data.ingredients.filter((i) => i.title.trim());
+      data.ingredients = data.ingredients.filter((i) => i.title?.trim());
 
       if (this.image) {
         this.upload({ file: this.image }).then((response) => {
