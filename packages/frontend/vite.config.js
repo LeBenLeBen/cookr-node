@@ -29,6 +29,10 @@ export default {
             'CPicture',
           ],
         },
+        {
+          name: 'vee-validate',
+          entries: ['Form', 'Field'],
+        },
       ],
     }),
     WindiCSS({
