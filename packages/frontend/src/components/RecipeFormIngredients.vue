@@ -35,7 +35,7 @@
 
     <CBtn variant="default" class="mt-4" @click="addItem">
       <CIcon id="plus" class="-my-1 -ml-1 mr-2 text-alt-600" />
-      {{ $t('recipe.new.addIngredient') }}
+      {{ $t('recipe.form.addIngredient') }}
     </CBtn>
   </div>
 </template>

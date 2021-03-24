@@ -19,6 +19,16 @@
         <li>
           <CBtn
             variant="link"
+            :to="{ name: 'edit-recipe', params: { id: recipe.id } }"
+            class="text-sm font-bold align-middle"
+          >
+            <span class="hidden md:inline">{{ $t('common.edit') }}</span>
+            <CIcon id="edit" class="md:ml-2 text-alt-500" />
+          </CBtn>
+        </li>
+        <li>
+          <CBtn
+            variant="link"
             class="text-sm font-bold align-middle"
             @click="confirmToDelete"
           >

@@ -10,13 +10,23 @@ export default {
     label: 'Libellé',
     tags: 'Tags',
     steps: 'Étapes',
-    new: {
-      title: 'Nouvelle recette',
+    form: {
       addIngredient: 'Ajouter un ingrédient',
       time: 'Temps',
+      steps: {
+        help: 'Séparez chaque étape par un retour à la ligne.',
+      },
       quantity: 'Quantité',
-      image: 'Image',
-      submit: 'Créer la recette',
+      image: {
+        label: 'Image',
+        help: 'Priviligiez un format paysage.',
+      },
+    },
+    new: {
+      title: 'Nouvelle recette',
+    },
+    edit: {
+      title: 'Modifier la recette',
     },
   },
   recipes: {
@@ -51,10 +61,16 @@ export default {
     results: 'Résultats',
     empty: 'Votre recherche n’a donné aucun résultat.',
   },
+  imageUploader: {
+    browse: 'Parcourir',
+    delete: 'Supprimer l’image',
+  },
   common: {
     loading: 'Chargement…',
     loadMore: 'Afficher plus',
     delete: 'Supprimer',
+    edit: 'Modifier',
+    save: 'Sauvegarder',
   },
   forms: {
     rules: {

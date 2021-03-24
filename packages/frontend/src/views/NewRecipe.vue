@@ -10,13 +10,13 @@
     v-model:quantity.number="input.quantity"
     v-model:notes="input.notes"
     v-model:tags="input.tags"
-    v-model:imageFile="imageFile"
+    v-model:image="input.image"
     @submit="prepareToSave"
   />
 </template>
 
 <script>
-import { reactive, ref } from 'vue';
+import { reactive } from 'vue';
 import { useMutation } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 import deburr from 'lodash/deburr';
@@ -29,7 +29,6 @@ import store from '@/store';
 
 export default {
   setup() {
-    const imageFile = ref(null);
     const input = reactive({
       author: store.state.currentUser.id,
       title: '',
@@ -43,17 +42,7 @@ export default {
       image: '',
     });
 
-    const { mutate: upload } = useMutation(
-      gql`
-        mutation uploadImage($file: Upload!) {
-          upload(file: $file) {
-            id
-          }
-        }
-      `
-    );
-
-    const { mutate: save, onDone, onError } = useMutation(
+    const { mutate: save, onDone } = useMutation(
       gql`
         mutation createRecipe($input: createRecipeInput) {
           createRecipe(input: $input) {
@@ -76,13 +65,9 @@ export default {
       });
     });
 
-    onError(() => {});
-
     return {
       input,
-      imageFile,
       save,
-      upload,
     };
   },
 
@@ -98,14 +83,7 @@ export default {
       data = omitBy(data, (i) => typeof i === 'string' && i.trim() === '');
       data.ingredients = data.ingredients.filter((i) => i.title?.trim());
 
-      if (this.imageFile) {
-        this.upload({ file: this.imageFile }).then((response) => {
-          data.image = response.data.upload.id;
-          this.save({ input: { data } });
-        });
-      } else {
-        this.save({ input: { data } });
-      }
+      this.save({ input: { data } });
     },
   },
 };

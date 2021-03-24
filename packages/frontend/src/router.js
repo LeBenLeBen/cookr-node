@@ -48,6 +48,15 @@ const router = createRouter({
       },
     },
     {
+      path: '/recipes/edit/:id',
+      name: 'edit-recipe',
+      component: () => import('./views/EditRecipe.vue'),
+      props: true,
+      meta: {
+        layout: 'AppLayout',
+      },
+    },
+    {
       path: '/recipes',
       name: 'recipes',
       component: () => import('./views/Recipes.vue'),

@@ -29,6 +29,7 @@ createSvgSpritesheet({
     'controls.svg',
     'bin.svg',
     'edit.svg',
+    'folder.svg',
   ],
   save: true,
 });
