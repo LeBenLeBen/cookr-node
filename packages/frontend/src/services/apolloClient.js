@@ -19,7 +19,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
       notify({
         type: 'error',
-        id: btoa(message),
+        id: message,
         title: extensions?.code
           ? capitalize(extensions?.code.replaceAll('_', ' '))
           : null,

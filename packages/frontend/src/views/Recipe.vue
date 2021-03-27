@@ -15,7 +15,7 @@
           </li>
         </ul>
       </div>
-      <ul class="flex flex-col justify-end items-end space-y-2">
+      <ul v-if="isOwner" class="flex flex-col justify-end items-end space-y-2">
         <li>
           <CBtn
             variant="link"
@@ -136,6 +136,7 @@ export default {
             id
             title
             author {
+              id
               username
             }
             time
@@ -201,6 +202,10 @@ export default {
       return this.recipe?.steps?.length
         ? this.recipe.steps.split(/\r?\n/).filter((s) => !!s.trim())
         : [];
+    },
+
+    isOwner() {
+      return this.recipe.author.id === store.state.currentUser.id;
     },
   },
 
