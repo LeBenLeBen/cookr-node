@@ -16,7 +16,6 @@
         >
           <Input id="title" ref="title" v-bind="field" />
         </Field>
-        <div v-if="slug" class="mt-2 text-sm text-alt-500">/{{ slug }}</div>
         <Errors name="title" />
       </div>
     </FormGroup>
@@ -160,10 +159,6 @@ export default {
       type: String,
       required: true,
     },
-    slug: {
-      type: String,
-      required: true,
-    },
     ingredients: {
       type: Array,
       required: true,
@@ -196,7 +191,6 @@ export default {
 
   emits: [
     'update:title',
-    'update:slug',
     'update:ingredients',
     'update:steps',
     'update:time',

@@ -2,13 +2,12 @@
   <h1 class="h1 mb-6 md:mb-8">{{ $t('recipe.new.title') }}</h1>
 
   <RecipeForm
-    v-model:title="input.title"
-    v-model:slug="input.slug"
+    v-model:title.trim="input.title"
     v-model:ingredients="input.ingredients"
-    v-model:steps="input.steps"
+    v-model:steps.trim="input.steps"
     v-model:time.number="input.time"
     v-model:quantity.number="input.quantity"
-    v-model:notes="input.notes"
+    v-model:notes.trim="input.notes"
     v-model:tags="input.tags"
     v-model:image="input.image"
     @submit="prepareToSave"
