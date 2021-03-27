@@ -3,3 +3,5 @@
 @import './components/headings.css';
 @import './components/container.css';
 @import './components/icon.css';
+
+@import './transitions/fade-in-left.css';

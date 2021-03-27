@@ -1,5 +1,6 @@
 <template>
   <component :is="$route.meta.layout">
+    <Notifications />
     <RouterView />
   </component>
 </template>

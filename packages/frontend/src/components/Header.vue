@@ -1,7 +1,7 @@
 <template>
   <CCollapse
     v-model="menuIsOpen"
-    class="sticky md:relative top-0 py-3 sm:py-4 mb-4 sm:mb-6 md:mb-8 bg-white transition duration-200 border-b border-alt-200"
+    class="sticky md:relative top-0 z-30 py-3 sm:py-4 mb-4 sm:mb-6 md:mb-8 bg-white transition duration-200 border-b border-alt-200"
   >
     <header>
       <div class="container">
@@ -53,7 +53,7 @@
     </header>
 
     <CCollapseContent
-      class="md:hidden flex flex-col items-center justify-center p-8 fixed inset-0 z-40 bg-alt-800 bg-opacity-98"
+      class="md:hidden flex flex-col items-center justify-center p-8 fixed inset-0 z-50 bg-alt-800 bg-opacity-98"
       :transition="{
         enterActiveClass: 'transition ease-out duration-100',
         enterFromClass: 'transform opacity-0 scale-95',

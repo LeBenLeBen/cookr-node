@@ -1,17 +1,36 @@
-import router from '@/router';
-import store from '@/store';
+import capitalize from 'lodash/capitalize';
 import { ApolloClient, InMemoryCache } from '@apollo/client/core';
 import { from } from '@apollo/client/link/core/from';
 import { onError } from '@apollo/client/link/error';
 import { createUploadLink } from 'apollo-upload-client';
 
-const errorLink = onError(({ graphQLErrors }) => {
+import router from '@/router';
+import store from '@/store';
+
+import { notify } from '@/composables/useNotifications';
+
+const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
-    graphQLErrors.map(({ message }) => {
+    graphQLErrors.map(({ message, extensions }) => {
       if (message === 'Invalid token.' || message === 'Forbidden') {
         store.setCurrentUser(null);
         router.replace({ name: 'login' });
       }
+
+      notify({
+        type: 'error',
+        id: btoa(message),
+        title: extensions?.code
+          ? capitalize(extensions?.code.replaceAll('_', ' '))
+          : null,
+        message,
+      });
+    });
+  } else if (networkError) {
+    notify({
+      type: 'error',
+      id: 'network-error',
+      message: networkError.message,
     });
   }
 });

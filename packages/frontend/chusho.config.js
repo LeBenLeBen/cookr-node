@@ -5,9 +5,11 @@ export default {
     alert: {
       class: ({ variant }) => {
         return [
-          'block py-3 px-4 rounded',
+          'block py-3 px-5 rounded-lg',
           {
-            'bg-red-100 text-red-700': variant?.includes('error'),
+            'bg-red-100 text-red-700 border-l-8 border-red-400 shadow-lg': variant?.includes(
+              'error'
+            ),
           },
         ];
       },
