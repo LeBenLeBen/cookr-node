@@ -76,7 +76,6 @@ export default {
   position: absolute;
   left: 0;
   right: 0;
-  z-index: 100;
 
   max-height: 160px;
   overflow: scroll;

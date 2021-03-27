@@ -26,6 +26,13 @@ label {
   transition-timing-function: ease-out;
 }
 
+input,
+select,
+textarea {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
 input {
   /* Remove inner shadow on iOS */
   appearance: none;

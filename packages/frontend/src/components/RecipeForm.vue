@@ -145,9 +145,11 @@
     </FormGroup>
 
     <div class="pt-6 grid sm:grid-cols-4 gap-4 sm:gap-4">
-      <CBtn type="submit" variant="primary" class="sm:col-start-2">
-        {{ $t('common.save') }}
-      </CBtn>
+      <div class="sm:col-start-2 sm:col-span-3">
+        <CBtn type="submit" variant="primary" class="w-full sm:w-auto">
+          {{ $t('common.save') }}
+        </CBtn>
+      </div>
     </div>
   </Form>
 </template>

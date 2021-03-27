@@ -1,7 +1,7 @@
 <template>
   <Header :menu="menu" />
 
-  <div class="container pb-10">
+  <div class="container pb-20">
     <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-14">
       <div class="md:col-span-1 hidden md:block">
         <Nav :menu="menu" />
