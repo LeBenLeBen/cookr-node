@@ -42,7 +42,10 @@ export default {
         }
         ${recipeCardFragment}
       `,
-      () => ({ username: props.username })
+      () => ({ username: props.username }),
+      {
+        fetchPolicy: 'network-only',
+      }
     );
 
     return {

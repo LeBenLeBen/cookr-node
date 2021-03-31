@@ -1,4 +1,3 @@
-import capitalize from 'lodash/capitalize';
 import { ApolloClient, InMemoryCache } from '@apollo/client/core';
 import { from } from '@apollo/client/link/core/from';
 import { onError } from '@apollo/client/link/error';
@@ -12,19 +11,23 @@ import { notify } from '@/composables/useNotifications';
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.map(({ message, extensions }) => {
-      if (message === 'Invalid token.' || message === 'Forbidden') {
+      if (
+        message === 'User Not Found' ||
+        message === 'Invalid token.' ||
+        message === 'Forbidden'
+      ) {
         store.setCurrentUser(null);
         router.replace({ name: 'login' });
       }
 
-      notify({
-        type: 'error',
-        id: message,
-        title: extensions?.code
-          ? capitalize(extensions?.code.replaceAll('_', ' '))
-          : null,
-        message,
-      });
+      // Bad requests should be handled in the context
+      if (extensions?.exception?.code !== 400) {
+        notify({
+          type: 'error',
+          id: message,
+          message,
+        });
+      }
     });
   } else if (networkError) {
     notify({

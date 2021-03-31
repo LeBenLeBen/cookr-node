@@ -4,16 +4,16 @@
   <h2 class="h2 mb-4">
     {{ $t('home.recentlyAdded') }}
   </h2>
-  <RecipesCarousel :recipes="result?.recipes" :loading="loading" />
+  <RecipesCarousel :recipes="recipes" :loading="loading" />
 
-  <template v-if="result?.tags.length">
+  <template v-if="tags.length">
     <hr class="my-8" />
-    <TagsList :tags="result?.tags" />
+    <TagsList :tags="tags" />
   </template>
 </template>
 
 <script>
-import { useQuery } from '@vue/apollo-composable';
+import { useQuery, useResult } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 
 import { recipeCardFragment } from '@/services/fragments';
@@ -33,8 +33,12 @@ export default {
       ${recipeCardFragment}
     `);
 
+    const recipes = useResult(result, [], (data) => data.recipes);
+    const tags = useResult(result, [], (data) => data.tags);
+
     return {
-      result,
+      recipes,
+      tags,
       loading,
     };
   },

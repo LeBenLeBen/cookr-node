@@ -22,26 +22,28 @@ export default {
   },
 
   setup() {
-    const { onResult } = useQuery(
-      gql`
-        query currentUser {
-          me {
-            ...CurrentUser
+    if (store.state.currentUser) {
+      const { onResult } = useQuery(
+        gql`
+          query currentUser {
+            me {
+              ...CurrentUser
+            }
           }
+          ${currentUserFragment}
+        `,
+        null,
+        {
+          fetchPolicy: 'no-cache',
         }
-        ${currentUserFragment}
-      `,
-      null,
-      {
-        fetchPolicy: 'no-cache',
-      }
-    );
+      );
 
-    onResult((result) => {
-      if (result.data.me) {
-        store.setCurrentUser(result.data.me);
-      }
-    });
+      onResult((result) => {
+        if (result.data.me) {
+          store.setCurrentUser(result.data.me);
+        }
+      });
+    }
   },
 };
 </script>
