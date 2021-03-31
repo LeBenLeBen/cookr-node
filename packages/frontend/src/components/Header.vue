@@ -3,7 +3,7 @@
     v-model="menuIsOpen"
     class="sticky md:relative top-0 z-30 py-3 sm:py-4 mb-4 sm:mb-6 md:mb-8 bg-white transition duration-200 border-b border-alt-200"
   >
-    <header>
+    <header id="app-header">
       <div class="container">
         <div
           class="flex items-center md:grid md:grid-cols-3 lg:grid-cols-4 md:gap-6 lg:gap-14"

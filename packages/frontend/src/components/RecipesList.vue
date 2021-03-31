@@ -16,9 +16,9 @@
       </li>
     </template>
   </ul>
-  <div v-else class="text-alt-500">
+  <Alert v-else variant="info" class="text-alt-500">
     {{ $t('recipes.empty') }}
-  </div>
+  </Alert>
 </template>
 
 <script>

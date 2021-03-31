@@ -7,7 +7,7 @@
     :style="style"
   >
     <li v-for="(notification, i) in notifications" :key="i">
-      <CAlert
+      <Alert
         :variant="notification.type"
         class="cursor-pointer"
         @click="hide(notification)"
@@ -16,7 +16,7 @@
           {{ notification.title }}
         </div>
         {{ notification.message }}
-      </CAlert>
+      </Alert>
     </li>
   </transition-group>
 </template>
@@ -31,7 +31,8 @@ export default {
   setup() {
     const { y } = useWindowScroll();
     const isHeaderNotSticky = useMediaQuery('(min-width: 768px)');
-    const headerHeight = 96;
+    const header = document.querySelector('#app-header');
+    const headerHeight = header ? header.getBoundingClientRect().height : 0;
 
     return {
       notifications: notifications.value,

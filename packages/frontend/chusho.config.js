@@ -5,10 +5,15 @@ export default {
     alert: {
       class: ({ variant }) => {
         return [
-          'block py-3 px-5 rounded-lg',
+          'block py-3 px-5 border-b-1 rounded-lg',
           {
-            'bg-red-100 text-red-700 border-l-8 border-red-400 shadow-lg': variant?.includes(
+            'bg-red-100 text-red-700 border-red-200': variant?.includes(
               'error'
+            ),
+          },
+          {
+            'bg-blue-100 text-blue-700 border-blue-200': variant?.includes(
+              'info'
             ),
           },
         ];
