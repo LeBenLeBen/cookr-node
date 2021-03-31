@@ -1,7 +1,6 @@
 <template>
   <CCollapse v-slot="{ active }">
-    <div class="flex items-center justify-between space-x-4 mb-4">
-      <h1 class="h1">{{ $t('explore.title') }}</h1>
+    <PageHeader :title="$t('explore.title')">
       <CCollapseBtn variant="default small" bare>
         <CIcon id="controls" class="-m-1 mr-2 text-alt-600" />
         {{ $t('recipes.filters.label') }}
@@ -11,7 +10,7 @@
           class="-m-1 ml-2 text-alt-600"
         />
       </CCollapseBtn>
-    </div>
+    </PageHeader>
 
     <CCollapseContent
       class="grid sm:grid-cols-2 gap-6 mb-6 pb-8 border-b border-alt-200"

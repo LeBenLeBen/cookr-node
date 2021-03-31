@@ -1,5 +1,5 @@
 <template>
-  <h1 class="h1 mb-6 md:mb-8">{{ $t('recipe.new.title') }}</h1>
+  <PageHeader :title="$t('recipe.new.title')" />
 
   <RecipeForm
     v-model:title.trim="input.title"

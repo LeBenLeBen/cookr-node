@@ -1,17 +1,15 @@
 <template>
-  <div class="flex items-center justify-between mb-6">
-    <h1 class="h1 mr-4">{{ username }}</h1>
-
+  <PageHeader :title="username">
     <CBtn
       v-if="isCurrentUser"
-      variant="primary"
+      variant="primary small"
       :to="{ name: 'new-recipe' }"
       class="inline-flex items-center"
     >
       <CIcon id="plus" class="-m-1 text-primary-200" />
       <div class="hidden sm:block ml-3">{{ $t('recipe.new.title') }}</div>
     </CBtn>
-  </div>
+  </PageHeader>
   <RecipesList :recipes="result?.recipes" :loading="loading" />
 </template>
 
