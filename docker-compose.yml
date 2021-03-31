@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: db
+    image: postgres:12
+    environment:
+      POSTGRES_DB: cookr
+      POSTGRES_USER: cookr
+      POSTGRES_PASSWORD: cookr
+      PG_DATA: /var/lib/postgresql/data
+    ports:
+      - 5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    container_name: backend
+    image: strapi/strapi
+    volumes:
+      - ./packages/backend:/srv/app
+      - /srv/app/node_modules
+    ports:
+      - 1337:1337
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
