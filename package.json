@@ -9,6 +9,7 @@
     "postinstall": "lerna bootstrap",
     "validate": "eslint . --ext .js,.vue --ignore-path .gitignore",
     "format": "npm run validate -- --fix",
+    "test": "npm run validate",
     "heroku-postbuild": "npm run build --prefix packages/backend"
   },
   "devDependencies": {
