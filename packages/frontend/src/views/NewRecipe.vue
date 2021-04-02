@@ -30,15 +30,15 @@ export default {
   setup() {
     const input = reactive({
       author: store.state.currentUser.id,
-      title: '',
-      slug: '',
-      ingredients: [{ title: '', amount: '' }],
-      steps: '',
+      title: null,
+      slug: null,
+      ingredients: [{ title: null, amount: null }],
+      steps: null,
       time: null,
       quantity: null,
-      notes: '',
+      notes: null,
       tags: [],
-      image: '',
+      image: null,
     });
 
     const { mutate: save, onDone } = useMutation(

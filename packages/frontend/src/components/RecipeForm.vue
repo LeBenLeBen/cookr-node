@@ -159,15 +159,15 @@ export default {
   props: {
     title: {
       type: String,
-      required: true,
+      default: null,
     },
     ingredients: {
       type: Array,
-      required: true,
+      default: null,
     },
     steps: {
       type: String,
-      required: true,
+      default: null,
     },
     time: {
       type: [Number, String],
@@ -179,11 +179,11 @@ export default {
     },
     notes: {
       type: String,
-      required: true,
+      default: null,
     },
     tags: {
       type: Array,
-      required: true,
+      default: null,
     },
     image: {
       type: String,
