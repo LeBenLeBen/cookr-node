@@ -39,7 +39,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 });
 
 const httpLink = createUploadLink({
-  uri: `${import.meta.env.VITE_API_ORIGIN}/graphql`,
+  uri: `/api/graphql`,
   credentials: 'include',
 });
 

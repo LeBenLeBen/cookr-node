@@ -1,7 +1,13 @@
 [build]
   base ="packages/frontend/"
   publish = "dist/"
-  command = "npm run build"
+  command = "sed -i \"s|API_ORIGIN_PLACEHOLDER|${API_ORIGIN}|g\" /opt/build/repo/netlify.toml && cat /opt/build/repo/netlify.toml && npm run build"
+
+[[redirects]]
+  from = "/api/*"
+  to = "API_ORIGIN_PLACEHOLDER/:splat"
+  status = 200
+  force = true
 
 [[redirects]]
   from = "/*"
