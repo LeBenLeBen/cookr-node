@@ -16,6 +16,11 @@ export default {
               'info'
             ),
           },
+          {
+            'bg-green-100 text-green-700 border-green-200': variant?.includes(
+              'success'
+            ),
+          },
         ];
       },
     },

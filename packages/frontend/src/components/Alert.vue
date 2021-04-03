@@ -5,10 +5,12 @@ import { CAlert, CIcon } from 'chusho';
 export default {
   setup(props, { attrs, slots }) {
     const icons = {
+      success: 'ok',
       error: 'danger',
       info: 'info',
     };
     const className = {
+      success: 'text-green-500',
       error: 'text-red-500',
       info: 'text-blue-500',
     };
@@ -21,7 +23,7 @@ export default {
         children.unshift(
           h(CIcon, {
             id: iconId,
-            class: [className[attrs.variant], 'mr-4'],
+            class: [className[attrs.variant], 'mr-4 flex-shrink-0'],
           })
         );
       }

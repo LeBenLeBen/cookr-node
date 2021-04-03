@@ -32,6 +32,7 @@ createSvgSpritesheet({
     'folder.svg',
     'danger.svg',
     'info.svg',
+    'ok.svg',
   ],
   save: true,
 });
