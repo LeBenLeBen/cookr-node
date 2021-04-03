@@ -117,7 +117,6 @@ import gql from 'graphql-tag';
 
 import router from '@/router';
 import store from '@/store';
-import i18n from '@/i18n';
 
 export default {
   props: {
@@ -214,7 +213,7 @@ export default {
     },
 
     isOwner() {
-      return this.recipe.author.id === store.state.currentUser.id;
+      return this.recipe.author.id === store.state.currentUser?.id;
     },
   },
 

@@ -22,6 +22,11 @@
         name="password"
         autocomplete="current-password"
       />
+      <div class="mt-2 text-sm">
+        <router-link :to="{ name: 'forgot-password' }">
+          {{ $t('auth.forgotPassword') }}
+        </router-link>
+      </div>
     </FormGroup>
     <div>
       <CBtn type="submit" variant="primary block">{{ $t('auth.login') }}</CBtn>

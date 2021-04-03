@@ -6,7 +6,7 @@
   </h2>
   <RecipesCarousel :recipes="recipes" :loading="loading" />
 
-  <template v-if="tags.length">
+  <template v-if="tags?.length">
     <hr class="my-8" />
     <TagsList :tags="tags" />
   </template>
