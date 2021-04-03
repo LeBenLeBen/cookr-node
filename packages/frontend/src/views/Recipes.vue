@@ -58,14 +58,20 @@
 </template>
 
 <script>
-import { computed, reactive } from 'vue';
+import { computed, inject, onMounted, reactive } from 'vue';
 import { useQuery, useResult } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 
 import { recipeCardFragment } from '@/services/fragments';
+import i18n from '@/i18n';
 
 export default {
   setup() {
+    const setPageTitle = inject('setPageTitle');
+    onMounted(() => {
+      setPageTitle(i18n.global.t('explore.title'));
+    });
+
     const params = reactive({
       sort: 'created_at:asc',
       tags: [],

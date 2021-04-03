@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { computed } from 'vue';
+import { computed, inject, onMounted } from 'vue';
 import { useQuery } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 
@@ -30,6 +30,11 @@ export default {
   },
 
   setup(props) {
+    const setPageTitle = inject('setPageTitle');
+    onMounted(() => {
+      setPageTitle(props.username);
+    });
+
     const { result, loading } = useQuery(
       gql`
         query getRecipesForUser($username: String!) {
@@ -52,7 +57,7 @@ export default {
       result,
       loading,
       isCurrentUser: computed(
-        () => props.username === store.state.currentUser.username
+        () => props.username === store.state.currentUser?.username
       ),
     };
   },

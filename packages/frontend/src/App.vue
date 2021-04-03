@@ -6,8 +6,10 @@
 </template>
 
 <script>
-import { useQuery } from '@vue/apollo-composable';
+import { computed, provide, ref } from 'vue';
 import gql from 'graphql-tag';
+import { useQuery } from '@vue/apollo-composable';
+import { useTitle } from '@vueuse/core';
 
 import store from './store';
 import { currentUserFragment } from './services/fragments';
@@ -22,6 +24,22 @@ export default {
   },
 
   setup() {
+    const pageTitle = ref(null);
+    const setPageTitle = (value) => {
+      pageTitle.value = value;
+    };
+    const fullPageTitle = computed(() => {
+      return pageTitle?.value ? `${pageTitle.value} · Cookr` : 'Cookr';
+    });
+
+    useTitle(fullPageTitle);
+
+    provide(
+      'pageTitle',
+      computed(() => pageTitle.value)
+    );
+    provide('setPageTitle', setPageTitle);
+
     if (store.state.currentUser) {
       const { onResult } = useQuery(
         gql`

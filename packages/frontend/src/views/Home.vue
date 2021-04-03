@@ -13,13 +13,20 @@
 </template>
 
 <script>
+import { inject, onMounted } from 'vue';
 import { useQuery, useResult } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 
 import { recipeCardFragment } from '@/services/fragments';
+import i18n from '@/i18n';
 
 export default {
   setup() {
+    const setPageTitle = inject('setPageTitle');
+    onMounted(() => {
+      setPageTitle(i18n.global.t('home.title'));
+    });
+
     const { result, loading } = useQuery(gql`
       query getHome {
         recipes(limit: 5, sort: "created_at:asc") {

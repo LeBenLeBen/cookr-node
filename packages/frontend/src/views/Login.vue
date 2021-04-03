@@ -1,15 +1,4 @@
 <template>
-  <header class="mb-8 text-center">
-    <div class="mb-2 font-display text-5xl text-primary-500">Cookr</div>
-    <div
-      role="heading"
-      aria-level="1"
-      class="text-alt-500 text-sm uppercase font-bold"
-    >
-      {{ $t('auth.login') }}
-    </div>
-  </header>
-
   <ErrorsList :errors="errors" />
 
   <form class="space-y-6" @submit.prevent="login">
@@ -41,7 +30,7 @@
 </template>
 
 <script>
-import { reactive, ref } from 'vue';
+import { inject, onMounted, reactive, ref } from 'vue';
 import { useMutation } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 
@@ -49,9 +38,15 @@ import router from '../router';
 import store from '../store';
 
 import { currentUserFragment } from '../services/fragments';
+import i18n from '@/i18n';
 
 export default {
   setup() {
+    const setPageTitle = inject('setPageTitle');
+    onMounted(() => {
+      setPageTitle(i18n.global.t('auth.login'));
+    });
+
     const errors = ref(null);
     const input = reactive({ identifier: '', password: '' });
     const { mutate: authenticate } = useMutation(

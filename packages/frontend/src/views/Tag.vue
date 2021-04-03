@@ -1,10 +1,13 @@
 <template>
-  <h1 class="h1 mb-6">{{ result?.tags?.[0]?.title || (!loading && slug) }}</h1>
-  <RecipesList :recipes="result?.tags?.[0]?.recipes" :loading="loading" />
+  <template v-if="tag">
+    <h1 class="h1 mb-6">{{ tag.title }}</h1>
+    <RecipesList :recipes="tag.recipes" :loading="loading" />
+  </template>
 </template>
 
 <script>
-import { useQuery } from '@vue/apollo-composable';
+import { inject } from 'vue';
+import { useQuery, useResult } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 
 import { recipeCardFragment } from '@/services/fragments';
@@ -18,7 +21,9 @@ export default {
   },
 
   setup(props) {
-    const { result, loading } = useQuery(
+    const setPageTitle = inject('setPageTitle');
+
+    const { result, loading, onResult } = useQuery(
       gql`
         query getTag($slug: String!) {
           tags(where: { slug: $slug }) {
@@ -33,8 +38,14 @@ export default {
       () => ({ slug: props.slug })
     );
 
+    const tag = useResult(result, null, (data) => data?.tags?.[0]);
+
+    onResult((response) => {
+      setPageTitle(response.data?.tags?.[0]?.title);
+    });
+
     return {
-      result,
+      tag,
       loading,
     };
   },

@@ -111,10 +111,13 @@
 </template>
 
 <script>
+import { inject } from 'vue';
 import { useQuery, useMutation, useResult } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
+
 import router from '@/router';
 import store from '@/store';
+import i18n from '@/i18n';
 
 export default {
   props: {
@@ -129,7 +132,9 @@ export default {
   },
 
   setup(props) {
-    const { result } = useQuery(
+    const setPageTitle = inject('setPageTitle');
+
+    const { result, onResult } = useQuery(
       gql`
         query getRecipe($id: ID!) {
           recipe(id: $id) {
@@ -165,6 +170,10 @@ export default {
     );
 
     const recipe = useResult(result, null, (data) => data.recipe);
+
+    onResult((response) => {
+      setPageTitle(response.data.recipe?.title);
+    });
 
     const { mutate: deleteRecipe, onDone: onDeleteDone } = useMutation(
       gql`

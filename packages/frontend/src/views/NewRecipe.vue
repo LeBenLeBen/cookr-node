@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { inject, onMounted, reactive } from 'vue';
 import { useMutation } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 import deburr from 'lodash/deburr';
@@ -25,9 +25,15 @@ import isNil from 'lodash/isNil';
 
 import router from '@/router';
 import store from '@/store';
+import i18n from '@/i18n';
 
 export default {
   setup() {
+    const setPageTitle = inject('setPageTitle');
+    onMounted(() => {
+      setPageTitle(i18n.global.t('recipe.new.title'));
+    });
+
     const input = reactive({
       author: store.state.currentUser.id,
       title: null,

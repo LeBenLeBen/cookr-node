@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { inject, onMounted, reactive } from 'vue';
 import { useMutation, useQuery, useResult } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 import deburr from 'lodash/deburr';
@@ -25,6 +25,7 @@ import omitBy from 'lodash/omitBy';
 import isNil from 'lodash/isNil';
 
 import router from '@/router';
+import i18n from '@/i18n';
 
 export default {
   props: {
@@ -35,6 +36,11 @@ export default {
   },
 
   setup(props) {
+    const setPageTitle = inject('setPageTitle');
+    onMounted(() => {
+      setPageTitle(i18n.global.t('recipe.edit.title'));
+    });
+
     const { result } = useQuery(
       gql`
         query getRecipeToEdit($id: ID!) {
@@ -69,10 +75,12 @@ export default {
       return reactive({
         title: recipe.title,
         slug: recipe.slug,
-        ingredients: recipe.ingredients.map(({ amount, title }) => ({
-          amount,
-          title,
-        })),
+        ingredients: recipe.ingredients?.length
+          ? recipe.ingredients.map(({ amount, title }) => ({
+              amount,
+              title,
+            }))
+          : [{ title: null, amount: null }],
         steps: recipe.steps,
         time: recipe.time,
         quantity: recipe.quantity,
