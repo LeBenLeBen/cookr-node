@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { computed } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useWindowScroll, useMediaQuery } from '@vueuse/core';
 
 import { notifications, hide } from '@/composables/useNotifications';
@@ -32,7 +32,11 @@ export default {
     const { y } = useWindowScroll();
     const isHeaderNotSticky = useMediaQuery('(min-width: 768px)');
     const header = document.querySelector('#app-header');
-    const headerHeight = header ? header.getBoundingClientRect().height : 0;
+    let headerHeight = ref(0);
+
+    onMounted(() => {
+      headerHeight.value = header ? header.getBoundingClientRect().height : 0;
+    });
 
     return {
       notifications: notifications.value,
@@ -40,7 +44,7 @@ export default {
       style: computed(() => {
         if (isHeaderNotSticky.value) {
           return {
-            top: `${Math.max(16, headerHeight - y.value)}px`,
+            top: `${Math.max(16, headerHeight.value - y.value + 20)}px`,
           };
         }
         return null;
