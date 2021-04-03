@@ -1,4 +1,4 @@
-module.exports = ({ env }) => ({
+module.exports = ({ env, log }) => ({
   email: {
     provider: 'nodemailer',
     providerOptions: {
@@ -9,6 +9,8 @@ module.exports = ({ env }) => ({
         user: env('SMTP_USERNAME'),
         pass: env('SMTP_PASSWORD'),
       },
+      logger: log,
+      debug: true,
     },
     settings: {
       defaultFrom: env('EMAIL_FROM'),
