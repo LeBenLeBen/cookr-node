@@ -52,9 +52,9 @@
       "component": "recipes.ingredients"
     },
     "author": {
+      "via": "recipes",
       "plugin": "users-permissions",
-      "model": "user",
-      "via": "recipes"
+      "model": "user"
     }
   }
 }

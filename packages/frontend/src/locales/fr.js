@@ -44,7 +44,8 @@ export default {
   },
   home: {
     title: 'Accueil',
-    recentlyAdded: 'Dernières recettes',
+    recentlyAdded: 'Ajoutées en dernier',
+    recentlyViewed: 'Consultées récemment',
   },
   explore: {
     title: 'Explorer',

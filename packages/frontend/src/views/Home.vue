@@ -6,8 +6,15 @@
   </h2>
   <RecipesCarousel :recipes="recipes" :loading="loading" />
 
+  <template v-if="lastViewedRecipes?.length">
+    <h2 class="h2 mt-8 mb-4">
+      {{ $t('home.recentlyViewed') }}
+    </h2>
+    <RecipesCarousel :recipes="lastViewedRecipes" :loading="loading" />
+  </template>
+
   <template v-if="tags?.length">
-    <hr class="my-8" />
+    <hr class="my-6 md:my-8" />
     <TagsList :tags="tags" />
   </template>
 </template>
@@ -27,24 +34,43 @@ export default {
       setPageTitle(i18n.global.t('home.title'));
     });
 
-    const { result, loading } = useQuery(gql`
-      query getHome {
-        recipes(limit: 5, sort: "created_at:desc") {
-          ...RecipeCard
+    const { result, loading } = useQuery(
+      gql`
+        query getHome {
+          recipes(limit: 5, sort: "created_at:desc") {
+            ...RecipeCard
+          }
+          me {
+            user {
+              lastViewedRecipes {
+                recipe {
+                  ...RecipeCard
+                }
+              }
+            }
+          }
+          tags(sort: "title") {
+            title
+            slug
+          }
         }
-        tags(sort: "title") {
-          title
-          slug
-        }
+        ${recipeCardFragment}
+      `,
+      null,
+      {
+        fetchPolicy: 'network-only',
       }
-      ${recipeCardFragment}
-    `);
+    );
 
     const recipes = useResult(result, [], (data) => data.recipes);
+    const lastViewedRecipes = useResult(result, [], (data) =>
+      data.me.user.lastViewedRecipes.map((r) => r.recipe)
+    );
     const tags = useResult(result, [], (data) => data.tags);
 
     return {
       recipes,
+      lastViewedRecipes,
       tags,
       loading,
     };
