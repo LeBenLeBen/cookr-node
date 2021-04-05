@@ -34,7 +34,15 @@ module.exports = {
       }
     },
     afterDelete(result) {
-      removeFromIndex(result.id);
+      const results = Array.isArray(result) ? result : [result];
+
+      results.forEach((res) => {
+        removeFromIndex(res.id);
+
+        if (res.image && res.image.id) {
+          strapi.query('file', 'upload').delete({ id: res.image.id });
+        }
+      });
     },
   },
 };
