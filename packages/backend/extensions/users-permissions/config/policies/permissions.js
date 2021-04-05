@@ -54,6 +54,14 @@ module.exports = async (ctx, next) => {
     }
 
     if (!ctx.state.user) {
+      /*----------------------------------------*\
+        BEGIN CUSTOM CODE
+      \*----------------------------------------*/
+      // Token is invalid, clear the cookie storing it
+      ctx.cookies.set('token');
+      /*----------------------------------------*\
+        END CUSTOM CODE
+      \*----------------------------------------*/
       return handleErrors(ctx, 'User Not Found', 'unauthorized');
     }
 
