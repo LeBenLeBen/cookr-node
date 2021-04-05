@@ -18,11 +18,12 @@
       <RecipeAuthor
         v-if="username"
         :username="username"
-        class="text-sm text-alt-600 mb-2"
+        class="text-sm text-alt-600"
       />
 
       <ul
-        class="flex items-end text-alt-600 text-sm md:text-base leading-none pt-1 mt-auto"
+        v-if="time || quantity"
+        class="flex items-end text-alt-600 text-sm md:text-base leading-none pt-3 mt-auto"
       >
         <li v-if="time" class="mr-4 sm:mr-6">
           <RecipeTime :time="time" />
