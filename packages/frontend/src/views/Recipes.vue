@@ -28,11 +28,11 @@
           v-model="params.sort"
           :options="[
             {
-              value: 'created_at:asc',
+              value: 'created_at:desc',
               label: $t('recipes.filters.sort.mostRecentFirst'),
             },
             {
-              value: 'created_at:desc',
+              value: 'created_at:asc',
               label: $t('recipes.filters.sort.oldestFirst'),
             },
             {
@@ -73,7 +73,7 @@ export default {
     });
 
     const params = reactive({
-      sort: 'created_at:asc',
+      sort: 'created_at:desc',
       tags: [],
     });
 

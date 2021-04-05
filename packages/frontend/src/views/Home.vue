@@ -29,7 +29,7 @@ export default {
 
     const { result, loading } = useQuery(gql`
       query getHome {
-        recipes(limit: 5, sort: "created_at:asc") {
+        recipes(limit: 5, sort: "created_at:desc") {
           ...RecipeCard
         }
         tags(sort: "title") {
