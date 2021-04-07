@@ -10,12 +10,18 @@
       class="w-full sm:w-auto flex-shrink-0 bg-alt-200 bg-opacity-75"
     />
 
-    <div class="py-2 px-4">
+    <div class="py-3 px-4">
       <h2
         class="font-display text-lg font-medium text-alt-700 overflow-hidden overflow-ellipsis whitespace-nowrap"
       >
         {{ title }}
       </h2>
+
+      <RecipeAuthor
+        v-if="username"
+        :username="username"
+        class="text-sm text-alt-600"
+      />
     </div>
   </router-link>
 </template>
@@ -37,6 +43,10 @@ export default {
     },
     image: {
       type: Object,
+      default: null,
+    },
+    username: {
+      type: String,
       default: null,
     },
   },
