@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const { parseMultipartData, sanitizeEntity } = require('strapi-utils');
 
 async function withOwnership(action, ctx) {
@@ -42,17 +43,25 @@ module.exports = {
       ].services.user.fetch({ id: ctx.state.user.id }, ['lastViewedRecipes']);
 
       if (user) {
-        let lastViewedRecipes = user.lastViewedRecipes.map((r) => r.recipe.id);
+        let lastViewedRecipes = user.lastViewedRecipes.filter(
+          (r) => r && r.recipe && r.recipe.id
+        );
         // Add the viewed recipe to the beginnning of the list
-        lastViewedRecipes.unshift(entity.id);
+        lastViewedRecipes.unshift({
+          recipe: { id: entity.id },
+          viewedAt: Date.now(),
+        });
         // Remove duplicates
-        lastViewedRecipes = [...new Set(lastViewedRecipes)];
+        lastViewedRecipes = _.uniqWith(
+          lastViewedRecipes,
+          (val, otherVal) => val.recipe.id === otherVal.recipe.id
+        );
         // Never store more than 5 recipes
         lastViewedRecipes = lastViewedRecipes.slice(0, 5);
 
         await strapi.plugins['users-permissions'].services.user.edit(
           { id: ctx.state.user.id },
-          { lastViewedRecipes: lastViewedRecipes.map((r) => ({ recipe: r })) }
+          { lastViewedRecipes: lastViewedRecipes }
         );
       }
     }

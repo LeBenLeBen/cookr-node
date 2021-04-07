@@ -64,7 +64,9 @@ export default {
 
     const recipes = useResult(result, [], (data) => data.recipes);
     const lastViewedRecipes = useResult(result, [], (data) =>
-      data.me.user.lastViewedRecipes.map((r) => r.recipe)
+      data.me.user.lastViewedRecipes
+        .filter((r) => !!r.recipe)
+        .map((r) => r.recipe)
     );
     const tags = useResult(result, [], (data) => data.tags);
 
