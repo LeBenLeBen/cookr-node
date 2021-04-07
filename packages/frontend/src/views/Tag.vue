@@ -10,6 +10,7 @@
 import { inject } from 'vue';
 import { useQuery, useResult } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
+import router from '@/router';
 
 export default {
   props: {
@@ -37,7 +38,11 @@ export default {
     const tag = useResult(result, null, (data) => data?.tags?.[0]);
 
     onResult((response) => {
-      setPageTitle(response.data?.tags?.[0]?.title);
+      if (response.data.tags?.[0]) {
+        setPageTitle(response.data.tags[0].title);
+      } else {
+        router.replace({ name: 'not-found' });
+      }
     });
 
     return {

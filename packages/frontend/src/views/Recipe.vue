@@ -178,7 +178,11 @@ export default {
     const recipe = useResult(result, null, (data) => data.recipe);
 
     onResult((response) => {
-      setPageTitle(response.data.recipe?.title);
+      if (response.data.recipe) {
+        setPageTitle(response.data.recipe?.title);
+      } else {
+        router.replace({ name: 'not-found' });
+      }
     });
 
     const { mutate: deleteRecipe, onDone: onDeleteDone } = useMutation(

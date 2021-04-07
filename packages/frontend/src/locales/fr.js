@@ -102,6 +102,11 @@ export default {
     success:
       'Votre mot de passe a bien été réinitialisé. Vous êtes maintenant connecté·e.',
   },
+  notFound: {
+    title: 'Erreur 404',
+    body: 'La page demandée est introuvable.',
+    home: 'Aller à l’accueil',
+  },
   api: {
     auth: {
       form: {
