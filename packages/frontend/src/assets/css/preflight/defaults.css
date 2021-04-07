@@ -21,7 +21,7 @@ a,
 button,
 input,
 label {
-  transition-property: color, background, border, box-shadow;
+  transition-property: color, background, border, box-shadow, opacity;
   transition-duration: 0.15s;
   transition-timing-function: ease-out;
 }
@@ -48,4 +48,9 @@ abbr[title] {
 
 label {
   cursor: pointer;
+}
+
+.break-words {
+  /* Extend overflow-wrap for Safari */
+  word-break: break-word;
 }

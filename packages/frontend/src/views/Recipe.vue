@@ -101,7 +101,7 @@
           <h2 class="mb-3 text-alt-600 font-bold text-sm uppercase">
             {{ $t('recipe.notes') }}
           </h2>
-          <div class="text-sm">
+          <div class="text-sm break-words">
             {{ recipe.notes }}
           </div>
         </div>
