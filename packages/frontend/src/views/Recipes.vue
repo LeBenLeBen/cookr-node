@@ -45,24 +45,12 @@
     </CCollapseContent>
   </CCollapse>
 
-  <h2 v-if="total" class="mb-4 text-alt-600 font-bold text-sm uppercase">
-    {{ $t('recipes.total', total) }}
-  </h2>
-
-  <RecipesList
-    :recipes="recipes"
-    :loading="loading"
-    :has-more="hasMore"
-    @loadMore="loadMore"
-  />
+  <RecipesList :sort="params.sort" :where="{ tags_in: params.tags }" />
 </template>
 
 <script>
-import { computed, inject, onMounted, reactive } from 'vue';
-import { useQuery, useResult } from '@vue/apollo-composable';
-import gql from 'graphql-tag';
+import { inject, onMounted, reactive } from 'vue';
 
-import { recipeCardFragment } from '@/services/fragments';
 import i18n from '@/i18n';
 
 export default {
@@ -77,75 +65,8 @@ export default {
       tags: [],
     });
 
-    const { result: aggregatorResult } = useQuery(
-      gql`
-        query total($sort: String!, $where: JSON) {
-          recipesConnection(sort: $sort, where: $where) {
-            aggregate {
-              count
-              totalCount
-            }
-          }
-        }
-      `,
-      () => ({
-        sort: params.sort,
-        where: {
-          tags_in: params.tags,
-        },
-      })
-    );
-    const total = useResult(
-      aggregatorResult,
-      0,
-      (data) =>
-        data.recipesConnection.aggregate.count ||
-        data.recipesConnection.aggregate.totalCount
-    );
-
-    const { result, loading, fetchMore } = useQuery(
-      gql`
-        query explore($start: Int!, $sort: String!, $where: JSON) {
-          recipes(limit: 20, start: $start, sort: $sort, where: $where) {
-            ...RecipeCard
-          }
-        }
-        ${recipeCardFragment}
-      `,
-      () => ({
-        start: 0,
-        sort: params.sort,
-        where: {
-          tags_in: params.tags,
-        },
-      })
-    );
-    const recipes = useResult(result, [], (data) => data.recipes);
-
-    function loadMore() {
-      fetchMore({
-        variables: {
-          start: recipes.value.length,
-        },
-        updateQuery: (previousResult, { fetchMoreResult }) => {
-          if (!fetchMoreResult) return previousResult;
-          return {
-            ...previousResult,
-            recipes: [...previousResult.recipes, ...fetchMoreResult.recipes],
-          };
-        },
-      });
-    }
-
-    const hasMore = computed(() => recipes.value.length < total.value);
-
     return {
       params,
-      recipes,
-      loading,
-      hasMore,
-      loadMore,
-      total,
     };
   },
 };

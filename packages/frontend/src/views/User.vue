@@ -10,16 +10,14 @@
       <div class="hidden sm:block ml-3">{{ $t('recipe.new.title') }}</div>
     </CBtn>
   </PageHeader>
-  <RecipesList :recipes="result?.recipes" :loading="loading" />
+
+  <RecipesList sort="title:asc" :where="{ author: { username: username } }" />
 </template>
 
 <script>
 import { computed, inject, onMounted } from 'vue';
-import { useQuery } from '@vue/apollo-composable';
-import gql from 'graphql-tag';
 
 import store from '@/store';
-import { recipeCardFragment } from '@/services/fragments';
 
 export default {
   props: {
@@ -35,27 +33,7 @@ export default {
       setPageTitle(props.username);
     });
 
-    const { result, loading } = useQuery(
-      gql`
-        query getRecipesForUser($username: String!) {
-          recipes(
-            where: { author: { username: $username } }
-            sort: "title:asc"
-          ) {
-            ...RecipeCard
-          }
-        }
-        ${recipeCardFragment}
-      `,
-      () => ({ username: props.username }),
-      {
-        fetchPolicy: 'network-only',
-      }
-    );
-
     return {
-      result,
-      loading,
       isCurrentUser: computed(
         () => props.username === store.state.currentUser?.username
       ),
