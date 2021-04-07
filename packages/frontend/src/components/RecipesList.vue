@@ -1,6 +1,6 @@
 <template>
-  <h2 v-if="total" class="mb-4 text-alt-600 font-bold text-sm uppercase">
-    {{ $t('recipes.total', total) }}
+  <h2 class="mb-4 text-alt-600 font-bold text-sm uppercase">
+    {{ total ? $t('recipes.total', total) : '&nbsp;' }}
   </h2>
   <ul v-if="recipes.length || loading" class="space-y-4">
     <template v-if="recipes.length">

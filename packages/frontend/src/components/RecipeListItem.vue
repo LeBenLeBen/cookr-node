@@ -1,7 +1,7 @@
 <template>
   <router-link
     :to="{ name: 'recipe', params: { id: id, slug: slug } }"
-    class="overflow-hidden flex flex-col sm:flex-row text-alt-800 hover:text-alt-800 bg-alt-50 hover:bg-white rounded-xl border-b border-alt-200 ring-offset-2"
+    class="overflow-hidden min-height-150px flex flex-col sm:flex-row text-alt-800 hover:text-alt-800 bg-alt-50 hover:bg-white rounded-xl border-b border-alt-200 ring-offset-2"
   >
     <RecipeImage
       :image="image"
