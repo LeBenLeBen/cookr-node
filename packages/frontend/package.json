@@ -6,38 +6,37 @@
   "license": "MIT",
   "author": "Benoît Burgener",
   "scripts": {
-    "postinstall": "node scripts/patch-apollo.js",
     "dev": "vite",
     "build": "vite build",
     "generate:sprite": "node scripts/generate-svg-sprite.js"
   },
   "dependencies": {
-    "@apollo/client": "^3.3.13",
-    "@vee-validate/rules": "^4.2.2",
-    "@vue/apollo-composable": "^4.0.0-alpha.12",
+    "@apollo/client": "^3.4.13",
+    "@vee-validate/rules": "^4.4.7",
+    "@vue/apollo-composable": "^4.0.0-alpha.14",
     "@vueform/multiselect": "^1.3.6",
-    "@vueuse/core": "^4.6.3",
-    "algoliasearch": "^4.8.6",
-    "apollo-upload-client": "^14.1.3",
+    "@vueuse/core": "^6.4.1",
+    "algoliasearch": "^4.10.5",
+    "apollo-upload-client": "^16.0.0",
     "chusho": "^0.3.0",
-    "graphql": "^15.5.0",
-    "graphql-tag": "^2.11.0",
+    "graphql": "^15.5.3",
+    "graphql-tag": "^2.12.5",
     "ikonate": "^1.1.1",
     "lodash": "^4.17.21",
     "scroll-into-view-if-needed": "^2.2.28",
-    "swiper": "^6.5.4",
+    "swiper": "^7.0.6",
     "vee-validate": "^4.2.2",
-    "vue": "^3.0.11",
+    "vue": "^3.2.12",
     "vue-content-loader": "^2.0.0",
     "vue-i18n": "^9.0.0-rc.5",
     "vue-router": "^4.0.2"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.2.1",
-    "@vue/compiler-sfc": "^3.0.11",
-    "sass": "^1.32.8",
-    "vite": "^2.1.5",
+    "@vitejs/plugin-vue": "^1.8.1",
+    "@vue/compiler-sfc": "^3.2.12",
+    "sass": "^1.41.1",
+    "vite": "^2.5.10",
     "vite-plugin-components": "^0.8.3",
-    "vite-plugin-windicss": "0.12.2"
+    "vite-plugin-windicss": "1.4.3"
   }
 }
