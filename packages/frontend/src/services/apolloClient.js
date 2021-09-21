@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client/core';
 import { from } from '@apollo/client/link/core/from';
 import { onError } from '@apollo/client/link/error';
+import { setContext } from '@apollo/client/link/context';
 import { createUploadLink } from 'apollo-upload-client';
 
 import router from '@/router';
@@ -16,6 +17,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
         message === 'Invalid token.' ||
         message === 'Forbidden'
       ) {
+        store.setToken(null);
         store.setCurrentUser(null);
         router.replace({ name: 'login' });
       }
@@ -40,13 +42,22 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 
 const httpLink = createUploadLink({
   uri: `/api/graphql`,
-  credentials: 'include',
 });
 
 const cache = new InMemoryCache();
 
+const authLink = setContext((_, { headers }) => {
+  const token = store.state.token;
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+
 export default new ApolloClient({
-  link: from([errorLink, httpLink]),
+  link: from([authLink, errorLink, httpLink]),
   cache,
   defaultOptions: {
     watchQuery: {

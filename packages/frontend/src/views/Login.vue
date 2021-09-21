@@ -61,6 +61,7 @@ export default {
             user {
               ...CurrentUser
             }
+            jwt
           }
         }
         ${currentUserFragment}
@@ -77,6 +78,7 @@ export default {
 
       authenticate().then(
         (result) => {
+          store.setToken(result.data.login.jwt);
           store.setCurrentUser(result.data.login.user);
           router.push({ name: 'home' });
         },
