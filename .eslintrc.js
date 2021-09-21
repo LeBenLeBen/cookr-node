@@ -9,7 +9,6 @@ module.exports = {
     'eslint:recommended',
     'plugin:prettier/recommended',
     'prettier',
-    'prettier/vue',
   ],
   parser: 'vue-eslint-parser',
   rules: {
