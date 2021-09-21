@@ -26,6 +26,7 @@ import isNil from 'lodash/isNil';
 
 import router from '@/router';
 import i18n from '@/i18n';
+import { recipeFragment } from '@/services/fragments';
 
 export default {
   props: {
@@ -45,25 +46,10 @@ export default {
       gql`
         query getRecipeToEdit($id: ID!) {
           recipe(id: $id) {
-            id
-            title
-            slug
-            time
-            quantity
-            steps
-            notes
-            ingredients {
-              amount
-              title
-            }
-            tags {
-              id
-            }
-            image {
-              id
-            }
+            ...RecipeFragment
           }
         }
+        ${recipeFragment}
       `,
       () => ({ id: props.id }),
       {
@@ -95,11 +81,11 @@ export default {
         mutation updateRecipe($id: ID!, $data: editRecipeInput) {
           updateRecipe(input: { where: { id: $id }, data: $data }) {
             recipe {
-              id
-              slug
+              ...RecipeFragment
             }
           }
         }
+        ${recipeFragment}
       `
     );
 
