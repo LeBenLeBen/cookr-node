@@ -15,4 +15,8 @@ export default {
   setCurrentUser(user) {
     state.value.currentUser = user;
   },
+
+  updateCurrentUser(user) {
+    state.value.currentUser = Object.assign({}, state.value.currentUser, user);
+  },
 };

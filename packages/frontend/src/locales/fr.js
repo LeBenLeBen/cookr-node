@@ -83,6 +83,7 @@ export default {
   auth: {
     login: 'Connexion',
     email: 'E-mail',
+    username: 'Nom d’utilisateur',
     password: 'Mot de passe',
     forgotPassword: 'Mot de passe oublié?',
     logout: 'Déconnexion',
@@ -101,6 +102,10 @@ export default {
     submit: 'Modifier mon mot de passe',
     success:
       'Votre mot de passe a bien été réinitialisé. Vous êtes maintenant connecté·e.',
+  },
+  profile: {
+    title: 'Mon profil',
+    success: 'Votre profil a bien été mis à jour.',
   },
   notFound: {
     title: 'Erreur 404',

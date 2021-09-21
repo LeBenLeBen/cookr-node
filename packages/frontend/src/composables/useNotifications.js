@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue';
+import { ref, computed, nextTick } from 'vue';
 
 const _notifications = ref(new Set());
 
@@ -10,7 +10,9 @@ export function notify(notification) {
     _notifications.value.delete(sameExistingNotification);
   }
 
-  _notifications.value.add(notification);
+  nextTick(() => {
+    _notifications.value.add(notification);
+  });
 
   const duration = notification.duration ?? 10000;
 

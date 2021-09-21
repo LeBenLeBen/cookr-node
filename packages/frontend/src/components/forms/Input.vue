@@ -1,7 +1,20 @@
 <template>
   <input
     :value="modelValue"
-    class="block w-full py-3 px-5 border border-alt-300 bg-white rounded-lg shadow-inner ring-offset-2 ring-offset-alt-100"
+    class="
+      block
+      w-full
+      py-3
+      px-5
+      border border-alt-300
+      rounded-lg
+      shadow-inner
+      ring-offset-2 ring-offset-alt-100
+    "
+    :class="{
+      'bg-alt-200': disabled,
+      'bg-white': !disabled,
+    }"
     v-bind="attrs"
     @input="(e) => $emit('update:modelValue', e.target.value)"
   />
@@ -20,6 +33,10 @@ export default {
       type: Boolean,
       default: null,
     },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   emits: ['update:modelValue'],
@@ -30,6 +47,7 @@ export default {
     return {
       attrs: {
         required: props.required ?? formGroup?.required,
+        disabled: props.disabled,
       },
     };
   },
