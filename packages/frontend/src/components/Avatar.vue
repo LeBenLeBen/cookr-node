@@ -1,6 +1,15 @@
 <template>
   <div
-    class="flex items-center justify-center w-12 h-12 overflow-hidden rounded-full bg-alt-200"
+    class="
+      flex
+      items-center
+      justify-center
+      w-12
+      h-12
+      overflow-hidden
+      rounded-full
+      bg-alt-200
+    "
   >
     <CPicture
       v-if="picture"

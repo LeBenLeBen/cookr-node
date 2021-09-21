@@ -1,7 +1,17 @@
 <template>
   <textarea
     :value="modelValue"
-    class="block w-full py-3 px-5 border border-alt-300 bg-white rounded-lg shadow-inner ring-offset-2 ring-offset-alt-100"
+    class="
+      block
+      w-full
+      py-3
+      px-5
+      border border-alt-300
+      bg-white
+      rounded-lg
+      shadow-inner
+      ring-offset-2 ring-offset-alt-100
+    "
     v-bind="attrs"
     @input="(e) => $emit('update:modelValue', e.target.value)"
   />

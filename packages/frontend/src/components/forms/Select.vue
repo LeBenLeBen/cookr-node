@@ -2,7 +2,16 @@
   <div class="relative">
     <select
       :value="modelValue"
-      class="appearance-none block w-full overflow-ellipsis border border-alt-300 bg-white shadow-inner ring-offset-2 ring-offset-alt-100"
+      class="
+        appearance-none
+        block
+        w-full
+        overflow-ellipsis
+        border border-alt-300
+        bg-white
+        shadow-inner
+        ring-offset-2 ring-offset-alt-100
+      "
       :class="{
         'py-3 pl-5 pr-10 rounded-lg': !variant,
         'py-2 pl-2 pr-6 text-sm rounded': variant.includes('small'),
