@@ -1,7 +1,19 @@
 <template>
   <div class="relative -mx-4 sm:-mx-6 md:-ml-1 lg:-mx-1">
     <CBtn
-      class="-sm:hidden py-1 absolute top-20 left-0 z-10 text-alt-600 hover:text-alt-800 bg-white bg-opacity-85 hover:bg-opacity-100 rounded-r"
+      class="
+        -sm:hidden
+        py-1
+        absolute
+        top-20
+        left-0
+        z-10
+        text-alt-600
+        hover:text-alt-800
+        bg-white bg-opacity-85
+        hover:bg-opacity-100
+        rounded-r
+      "
       :class="{ 'opacity-0': swiper?.isBeginning }"
       @click="swiper?.slidePrev()"
     >
@@ -49,7 +61,19 @@
       </template>
     </Swiper>
     <CBtn
-      class="-sm:hidden py-1 absolute top-20 right-0 z-10 text-alt-600 hover:text-alt-800 bg-white bg-opacity-85 hover:bg-opacity-100 rounded-l"
+      class="
+        -sm:hidden
+        py-1
+        absolute
+        top-20
+        right-0
+        z-10
+        text-alt-600
+        hover:text-alt-800
+        bg-white bg-opacity-85
+        hover:bg-opacity-100
+        rounded-l
+      "
       :class="{ 'opacity-0': swiper?.isEnd }"
       @click="swiper?.slideNext()"
     >
@@ -63,7 +87,7 @@ import { ref } from 'vue';
 
 import SwiperCore, { Mousewheel } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/vue';
-import 'swiper/swiper.scss';
+import 'swiper/scss';
 
 SwiperCore.use([Mousewheel]);
 
