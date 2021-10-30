@@ -204,7 +204,7 @@ export default {
     },
   },
 
-  emits: ['update:isOpen'],
+  emits: ['update:is-open'],
 
   setup() {
     const client = algoliasearch(
@@ -262,11 +262,11 @@ export default {
 
   methods: {
     open() {
-      this.$emit('update:isOpen', true);
+      this.$emit('update:is-open', true);
     },
 
     close() {
-      this.$emit('update:isOpen', false);
+      this.$emit('update:is-open', false);
     },
 
     handleBlur() {

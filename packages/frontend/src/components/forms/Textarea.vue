@@ -13,7 +13,7 @@
       ring-offset-2 ring-offset-alt-100
     "
     v-bind="attrs"
-    @input="(e) => $emit('update:modelValue', e.target.value)"
+    @input="(e) => $emit('update:model-value', e.target.value)"
   />
 </template>
 
@@ -32,7 +32,7 @@ export default {
     },
   },
 
-  emits: ['update:modelValue'],
+  emits: ['update:model-value'],
 
   setup(props) {
     const formGroup = inject('formGroup', {});

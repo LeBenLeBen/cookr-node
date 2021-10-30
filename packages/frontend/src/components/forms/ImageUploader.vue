@@ -42,7 +42,7 @@
       <CBtn
         v-if="modelValue && image"
         class="text-left text-sm text-red-500 hover:text-red-700"
-        @click="$emit('update:modelValue', null)"
+        @click="$emit('update:model-value', null)"
       >
         <CIcon id="bin" class="mr-2" />
         {{ $t('imageUploader.delete') }}
@@ -63,7 +63,7 @@ export default {
     },
   },
 
-  emits: ['update:modelValue'],
+  emits: ['update:model-value'],
 
   setup(props) {
     const { result } = useQuery(
@@ -110,7 +110,7 @@ export default {
       const file = e.target.files[0];
       if (file) {
         this.upload({ file }).then((response) => {
-          this.$emit('update:modelValue', response.data.upload.id);
+          this.$emit('update:model-value', response.data.upload.id);
         });
       }
     },

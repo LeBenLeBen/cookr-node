@@ -62,7 +62,7 @@
           >
             <Search
               :is-open="searchIsOpen"
-              @update:isOpen="(val) => (searchIsOpen = val)"
+              @update:is-open="(val) => (searchIsOpen = val)"
             />
             <div class="ml-8 hidden md:block">
               <CurrentUser />

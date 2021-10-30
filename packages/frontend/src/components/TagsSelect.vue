@@ -4,7 +4,7 @@
     :options="tags"
     mode="tags"
     searchable
-    @change="(val) => $emit('update:modelValue', val)"
+    @change="(val) => $emit('update:model-value', val)"
   />
 </template>
 
@@ -21,7 +21,7 @@ export default {
     },
   },
 
-  emits: ['update:modelValue'],
+  emits: ['update:model-value'],
 
   setup() {
     const { result } = useQuery(

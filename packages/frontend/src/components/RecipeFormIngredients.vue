@@ -10,7 +10,7 @@
           v-slot="{ field }"
           :model-value="ingredient.amount"
           :name="`ingredients[${i}].amount`"
-          @update:modelValue="(val) => updateField(i, 'amount', val)"
+          @update:model-value="(val) => updateField(i, 'amount', val)"
         >
           <Input
             v-bind="field"
@@ -22,7 +22,7 @@
           v-slot="{ field }"
           :model-value="ingredient.title"
           :name="`ingredients[${i}].title`"
-          @update:modelValue="(val) => updateField(i, 'title', val)"
+          @update:model-value="(val) => updateField(i, 'title', val)"
         >
           <Input
             v-bind="field"
@@ -49,17 +49,17 @@ export default {
     },
   },
 
-  emits: ['update:modelValue'],
+  emits: ['update:model-value'],
 
   methods: {
     updateField(index, field, value) {
       const ingredients = [...this.modelValue];
       ingredients[index] = { ...ingredients[index], [field]: value };
-      this.$emit('update:modelValue', ingredients);
+      this.$emit('update:model-value', ingredients);
     },
 
     addItem() {
-      this.$emit('update:modelValue', [
+      this.$emit('update:model-value', [
         ...this.modelValue,
         { title: null, amount: null },
       ]);

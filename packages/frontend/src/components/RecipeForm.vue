@@ -12,7 +12,7 @@
           v-slot="{ field }"
           :model-value="title"
           name="title"
-          @update:modelValue="(val) => $emit('update:title', val)"
+          @update:model-value="(val) => $emit('update:title', val)"
         >
           <Input id="title" ref="title" v-bind="field" />
         </Field>
@@ -34,7 +34,7 @@
 
         <RecipeFormIngredients
           :model-value="ingredients"
-          @update:modelValue="(val) => $emit('update:ingredients', val)"
+          @update:model-value="(val) => $emit('update:ingredients', val)"
         />
       </div>
     </FormGroup>
@@ -49,7 +49,7 @@
         :model-value="steps"
         rows="10"
         class="sm:col-span-3"
-        @update:modelValue="(val) => $emit('update:steps', val)"
+        @update:model-value="(val) => $emit('update:steps', val)"
       />
     </FormGroup>
 
@@ -61,7 +61,7 @@
             v-slot="{ field }"
             :model-value="time"
             name="time"
-            @update:modelValue="(val) => $emit('update:time', val, 'number')"
+            @update:model-value="(val) => $emit('update:time', val, 'number')"
           >
             <Input
               id="time"
@@ -89,7 +89,7 @@
             v-slot="{ field }"
             :model-value="quantity"
             name="quantity"
-            @update:modelValue="
+            @update:model-value="
               (val) => $emit('update:quantity', val, 'number')
             "
           >
@@ -117,7 +117,7 @@
       <div class="sm:col-span-3">
         <ImageUploader
           :model-value="image"
-          @update:modelValue="(val) => $emit('update:image', val)"
+          @update:model-value="(val) => $emit('update:image', val)"
         />
       </div>
     </FormGroup>
@@ -128,7 +128,7 @@
         <TagsSelect
           id="tags"
           :model-value="tags"
-          @update:modelValue="(val) => $emit('update:tags', val)"
+          @update:model-value="(val) => $emit('update:tags', val)"
         />
       </div>
     </FormGroup>
@@ -140,7 +140,7 @@
         :model-value="notes"
         rows="4"
         class="sm:col-span-3"
-        @update:modelValue="(val) => $emit('update:notes', val)"
+        @update:model-value="(val) => $emit('update:notes', val)"
       />
     </FormGroup>
 
