@@ -42,6 +42,11 @@ export default {
     total: 'Aucune recette | 1 recette | {count} recettes',
     empty: 'Aucune recette à afficher.',
   },
+  favorites: {
+    title: 'Recettes favorites',
+    add: 'Ajouter aux favoris',
+    remove: 'Retirer des favoris',
+  },
   home: {
     title: 'Accueil',
     recentlyAdded: 'Ajoutées en dernier',
@@ -56,6 +61,7 @@ export default {
     browse: 'Toutes les recettes',
     mySpace: 'Mon espace',
     myRecipes: 'Mes recettes',
+    favoritesRecipes: 'Recettes favorites',
   },
   search: {
     label: 'Rechercher',

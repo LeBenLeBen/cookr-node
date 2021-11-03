@@ -39,16 +39,18 @@
       </ul>
     </header>
 
-    <div v-if="recipe.image" class="-mx-4 sm:-mx-6 lg:-ml-8 mb-6 md:mb-10">
+    <div class="relative -mx-4 sm:-mx-6 lg:-ml-8 mb-6 md:mb-10">
       <RecipeImage
         :image="recipe.image"
         width="792"
         height="528"
         class="md:rounded-xl bg-alt-200"
       />
+
+      <RecipeFavoriteBtn :recipe-id="recipe.id" />
     </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-10 items-start">
+    <div class="relative grid sm:grid-cols-2 lg:grid-cols-3 gap-10 items-start">
       <div v-if="steps.length" class="sm:col-span-2 space-y-10">
         <div
           class="
@@ -57,8 +59,9 @@
             focus-within:text-alt-400
             rounded-lg
             shadow-lg
+            -mt-12
+            md:-mt-20
           "
-          :class="{ '-mt-12 md:-mt-20': recipe.image }"
         >
           <ol class="divide-y divide-alt-100">
             <li

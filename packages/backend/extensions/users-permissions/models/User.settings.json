@@ -70,7 +70,8 @@
         "images"
       ],
       "plugin": "upload",
-      "required": false
+      "required": false,
+      "pluginOptions": {}
     },
     "lastViewedRecipes": {
       "type": "component",

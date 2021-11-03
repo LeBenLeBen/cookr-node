@@ -35,6 +35,7 @@ createSvgSpritesheet({
     'danger.svg',
     'info.svg',
     'ok.svg',
+    'favourite.svg',
   ],
   save: true,
 });

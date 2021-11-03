@@ -8,11 +8,12 @@
 <script>
 import { computed, provide, ref } from 'vue';
 import gql from 'graphql-tag';
-import { useQuery } from '@vue/apollo-composable';
+import { useQuery, provideApolloClient } from '@vue/apollo-composable';
 import { useTitle } from '@vueuse/core';
 
 import store from './store';
 import { currentUserFragment } from './services/fragments';
+import apolloClient from './services/apolloClient';
 
 import AppLayout from '@/components/layouts/AppLayout.vue';
 import AuthLayout from '@/components/layouts/AuthLayout.vue';
@@ -39,6 +40,7 @@ export default {
       computed(() => pageTitle.value)
     );
     provide('setPageTitle', setPageTitle);
+    provideApolloClient(apolloClient);
 
     if (store.state.currentUser) {
       const { onResult } = useQuery(

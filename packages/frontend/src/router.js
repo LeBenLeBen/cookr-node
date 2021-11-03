@@ -65,6 +65,14 @@ const router = createRouter({
       },
     },
     {
+      path: '/recipes/favorites',
+      name: 'favorites-recipes',
+      component: () => import('./views/Favorites.vue'),
+      meta: {
+        layout: 'AppLayout',
+      },
+    },
+    {
       path: '/tags/:slug',
       name: 'tag',
       component: () => import('./views/Tag.vue'),

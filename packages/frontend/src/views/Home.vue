@@ -42,6 +42,7 @@ export default {
           }
           me {
             user {
+              id
               lastViewedRecipes {
                 recipe {
                   ...RecipeCard
@@ -50,6 +51,7 @@ export default {
             }
           }
           tags(sort: "title") {
+            id
             title
             slug
           }

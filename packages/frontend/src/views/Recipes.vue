@@ -17,7 +17,7 @@
     >
       <FormGroup>
         <Label for="tags" class="mb-2">{{ $t('recipe.tags') }}</Label>
-        <TagsSelect id="tags" v-model="params.tags" />
+        <TagsSelect id="tags" v-model="params.where.tags_in" />
       </FormGroup>
       <FormGroup>
         <Label for="sort" class="mb-2">
@@ -45,29 +45,26 @@
     </CCollapseContent>
   </CCollapse>
 
-  <RecipesList :sort="params.sort" :where="{ tags_in: params.tags }" />
+  <RecipesList v-bind="collection.state" @load-more="collection.loadMore" />
 </template>
 
-<script>
+<script setup>
 import { inject, onMounted, reactive } from 'vue';
 
 import i18n from '@/i18n';
+import useRecipesList from '@/composables/useRecipesList';
 
-export default {
-  setup() {
-    const setPageTitle = inject('setPageTitle');
-    onMounted(() => {
-      setPageTitle(i18n.global.t('explore.title'));
-    });
+const setPageTitle = inject('setPageTitle');
+onMounted(() => {
+  setPageTitle(i18n.global.t('explore.title'));
+});
 
-    const params = reactive({
-      sort: 'created_at:desc',
-      tags: [],
-    });
-
-    return {
-      params,
-    };
+const params = reactive({
+  sort: 'created_at:desc',
+  where: {
+    tags_in: [],
   },
-};
+});
+
+const collection = useRecipesList(params);
 </script>

@@ -11,57 +11,56 @@
         <div class="hidden sm:block ml-3">{{ $t('recipe.new.title') }}</div>
       </CBtn>
     </PageHeader>
-    <RecipesList sort="title:asc" :where="{ author: { username: username } }" />
+    <RecipesList v-bind="collection.state" @load-more="collection.loadMore" />
   </template>
 </template>
 
-<script>
+<script setup>
 import { computed, inject } from 'vue';
 import { useQuery, useResult } from '@vue/apollo-composable';
 import gql from 'graphql-tag';
 
 import store from '@/store';
 import router from '@/router';
+import useRecipesList from '@/composables/useRecipesList';
 
-export default {
-  props: {
-    username: {
-      type: String,
-      required: true,
+const setPageTitle = inject('setPageTitle');
+const props = defineProps({
+  username: {
+    type: String,
+    required: true,
+  },
+});
+const { result, onResult } = useQuery(
+  gql`
+    query userProfile($username: String!) {
+      users(where: { username: $username }) {
+        id
+        username
+      }
+    }
+  `,
+  () => ({ username: props.username })
+);
+const user = useResult(result, null, (data) => data.users?.[0]);
+
+onResult((response) => {
+  if (response.data.users?.[0]) {
+    setPageTitle(response.data.users[0].username);
+  } else {
+    router.replace({ name: 'not-found' });
+  }
+});
+
+const isCurrentUser = computed(
+  () => props.username === store.state.currentUser?.username
+);
+const collection = useRecipesList({
+  sort: 'title:asc',
+  where: {
+    author: {
+      username: props.username,
     },
   },
-
-  setup(props) {
-    const setPageTitle = inject('setPageTitle');
-
-    const { result, onResult } = useQuery(
-      gql`
-        query userProfile($username: String!) {
-          users(where: { username: $username }) {
-            id
-            username
-          }
-        }
-      `,
-      () => ({ username: props.username })
-    );
-
-    const user = useResult(result, null, (data) => data.users?.[0]);
-
-    onResult((response) => {
-      if (response.data.users?.[0]) {
-        setPageTitle(response.data.users[0].username);
-      } else {
-        router.replace({ name: 'not-found' });
-      }
-    });
-
-    return {
-      user,
-      isCurrentUser: computed(
-        () => props.username === store.state.currentUser?.username
-      ),
-    };
-  },
-};
+});
 </script>

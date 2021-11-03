@@ -49,6 +49,13 @@ export default {
                 params: { username: store?.state?.currentUser?.username },
               },
             },
+            {
+              label: this.$t('app.favoritesRecipes'),
+              icon: 'favourite',
+              to: {
+                name: 'favorites-recipes',
+              },
+            },
           ],
         },
       ];
