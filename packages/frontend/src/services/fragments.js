@@ -23,6 +23,7 @@ export const recipeFragment = gql`
   fragment RecipeFragment on Recipe {
     id
     title
+    slug
     author {
       id
       username

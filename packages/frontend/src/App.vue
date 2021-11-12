@@ -1,19 +1,34 @@
 <template>
   <component :is="$route.meta.layout">
     <Notifications />
-    <RouterView />
+    <RouterView v-slot="{ Component }">
+      <template v-if="Component">
+        <transition
+          enter-active-class="transition-opacity ease-in-out"
+          leave-active-class="transition-opacity ease-in-out"
+          enter-from-class="opacity-0"
+          leave-to-class="opacity-0"
+          mode="out-in"
+        >
+          <Suspense>
+            <component :is="Component"></component>
+          </Suspense>
+        </transition>
+      </template>
+    </RouterView>
   </component>
 </template>
 
 <script>
 import { computed, provide, ref } from 'vue';
 import gql from 'graphql-tag';
-import { useQuery, provideApolloClient } from '@vue/apollo-composable';
+import { useQuery, provideClient } from '@urql/vue';
 import { useTitle } from '@vueuse/core';
 
 import store from './store';
+
 import { currentUserFragment } from './services/fragments';
-import apolloClient from './services/apolloClient';
+import client from './services/apiClient';
 
 import AppLayout from '@/components/layouts/AppLayout.vue';
 import AuthLayout from '@/components/layouts/AuthLayout.vue';
@@ -40,11 +55,11 @@ export default {
       computed(() => pageTitle.value)
     );
     provide('setPageTitle', setPageTitle);
-    provideApolloClient(apolloClient);
+    provideClient(client);
 
     if (store.state.currentUser) {
-      const { onResult } = useQuery(
-        gql`
+      useQuery({
+        query: gql`
           query currentUser {
             me {
               ...CurrentUser
@@ -52,13 +67,10 @@ export default {
           }
           ${currentUserFragment}
         `,
-        null,
-        {
-          fetchPolicy: 'no-cache',
-        }
-      );
-
-      onResult((result) => {
+        context: {
+          requestPolicy: 'no-cache',
+        },
+      }).then((result) => {
         if (result.data.me) {
           store.setCurrentUser(result.data.me);
         }

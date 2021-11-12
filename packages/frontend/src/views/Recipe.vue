@@ -1,5 +1,5 @@
 <template>
-  <template v-if="recipe">
+  <div v-if="recipe">
     <header class="flex space-x-2 mb-6 md:mb-8">
       <div class="flex-grow">
         <h1 class="h1 mb-1 sm:mb-2 md:mb-3">{{ recipe.title }}</h1>
@@ -47,7 +47,9 @@
         class="md:rounded-xl bg-alt-200"
       />
 
-      <RecipeFavoriteBtn :recipe-id="recipe.id" />
+      <Suspense>
+        <RecipeFavoriteBtn :recipe-id="recipe.id" />
+      </Suspense>
     </div>
 
     <div class="relative grid sm:grid-cols-2 lg:grid-cols-3 gap-10 items-start">
@@ -138,17 +140,18 @@
         </div>
       </div>
     </div>
-  </template>
+  </div>
 </template>
 
 <script>
 import { inject } from 'vue';
-import { useQuery, useMutation, useResult } from '@vue/apollo-composable';
+import { useQuery, useMutation } from '@urql/vue';
 import gql from 'graphql-tag';
 
 import router from '@/router';
 import store from '@/store';
 import { recipeFragment } from '@/services/fragments';
+import { useResult } from '@/composables/useResult';
 
 export default {
   props: {
@@ -162,35 +165,10 @@ export default {
     },
   },
 
-  setup(props) {
+  async setup(props) {
     const setPageTitle = inject('setPageTitle');
 
-    const { result, onResult } = useQuery(
-      gql`
-        query getRecipe($id: ID!) {
-          recipe(id: $id) {
-            ...RecipeFragment
-          }
-        }
-        ${recipeFragment}
-      `,
-      () => ({ id: props.id }),
-      {
-        fetchPolicy: 'network-only',
-      }
-    );
-
-    const recipe = useResult(result, null, (data) => data.recipe);
-
-    onResult((response) => {
-      if (response.data.recipe) {
-        setPageTitle(response.data.recipe?.title);
-      } else {
-        router.replace({ name: 'not-found' });
-      }
-    });
-
-    const { mutate: deleteRecipe, onDone: onDeleteDone } = useMutation(
+    const { executeMutation } = useMutation(
       gql`
         mutation deleteRecipe($id: ID!) {
           deleteRecipe(input: { where: { id: $id } }) {
@@ -199,25 +177,40 @@ export default {
             }
           }
         }
-      `,
-      () => ({
-        update: (cache, { data: { deleteRecipe } }) => {
-          cache.evict({ id: cache.identify(deleteRecipe.recipe) });
-          cache.gc();
-        },
-      })
+      `
     );
 
-    onDeleteDone(() => {
-      router.replace({
-        name: 'user',
-        params: { username: store.state.currentUser.username },
-      });
+    const result = await useQuery({
+      query: gql`
+        query getRecipe($id: ID!) {
+          recipe(id: $id) {
+            ...RecipeFragment
+          }
+        }
+        ${recipeFragment}
+      `,
+      variables: { id: props.id },
     });
+
+    if (result.data.value.recipe) {
+      setPageTitle(result.data.value.recipe?.title);
+    } else {
+      router.replace({ name: 'not-found' });
+      return;
+    }
+
+    const recipe = useResult(result.data, null, (data) => data.recipe);
 
     return {
       recipe,
-      deleteRecipe,
+      deleteRecipe(params) {
+        executeMutation(params).then(() => {
+          router.replace({
+            name: 'user',
+            params: { username: store.state.currentUser.username },
+          });
+        });
+      },
     };
   },
 

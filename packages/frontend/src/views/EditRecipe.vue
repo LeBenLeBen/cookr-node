@@ -1,124 +1,118 @@
 <template>
-  <PageHeader :title="$t('recipe.edit.title')" />
+  <div>
+    <PageHeader :title="$t('recipe.edit.title')" />
 
-  <RecipeForm
-    v-if="input"
-    v-model:title.trim="input.title"
-    v-model:ingredients="input.ingredients"
-    v-model:steps.trim="input.steps"
-    v-model:time.number="input.time"
-    v-model:quantity.number="input.quantity"
-    v-model:notes.trim="input.notes"
-    v-model:tags="input.tags"
-    v-model:image="input.image"
-    @submit="prepareToSave"
-  />
+    <RecipeForm
+      v-if="input"
+      v-model:title.trim="input.title"
+      v-model:ingredients="input.ingredients"
+      v-model:steps.trim="input.steps"
+      v-model:time.number="input.time"
+      v-model:quantity.number="input.quantity"
+      v-model:notes.trim="input.notes"
+      v-model:tags="input.tags"
+      v-model:image="input.image"
+      @submit="prepareToSave"
+    />
+  </div>
 </template>
 
-<script>
-import { inject, onMounted, reactive } from 'vue';
-import { useMutation, useQuery, useResult } from '@vue/apollo-composable';
+<script setup>
+import { inject, onMounted, reactive, watch } from 'vue';
+import { useMutation, useQuery } from '@urql/vue';
 import gql from 'graphql-tag';
 import deburr from 'lodash/deburr';
 import kebabCase from 'lodash/kebabCase';
-import omitBy from 'lodash/omitBy';
-import isNil from 'lodash/isNil';
+import cloneDeep from 'lodash/cloneDeep';
 
 import router from '@/router';
 import i18n from '@/i18n';
 import { recipeFragment } from '@/services/fragments';
+import { useResult } from '@/composables/useResult';
 
-export default {
-  props: {
-    id: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
   },
+});
 
-  setup(props) {
-    const setPageTitle = inject('setPageTitle');
-    onMounted(() => {
-      setPageTitle(i18n.global.t('recipe.edit.title'));
-    });
+const setPageTitle = inject('setPageTitle');
 
-    const { result } = useQuery(
-      gql`
-        query getRecipeToEdit($id: ID!) {
-          recipe(id: $id) {
-            ...RecipeFragment
-          }
+onMounted(() => {
+  setPageTitle(i18n.global.t('recipe.edit.title'));
+});
+
+const { executeMutation } = useMutation(
+  gql`
+    mutation updateRecipe($id: ID!, $data: editRecipeInput) {
+      updateRecipe(input: { where: { id: $id }, data: $data }) {
+        recipe {
+          ...RecipeFragment
         }
-        ${recipeFragment}
-      `,
-      () => ({ id: props.id }),
-      {
-        fetchPolicy: 'network-only',
       }
-    );
+    }
+    ${recipeFragment}
+  `
+);
 
-    const input = useResult(result, null, ({ recipe }) => {
-      return reactive({
-        title: recipe.title,
-        slug: recipe.slug,
-        ingredients: recipe.ingredients?.length
-          ? recipe.ingredients.map(({ amount, title }) => ({
-              amount,
-              title,
-            }))
-          : [{ title: null, amount: null }],
-        steps: recipe.steps,
-        time: recipe.time,
-        quantity: recipe.quantity,
-        notes: recipe.notes,
-        tags: recipe.tags.map((t) => t.id),
-        image: recipe.image?.id,
-      });
+const result = await useQuery({
+  query: gql`
+    query getRecipeToEdit($id: ID!) {
+      recipe(id: $id) {
+        ...RecipeFragment
+      }
+    }
+    ${recipeFragment}
+  `,
+  variables: { id: props.id },
+  context: {
+    requestPolicy: 'network-only',
+  },
+});
+
+const recipe = useResult(result.data, null, (data) => data.recipe);
+
+const input = reactive({
+  title: recipe.value.title,
+  slug: recipe.value.slug,
+  ingredients: recipe.value.ingredients?.length
+    ? recipe.value.ingredients.map(({ amount, title }) => ({
+        amount,
+        title,
+      }))
+    : [{ title: null, amount: null }],
+  steps: recipe.value.steps,
+  time: recipe.value.time,
+  quantity: recipe.value.quantity,
+  notes: recipe.value.notes,
+  tags: recipe.value.tags.map((t) => t.id),
+  image: recipe.value.image?.id,
+});
+
+function save(params) {
+  executeMutation(params).then((result) => {
+    router.push({
+      name: 'recipe',
+      params: {
+        id: result.data.updateRecipe.recipe.id,
+        slug: result.data.updateRecipe.recipe.slug,
+      },
     });
+  });
+}
 
-    const { mutate: save, onDone } = useMutation(
-      gql`
-        mutation updateRecipe($id: ID!, $data: editRecipeInput) {
-          updateRecipe(input: { where: { id: $id }, data: $data }) {
-            recipe {
-              ...RecipeFragment
-            }
-          }
-        }
-        ${recipeFragment}
-      `
-    );
+watch(
+  () => input.title,
+  (val) => {
+    input.slug = kebabCase(deburr(val));
+  }
+);
 
-    onDone((result) => {
-      router.push({
-        name: 'recipe',
-        params: {
-          id: result.data.updateRecipe.recipe.id,
-          slug: result.data.updateRecipe.recipe.slug,
-        },
-      });
-    });
+function prepareToSave() {
+  let data = cloneDeep(input);
+  data.ingredients = data.ingredients.filter((i) => i.title?.trim());
 
-    return {
-      input,
-      save,
-    };
-  },
-
-  watch: {
-    'input.title'(val) {
-      this.input.slug = kebabCase(deburr(val));
-    },
-  },
-
-  methods: {
-    prepareToSave() {
-      let data = omitBy(this.input, isNil);
-      data = omitBy(data, (i) => typeof i === 'string' && i.trim() === '');
-      data.ingredients = data.ingredients.filter((i) => i.title?.trim());
-
-      this.save({ id: this.id, data: data });
-    },
-  },
-};
+  save({ id: props.id, data });
+}
 </script>

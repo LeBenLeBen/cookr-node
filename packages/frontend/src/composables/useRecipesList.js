@@ -1,13 +1,20 @@
-import { reactive, computed } from 'vue';
+import { ref, reactive, computed } from 'vue';
 import gql from 'graphql-tag';
-import { useQuery, useResult } from '@vue/apollo-composable';
+import { useQuery } from '@urql/vue';
+import { useResult } from './useResult';
 
 import { recipeCardFragment } from '@/services/fragments';
 
 export default function useRecipesList(params) {
-  const { result: aggregatorResult } = useQuery(
-    gql`
-      query total($sort: String, $where: JSON) {
+  const limit = 20;
+  const start = ref(0);
+
+  const result = useQuery({
+    query: gql`
+      query explore($limit: Int!, $start: Int!, $sort: String, $where: JSON) {
+        recipes(limit: $limit, start: $start, sort: $sort, where: $where) {
+          ...RecipeCard
+        }
         recipesConnection(sort: $sort, where: $where) {
           aggregate {
             count
@@ -15,57 +22,33 @@ export default function useRecipesList(params) {
           }
         }
       }
+      ${recipeCardFragment}
     `,
-    () => ({
-      sort: params.sort,
+    variables: {
+      start,
+      limit,
+      sort: computed(() => params.sort),
       where: params.where,
-    })
-  );
+    },
+  });
+
   const total = useResult(
-    aggregatorResult,
+    result.data,
     0,
     (data) =>
       data.recipesConnection.aggregate.count ||
       data.recipesConnection.aggregate.totalCount
   );
-
-  const { result, loading, fetchMore } = useQuery(
-    gql`
-      query explore($start: Int!, $sort: String, $where: JSON) {
-        recipes(limit: 20, start: $start, sort: $sort, where: $where) {
-          ...RecipeCard
-        }
-      }
-      ${recipeCardFragment}
-    `,
-    () => ({
-      start: 0,
-      sort: params.sort,
-      where: params.where,
-    })
-  );
-  const recipes = useResult(result, [], (data) => data.recipes);
-
+  const recipes = useResult(result.data, [], (data) => data.recipes);
   const hasMore = computed(() => recipes.value?.length < total.value);
 
   function loadMore() {
-    fetchMore({
-      variables: {
-        start: recipes.value?.length,
-      },
-      updateQuery: (previousResult, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return previousResult;
-        return {
-          ...previousResult,
-          recipes: [...previousResult.recipes, ...fetchMoreResult.recipes],
-        };
-      },
-    });
+    start.value += limit;
   }
 
   return reactive({
     state: {
-      loading,
+      loading: result.fetching,
       recipes,
       total,
       hasMore,

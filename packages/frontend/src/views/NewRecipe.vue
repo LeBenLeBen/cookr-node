@@ -1,22 +1,24 @@
 <template>
-  <PageHeader :title="$t('recipe.new.title')" />
+  <div>
+    <PageHeader :title="$t('recipe.new.title')" />
 
-  <RecipeForm
-    v-model:title.trim="input.title"
-    v-model:ingredients="input.ingredients"
-    v-model:steps.trim="input.steps"
-    v-model:time.number="input.time"
-    v-model:quantity.number="input.quantity"
-    v-model:notes.trim="input.notes"
-    v-model:tags="input.tags"
-    v-model:image="input.image"
-    @submit="prepareToSave"
-  />
+    <RecipeForm
+      v-model:title.trim="input.title"
+      v-model:ingredients="input.ingredients"
+      v-model:steps.trim="input.steps"
+      v-model:time.number="input.time"
+      v-model:quantity.number="input.quantity"
+      v-model:notes.trim="input.notes"
+      v-model:tags="input.tags"
+      v-model:image="input.image"
+      @submit="prepareToSave"
+    />
+  </div>
 </template>
 
-<script>
-import { inject, onMounted, reactive } from 'vue';
-import { useMutation } from '@vue/apollo-composable';
+<script setup>
+import { inject, onMounted, reactive, watch } from 'vue';
+import { useMutation } from '@urql/vue';
 import gql from 'graphql-tag';
 import deburr from 'lodash/deburr';
 import kebabCase from 'lodash/kebabCase';
@@ -27,69 +29,58 @@ import router from '@/router';
 import store from '@/store';
 import i18n from '@/i18n';
 
-export default {
-  setup() {
-    const setPageTitle = inject('setPageTitle');
-    onMounted(() => {
-      setPageTitle(i18n.global.t('recipe.new.title'));
-    });
+const setPageTitle = inject('setPageTitle');
 
-    const input = reactive({
-      author: store.state.currentUser.id,
-      title: null,
-      slug: null,
-      ingredients: [{ title: null, amount: null }],
-      steps: null,
-      time: null,
-      quantity: null,
-      notes: null,
-      tags: [],
-      image: null,
-    });
+onMounted(() => {
+  setPageTitle(i18n.global.t('recipe.new.title'));
+});
 
-    const { mutate: save, onDone } = useMutation(
-      gql`
-        mutation createRecipe($input: createRecipeInput) {
-          createRecipe(input: $input) {
-            recipe {
-              id
-              slug
-            }
-          }
+const input = reactive({
+  author: store.state.currentUser.id,
+  title: null,
+  slug: null,
+  ingredients: [{ title: null, amount: null }],
+  steps: null,
+  time: null,
+  quantity: null,
+  notes: null,
+  tags: [],
+  image: null,
+});
+
+const { executeMutation: save } = useMutation(
+  gql`
+    mutation createRecipe($input: createRecipeInput) {
+      createRecipe(input: $input) {
+        recipe {
+          id
+          slug
         }
-      `
-    );
+      }
+    }
+  `
+);
 
-    onDone((result) => {
-      router.push({
-        name: 'recipe',
-        params: {
-          id: result.data.createRecipe.recipe.id,
-          slug: result.data.createRecipe.recipe.slug,
-        },
-      });
+watch(
+  () => input.title,
+  (val) => {
+    input.slug = kebabCase(deburr(val));
+  }
+);
+
+function prepareToSave() {
+  let data = omitBy(input, isNil);
+  data = omitBy(data, (i) => typeof i === 'string' && i.trim() === '');
+  data.ingredients = data.ingredients.filter((i) => i.title?.trim());
+
+  save({ input: { data } }).then((result) => {
+    router.push({
+      name: 'recipe',
+      params: {
+        id: result.data.createRecipe.recipe.id,
+        slug: result.data.createRecipe.recipe.slug,
+      },
     });
-
-    return {
-      input,
-      save,
-    };
-  },
-
-  watch: {
-    'input.title'(val) {
-      this.input.slug = kebabCase(deburr(val));
-    },
-  },
-
-  methods: {
-    prepareToSave() {
-      let data = omitBy(this.input, isNil);
-      data = omitBy(data, (i) => typeof i === 'string' && i.trim() === '');
-      data.ingredients = data.ingredients.filter((i) => i.title?.trim());
-
-      this.save({ input: { data } });
-    },
-  },
-};
+  });
+}
 </script>

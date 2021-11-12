@@ -20,7 +20,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useQuery, useMutation } from '@vue/apollo-composable';
+import { useQuery, useMutation } from '@urql/vue';
 import gql from 'graphql-tag';
 
 import store from '@/store';
@@ -35,15 +35,15 @@ const props = defineProps({
 
 const favoriteRecipe = ref(null);
 
-const { onResult } = useQuery(
-  gql`
+const result = await useQuery({
+  query: gql`
     query favoriteRecipe($where: JSON!) {
-      usersFavoriteRecipes(where: $where) {
+      usersFavoriteRecipes(start: 0, limit: 1, where: $where) {
         id
       }
     }
   `,
-  () => ({
+  variables: {
     where: {
       user: {
         id: store.state.currentUser.id,
@@ -52,16 +52,14 @@ const { onResult } = useQuery(
         id: props.recipeId,
       },
     },
-  })
-);
-
-onResult((result) => {
-  if (result.data.usersFavoriteRecipes.length) {
-    favoriteRecipe.value = result.data.usersFavoriteRecipes[0];
-  }
+  },
 });
 
-const { mutate: deleteFavoriteRecipe, onDone: onDeletionDone } = useMutation(
+if (result.data.value.usersFavoriteRecipes?.length) {
+  favoriteRecipe.value = result.data.value.usersFavoriteRecipes[0];
+}
+
+const { executeMutation: deleteFavoriteRecipe } = useMutation(
   gql`
     mutation deleteFavoriteRecipe($id: ID!) {
       deleteUsersFavoriteRecipe(input: { where: { id: $id } }) {
@@ -73,11 +71,7 @@ const { mutate: deleteFavoriteRecipe, onDone: onDeletionDone } = useMutation(
   `
 );
 
-onDeletionDone(() => {
-  favoriteRecipe.value = null;
-});
-
-const { mutate: createFavoriteRecipe, onDone: onCreationDone } = useMutation(
+const { executeMutation: createFavoriteRecipe } = useMutation(
   gql`
     mutation createFavoriteRecipe($data: UsersFavoriteRecipeInput!) {
       createUsersFavoriteRecipe(input: { data: $data }) {
@@ -93,15 +87,12 @@ const { mutate: createFavoriteRecipe, onDone: onCreationDone } = useMutation(
   `
 );
 
-onCreationDone((result) => {
-  favoriteRecipe.value =
-    result.data.createUsersFavoriteRecipe.usersFavoriteRecipe;
-});
-
 function toggle() {
   if (favoriteRecipe.value) {
     deleteFavoriteRecipe({
       id: favoriteRecipe.value.id,
+    }).then(() => {
+      favoriteRecipe.value = null;
     });
   } else {
     createFavoriteRecipe({
@@ -109,6 +100,9 @@ function toggle() {
         user: store.state.currentUser.id,
         recipe: props.recipeId,
       },
+    }).then((result) => {
+      favoriteRecipe.value =
+        result.data.createUsersFavoriteRecipe.usersFavoriteRecipe;
     });
   }
 }

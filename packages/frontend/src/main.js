@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+import urql from '@urql/vue';
 import Chusho, { $chusho } from 'chusho';
 import chushoConfig from '../chusho.config.js';
 
@@ -9,8 +10,14 @@ import App from './App.vue';
 
 import 'windi.css';
 import './assets/css/main.css';
+import apiClient from './services/apiClient.js';
 
-createApp(App).use(router).use(i18n).use(Chusho, chushoConfig).mount('#app');
+createApp(App)
+  .use(urql, apiClient)
+  .use(router)
+  .use(i18n)
+  .use(Chusho, chushoConfig)
+  .mount('#app');
 
 if (import.meta.hot) {
   import.meta.hot.accept('../chusho.config.js', (newConfig) => {

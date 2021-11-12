@@ -8,43 +8,35 @@
   />
 </template>
 
-<script>
+<script setup>
 import gql from 'graphql-tag';
-import { useQuery } from '@vue/apollo-composable';
-import { computed } from 'vue';
+import { useQuery } from '@urql/vue';
+import { useResult } from '@/composables/useResult';
 
-export default {
-  props: {
-    modelValue: {
-      type: Array,
-      default: () => [],
-    },
+defineProps({
+  modelValue: {
+    type: Array,
+    default: () => [],
   },
+});
 
-  emits: ['update:model-value'],
+defineEmits(['update:model-value']);
 
-  setup() {
-    const { result } = useQuery(
-      gql`
-        query allTags {
-          tags {
-            id
-            title
-          }
-        }
-      `
-    );
+const result = useQuery({
+  query: gql`
+    query allTags {
+      tags {
+        id
+        title
+      }
+    }
+  `,
+});
 
-    return {
-      tags: computed(() => {
-        return (
-          result?.value?.tags?.map((tag) => ({
-            value: tag.id,
-            label: tag.title,
-          })) ?? []
-        );
-      }),
-    };
-  },
-};
+const tags = useResult(result.data, [], (data) =>
+  data.tags.map((tag) => ({
+    value: tag.id,
+    label: tag.title,
+  }))
+);
 </script>

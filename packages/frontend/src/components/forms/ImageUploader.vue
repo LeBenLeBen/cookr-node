@@ -51,69 +51,61 @@
   </div>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue';
 import gql from 'graphql-tag';
-import { useMutation, useQuery, useResult } from '@vue/apollo-composable';
+import { useMutation, useQuery } from '@urql/vue';
 
-export default {
-  props: {
-    modelValue: {
-      type: String,
-      default: null,
-    },
+import { useResult } from '@/composables/useResult';
+
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: null,
   },
+});
 
-  emits: ['update:model-value'],
+const emit = defineEmits(['update:model-value']);
 
-  setup(props) {
-    const { result } = useQuery(
-      gql`
-        query imageUploaderImage($id: ID!) {
-          files(where: { id: $id }) {
-            id
-            hash
-            ext
-          }
-        }
-      `,
-      () => ({
-        id: props.modelValue,
-      }),
-      () => ({
-        enabled: !!props.modelValue,
-      })
-    );
-    const image = useResult(result, null, (data) => {
-      return props.modelValue ? data?.files?.[0] : null;
-    });
-
-    const { mutate: upload } = useMutation(
-      gql`
-        mutation editUploadImage($file: Upload!) {
-          upload(file: $file) {
-            id
-            hash
-            ext
-          }
-        }
-      `
-    );
-
-    return {
-      upload,
-      image,
-    };
-  },
-
-  methods: {
-    handleImageChange(e) {
-      const file = e.target.files[0];
-      if (file) {
-        this.upload({ file }).then((response) => {
-          this.$emit('update:model-value', response.data.upload.id);
-        });
+const result = useQuery({
+  query: gql`
+    query imageUploaderImage($id: ID!) {
+      files(where: { id: $id }) {
+        id
+        hash
+        ext
       }
-    },
+    }
+  `,
+  variables: {
+    id: computed(() => props.modelValue),
   },
-};
+  pause: computed(() => !props.modelValue),
+});
+
+const image = useResult(result.data, null, (data) => {
+  return props.modelValue ? data?.files?.[0] : null;
+});
+
+const { executeMutation: upload } = useMutation(
+  gql`
+    mutation editUploadImage($file: Upload!) {
+      upload(file: $file) {
+        id
+        hash
+        ext
+      }
+    }
+  `
+);
+
+function handleImageChange(e) {
+  const file = e.target.files[0];
+
+  if (file) {
+    upload({ file }).then((response) => {
+      emit('update:model-value', response.data.upload.id);
+    });
+  }
+}
 </script>

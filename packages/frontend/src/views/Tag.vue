@@ -1,21 +1,20 @@
 <template>
-  <template v-if="tag">
+  <div v-if="tag">
     <h1 class="h1 mb-6">{{ tag.title }}</h1>
 
-    <RecipesList
-      v-if="collection"
-      v-bind="collection.state"
-      @load-more="collection.loadMore"
-    />
-  </template>
+    <RecipesList v-bind="collection.state" @load-more="collection.loadMore" />
+  </div>
 </template>
 
 <script setup>
-import { ref, inject, watch } from 'vue';
-import { useQuery, useResult } from '@vue/apollo-composable';
+import { inject } from 'vue';
+import { useQuery } from '@urql/vue';
+
 import gql from 'graphql-tag';
 import router from '@/router';
+
 import useRecipesList from '@/composables/useRecipesList';
+import { useResult } from '@/composables/useResult';
 
 const props = defineProps({
   slug: {
@@ -26,8 +25,8 @@ const props = defineProps({
 
 const setPageTitle = inject('setPageTitle');
 
-const { result, onResult } = useQuery(
-  gql`
+const result = await useQuery({
+  query: gql`
     query getTag($slug: String!) {
       tags(where: { slug: $slug }) {
         id
@@ -35,26 +34,18 @@ const { result, onResult } = useQuery(
       }
     }
   `,
-  () => ({ slug: props.slug })
-);
-
-const tag = useResult(result, null, (data) => data?.tags?.[0]);
-
-onResult((response) => {
-  if (response.data.tags?.[0]) {
-    setPageTitle(response.data.tags[0].title);
-  } else {
-    router.replace({ name: 'not-found' });
-  }
+  variables: { slug: props.slug },
 });
 
-const collection = ref(null);
+if (result.data.value.tags?.[0]) {
+  setPageTitle(result.data.value.tags[0].title);
+} else {
+  router.replace({ name: 'not-found' });
+}
 
-watch(tag, () => {
-  if (tag.value) {
-    collection.value = useRecipesList({
-      where: { tags_in: [tag.value.id] },
-    });
-  }
+const tag = useResult(result.data, null, (data) => data?.tags?.[0]);
+
+const collection = useRecipesList({
+  where: { tags_in: [tag.value?.id] },
 });
 </script>

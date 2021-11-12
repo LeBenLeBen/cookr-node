@@ -11,13 +11,13 @@
     "generate:sprite": "node scripts/generate-svg-sprite.js"
   },
   "dependencies": {
-    "@apollo/client": "^3.4.16",
+    "@urql/exchange-graphcache": "^4.3.5",
+    "@urql/exchange-multipart-fetch": "^0.1.13",
+    "@urql/vue": "^0.6.0",
     "@vee-validate/rules": "^4.5.3",
-    "@vue/apollo-composable": "^4.0.0-alpha.15",
     "@vueform/multiselect": "^1.3.6",
     "@vueuse/core": "^6.7.4",
     "algoliasearch": "^4.11.0",
-    "apollo-upload-client": "^16.0.0",
     "chusho": "^0.3.0",
     "graphql": "^15.5.3",
     "graphql-tag": "^2.12.5",
