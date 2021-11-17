@@ -51,8 +51,11 @@ import { currentUserFragment } from '@/services/fragments';
 
 import usePageTitle from '@/composables/usePageTitle';
 import { getErrorMessages, StrapiErrors } from '@/helpers/api';
+import { useRoute } from 'vue-router';
 
 usePageTitle(i18n.global.t('auth.login'));
+
+const route = useRoute();
 
 const loading = ref(false);
 const errors = ref<StrapiErrors | null>(null);
@@ -86,7 +89,9 @@ function login() {
 
       store.setToken(result.data.login.jwt);
       store.setCurrentUser(result.data.login.user);
-      router.push({ name: 'home' });
+      router.push(
+        (route.query?.redirectTo as string | undefined) ?? { name: 'home' }
+      );
     })
     .finally(() => {
       loading.value = false;

@@ -37,44 +37,46 @@ import store from '@/store';
 const { t } = useI18n();
 
 const menu = computed<MenuGroup[]>(() => {
-  return [
-    {
-      label: t('app.explore'),
-      items: [
+  return store.state.currentUser?.username
+    ? [
         {
-          label: t('app.home'),
-          icon: 'home-alt2',
-          to: { name: 'home' },
+          label: t('app.explore'),
+          items: [
+            {
+              label: t('app.home'),
+              icon: 'home-alt2',
+              to: { name: 'home' },
+            },
+            {
+              label: t('app.browse'),
+              icon: 'restaurant',
+              to: {
+                name: 'recipes',
+              },
+            },
+          ],
         },
         {
-          label: t('app.browse'),
-          icon: 'restaurant',
-          to: {
-            name: 'recipes',
-          },
+          label: t('app.mySpace'),
+          items: [
+            {
+              label: t('app.myRecipes'),
+              icon: 'book',
+              to: {
+                name: 'user',
+                params: { username: store.state.currentUser.username },
+              },
+            },
+            {
+              label: t('app.favoritesRecipes'),
+              icon: 'favourite',
+              to: {
+                name: 'favorites-recipes',
+              },
+            },
+          ],
         },
-      ],
-    },
-    {
-      label: t('app.mySpace'),
-      items: [
-        {
-          label: t('app.myRecipes'),
-          icon: 'book',
-          to: {
-            name: 'user',
-            params: { username: store.state.currentUser!.username },
-          },
-        },
-        {
-          label: t('app.favoritesRecipes'),
-          icon: 'favourite',
-          to: {
-            name: 'favorites-recipes',
-          },
-        },
-      ],
-    },
-  ];
+      ]
+    : [];
 });
 </script>

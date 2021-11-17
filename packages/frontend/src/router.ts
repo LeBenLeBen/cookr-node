@@ -134,7 +134,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (!to.meta.guest && !store.state.token) {
-    next({ name: 'login' });
+    next({ name: 'login', query: { redirectTo: to.fullPath } });
   } else if (to.meta.guest && store.state.token) {
     next({ name: 'home' });
   } else {
