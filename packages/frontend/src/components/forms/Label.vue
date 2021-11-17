@@ -10,25 +10,21 @@
   </label>
 </template>
 
-<script>
+<script lang="ts" setup>
 import { inject } from 'vue';
 
-export default {
-  props: {
-    required: {
-      type: Boolean,
-      default: false,
-    },
-  },
+import { FormGroupProps } from './FormGroup.vue';
 
-  setup(props) {
-    const formGroup = inject('formGroup', {});
-
-    return {
-      attrs: {
-        required: props.required || formGroup?.required,
-      },
-    };
+const props = defineProps({
+  required: {
+    type: Boolean,
+    default: false,
   },
+});
+
+const formGroup = inject<FormGroupProps | null>('formGroup', null);
+
+const attrs = {
+  required: props.required || formGroup?.required,
 };
 </script>

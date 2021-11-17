@@ -20,34 +20,31 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
+import { PropType } from 'vue';
+
 import { crop, hdpiSources, imageUrl } from '@/helpers/images';
+import { GQLUploadFile } from '@/types/graphqlTypes';
 
-export default {
-  props: {
-    image: {
-      type: Object,
-      default: null,
-    },
+const props = defineProps({
+  image: {
+    type: Object as PropType<Pick<GQLUploadFile, 'hash' | 'ext'> | null>,
+    default: null,
   },
+});
 
-  setup(props) {
-    const url = imageUrl(props.image);
-    const cropOptions = {
-      w: 48,
-      h: 48,
-    };
-    const picture = url
-      ? {
-          src: crop(url, cropOptions),
-          sources: hdpiSources(url, cropOptions),
-          loading: 'lazy',
-        }
-      : null;
+const url = imageUrl(props.image);
 
-    return {
-      picture,
-    };
-  },
+const cropOptions = {
+  w: 48,
+  h: 48,
 };
+
+const picture = url
+  ? {
+      src: crop(url, cropOptions),
+      sources: hdpiSources(url, cropOptions),
+      loading: 'lazy',
+    }
+  : null;
 </script>

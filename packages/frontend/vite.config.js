@@ -49,7 +49,7 @@ export default {
         enableAll: true,
       },
       scan: {
-        include: ['./chusho.config.js'],
+        include: ['./chusho.config.ts'],
       },
     }),
   ],

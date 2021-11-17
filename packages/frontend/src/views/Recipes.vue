@@ -49,16 +49,15 @@
   </div>
 </template>
 
-<script setup>
-import { inject, onMounted, reactive } from 'vue';
+<script lang="ts" setup>
+import { reactive } from 'vue';
 
 import i18n from '@/i18n';
-import useRecipesList from '@/composables/useRecipesList';
 
-const setPageTitle = inject('setPageTitle');
-onMounted(() => {
-  setPageTitle(i18n.global.t('explore.title'));
-});
+import useRecipesList from '@/composables/useRecipesList';
+import usePageTitle from '@/composables/usePageTitle';
+
+usePageTitle(i18n.global.t('explore.title'));
 
 const params = reactive({
   sort: 'created_at:desc',

@@ -1,9 +1,10 @@
+import { ChushoUserOptions } from 'chusho';
 import spriteUrl from './src/assets/images/icons.svg';
 
 export default {
   components: {
     alert: {
-      class: ({ variant }) => {
+      class: ({ variant }: { variant: string }) => {
         return [
           'block py-3 px-5 border-b-1 rounded-lg',
           {
@@ -22,7 +23,13 @@ export default {
       },
     },
     btn: {
-      class: ({ variant, disabled }) => {
+      class: ({
+        variant,
+        disabled,
+      }: {
+        variant: string;
+        disabled: boolean;
+      }) => {
         return [
           'inline-flex items-center justify-center ring-offset-2 ring-offset-alt-100',
           {
@@ -49,4 +56,4 @@ export default {
       class: 'icon',
     },
   },
-};
+} as ChushoUserOptions;

@@ -6,13 +6,11 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    quantity: {
-      type: Number,
-      required: true,
-    },
+<script lang="ts" setup>
+defineProps({
+  quantity: {
+    type: Number,
+    required: true,
   },
-};
+});
 </script>

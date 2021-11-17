@@ -12,26 +12,26 @@
   </div>
 </template>
 
-<script setup>
-import { ref, inject, onMounted, computed } from 'vue';
+<script lang="ts" setup>
+import { ref, computed } from 'vue';
 import gql from 'graphql-tag';
 import { useQuery } from '@urql/vue';
 
 import { recipeCardFragment } from '@/services/fragments';
 import i18n from '@/i18n';
 import store from '@/store';
-import { useResult } from '@/composables/useResult';
+import useResult from '@/composables/useResult';
+import usePageTitle from '@/composables/usePageTitle';
+import { GQLQuery } from '@/types/graphqlTypes';
 
-const setPageTitle = inject('setPageTitle');
-
-onMounted(() => {
-  setPageTitle(i18n.global.t('favorites.title'));
-});
+usePageTitle(i18n.global.t('favorites.title'));
 
 const limit = 20;
 const start = ref(0);
 
-const result = useQuery({
+const result = useQuery<
+  Pick<GQLQuery, 'usersFavoriteRecipes' | 'usersFavoriteRecipesConnection'>
+>({
   query: gql`
     query favoriteRecipes(
       $limit: Int!
@@ -65,7 +65,7 @@ const result = useQuery({
     sort: 'created_at:desc',
     where: {
       user: {
-        id: store.state.currentUser.id,
+        id: store.state.currentUser!.id,
       },
     },
   },

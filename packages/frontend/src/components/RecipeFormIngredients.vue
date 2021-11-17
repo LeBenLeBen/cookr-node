@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul aria-labelledby="ingredients" class="space-y-4">
+    <ul ref="ingredientsList" aria-labelledby="ingredients" class="space-y-4">
       <li
         v-for="(ingredient, i) in modelValue"
         :key="i"
@@ -10,7 +10,7 @@
           v-slot="{ field }"
           :model-value="ingredient.amount"
           :name="`ingredients[${i}].amount`"
-          @update:model-value="(val) => updateField(i, 'amount', val)"
+          @update:model-value="(val: string) => updateField(i, 'amount', val)"
         >
           <Input
             v-bind="field"
@@ -22,7 +22,7 @@
           v-slot="{ field }"
           :model-value="ingredient.title"
           :name="`ingredients[${i}].title`"
-          @update:model-value="(val) => updateField(i, 'title', val)"
+          @update:model-value="(val: string) => updateField(i, 'title', val)"
         >
           <Input
             v-bind="field"
@@ -40,38 +40,48 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    modelValue: {
-      type: Array,
-      required: true,
-    },
+<script lang="ts" setup>
+import { ref, nextTick, PropType } from 'vue';
+
+import { GQLComponentRecipesIngredients } from '@/types/graphqlTypes';
+
+const props = defineProps({
+  modelValue: {
+    type: Array as PropType<Partial<GQLComponentRecipesIngredients>[]>,
+    required: true,
   },
+});
 
-  emits: ['update:model-value'],
+const emit = defineEmits(['update:model-value']);
 
-  methods: {
-    updateField(index, field, value) {
-      const ingredients = [...this.modelValue];
-      ingredients[index] = { ...ingredients[index], [field]: value };
-      this.$emit('update:model-value', ingredients);
-    },
+const ingredientsList = ref<HTMLUListElement | null>(null);
 
-    addItem() {
-      this.$emit('update:model-value', [
-        ...this.modelValue,
-        { title: null, amount: null },
-      ]);
+function updateField(
+  index: number,
+  field: keyof GQLComponentRecipesIngredients,
+  value: string
+) {
+  const ingredients = [...props.modelValue];
+  ingredients[index] = { ...ingredients[index], [field]: value };
+  emit('update:model-value', ingredients);
+}
 
-      this.$nextTick(function () {
-        Array.from(
-          this.$el.querySelectorAll('[data-field="ingredient-amount"]')
-        )
-          .pop()
-          ?.focus();
-      });
-    },
-  },
-};
+function addItem() {
+  const ingredients: Partial<GQLComponentRecipesIngredients>[] = [
+    ...props.modelValue,
+    { title: undefined, amount: undefined },
+  ];
+
+  emit('update:model-value', ingredients);
+
+  nextTick(() => {
+    const amountFields = ingredientsList.value?.querySelectorAll(
+      '[data-field="ingredient-amount"]'
+    ) as NodeListOf<HTMLInputElement>;
+
+    if (amountFields) {
+      Array.from(amountFields).pop()?.focus();
+    }
+  });
+}
 </script>

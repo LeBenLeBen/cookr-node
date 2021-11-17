@@ -4,19 +4,21 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+export type FormGroupProps = {
+  required: boolean;
+};
+</script>
+
+<script lang="ts" setup>
 import { provide } from 'vue';
 
-export default {
-  props: {
-    required: {
-      type: Boolean,
-      default: false,
-    },
+const props: FormGroupProps = defineProps({
+  required: {
+    type: Boolean,
+    default: false,
   },
+});
 
-  setup(props) {
-    provide('formGroup', props);
-  },
-};
+provide('formGroup', props);
 </script>

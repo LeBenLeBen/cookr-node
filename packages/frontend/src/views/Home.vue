@@ -21,22 +21,29 @@
   </div>
 </template>
 
-<script setup>
-import { inject, onMounted } from 'vue';
+<script lang="ts" setup>
 import { useQuery } from '@urql/vue';
 import gql from 'graphql-tag';
 
 import { recipeCardFragment } from '@/services/fragments';
 import i18n from '@/i18n';
-import { useResult } from '@/composables/useResult';
+import useResult from '@/composables/useResult';
+import usePageTitle from '@/composables/usePageTitle';
+import {
+  GQLRecipe,
+  GQLTags,
+  GQLUsersPermissionsMe,
+} from '@/types/graphqlTypes';
 
-const setPageTitle = inject('setPageTitle');
+usePageTitle(i18n.global.t('home.title'));
 
-onMounted(() => {
-  setPageTitle(i18n.global.t('home.title'));
-});
+interface HomeResponse {
+  recipes: GQLRecipe[];
+  me: GQLUsersPermissionsMe;
+  tags: GQLTags[];
+}
 
-const result = useQuery({
+const result = useQuery<HomeResponse>({
   query: gql`
     query getHome {
       recipes(start: 0, limit: 5, sort: "created_at:desc") {

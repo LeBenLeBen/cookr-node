@@ -47,7 +47,7 @@
           :key="recipe.id"
           class="slide p-1"
         >
-          <RecipeCard v-bind="recipe" :username="recipe.author.username" />
+          <RecipeCard v-bind="recipe" :username="recipe.author?.username" />
         </SwiperSlide>
       </template>
       <template v-if="loading">
@@ -82,16 +82,18 @@
   </div>
 </template>
 
-<script>
-import { ref } from 'vue';
-
+<script lang="ts">
+import { PropType, defineComponent, ref } from 'vue';
 import SwiperCore, { Mousewheel } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/vue';
+import type { Swiper as SwiperClass } from 'swiper';
 import 'swiper/scss';
+
+import { GQLRecipe } from '@/types/graphqlTypes';
 
 SwiperCore.use([Mousewheel]);
 
-export default {
+export default defineComponent({
   components: {
     Swiper,
     SwiperSlide,
@@ -99,7 +101,7 @@ export default {
 
   props: {
     recipes: {
-      type: Array,
+      type: Array as PropType<GQLRecipe[]>,
       default: () => [],
     },
     loading: {
@@ -109,16 +111,16 @@ export default {
   },
 
   setup() {
-    const swiper = ref(null);
+    const swiper = ref<SwiperClass | null>(null);
 
     return {
       swiper,
-      onSwiper: (s) => {
+      onSwiper: (s: SwiperClass) => {
         swiper.value = s;
       },
     };
   },
-};
+});
 </script>
 
 <style scoped>

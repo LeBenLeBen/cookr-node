@@ -62,7 +62,7 @@
           >
             <Search
               :is-open="searchIsOpen"
-              @update:is-open="(val) => (searchIsOpen = val)"
+              @update:is-open="(val: boolean) => (searchIsOpen = val)"
             />
             <div class="ml-8 hidden md:block">
               <CurrentUser />
@@ -185,22 +185,18 @@
   </CCollapse>
 </template>
 
-<script>
-import { ref } from 'vue';
+<script lang="ts" setup>
+import { ref, PropType } from 'vue';
 
-export default {
-  props: {
-    menu: {
-      type: Array,
-      required: true,
-    },
-  },
+import { MenuGroup } from '@/components/layouts/AppLayout.vue';
 
-  setup() {
-    return {
-      searchIsOpen: ref(false),
-      menuIsOpen: ref(false),
-    };
+defineProps({
+  menu: {
+    type: Array as PropType<MenuGroup[]>,
+    required: true,
   },
-};
+});
+
+const searchIsOpen = ref(false);
+const menuIsOpen = ref(false);
 </script>

@@ -12,9 +12,9 @@
           v-slot="{ field }"
           :model-value="title"
           name="title"
-          @update:model-value="(val) => $emit('update:title', val)"
+          @update:model-value="(val: string) => $emit('update:title', val)"
         >
-          <Input id="title" ref="title" v-bind="field" />
+          <Input id="title" ref="titleNode" v-bind="field" />
         </Field>
         <Errors name="title" />
       </div>
@@ -34,7 +34,7 @@
 
         <RecipeFormIngredients
           :model-value="ingredients"
-          @update:model-value="(val) => $emit('update:ingredients', val)"
+          @update:model-value="(val: []) => $emit('update:ingredients', val)"
         />
       </div>
     </FormGroup>
@@ -49,7 +49,7 @@
         :model-value="steps"
         rows="10"
         class="sm:col-span-3"
-        @update:model-value="(val) => $emit('update:steps', val)"
+        @update:model-value="(val: string) => $emit('update:steps', val)"
       />
     </FormGroup>
 
@@ -61,7 +61,7 @@
             v-slot="{ field }"
             :model-value="time"
             name="time"
-            @update:model-value="(val) => $emit('update:time', val, 'number')"
+            @update:model-value="(val: string) => $emit('update:time', val, 'number')"
           >
             <Input
               id="time"
@@ -90,7 +90,7 @@
             :model-value="quantity"
             name="quantity"
             @update:model-value="
-              (val) => $emit('update:quantity', val, 'number')
+              (val: string) => $emit('update:quantity', val, 'number')
             "
           >
             <Input
@@ -117,7 +117,7 @@
       <div class="sm:col-span-3">
         <ImageUploader
           :model-value="image"
-          @update:model-value="(val) => $emit('update:image', val)"
+          @update:model-value="(val: string) => $emit('update:image', val)"
         />
       </div>
     </FormGroup>
@@ -128,7 +128,7 @@
         <TagsSelect
           id="tags"
           :model-value="tags"
-          @update:model-value="(val) => $emit('update:tags', val)"
+          @update:model-value="(val: string[]) => $emit('update:tags', val)"
         />
       </div>
     </FormGroup>
@@ -140,7 +140,7 @@
         :model-value="notes"
         rows="4"
         class="sm:col-span-3"
-        @update:model-value="(val) => $emit('update:notes', val)"
+        @update:model-value="(val: string) => $emit('update:notes', val)"
       />
     </FormGroup>
 
@@ -154,69 +154,66 @@
   </Form>
 </template>
 
-<script>
-export default {
-  props: {
-    title: {
-      type: String,
-      default: null,
-    },
-    ingredients: {
-      type: Array,
-      default: null,
-    },
-    steps: {
-      type: String,
-      default: null,
-    },
-    time: {
-      type: [Number, String],
-      default: null,
-    },
-    quantity: {
-      type: [Number, String, null],
-      default: null,
-    },
-    notes: {
-      type: String,
-      default: null,
-    },
-    tags: {
-      type: Array,
-      default: null,
-    },
-    image: {
-      type: String,
-      default: null,
-    },
+<script lang="ts" setup>
+import { Field } from 'vee-validate';
+import { ref, PropType, onMounted } from 'vue';
+
+defineProps({
+  title: {
+    type: String,
+    default: null,
   },
-
-  emits: [
-    'update:title',
-    'update:ingredients',
-    'update:steps',
-    'update:time',
-    'update:quantity',
-    'update:notes',
-    'update:tags',
-    'update:image',
-    'submit',
-  ],
-
-  setup() {
-    const schema = {
-      title: 'required',
-      time: 'integer|min_value:1',
-      quantity: 'integer|min_value:1',
-    };
-
-    return {
-      schema,
-    };
+  ingredients: {
+    type: Array,
+    default: null,
   },
-
-  mounted() {
-    this.$refs?.title?.$el?.focus();
+  steps: {
+    type: String,
+    default: null,
   },
+  time: {
+    type: [Number, String],
+    default: null,
+  },
+  quantity: {
+    type: [Number, String],
+    default: null,
+  },
+  notes: {
+    type: String,
+    default: null,
+  },
+  tags: {
+    type: Array as PropType<string[]>,
+    default: null,
+  },
+  image: {
+    type: String,
+    default: null,
+  },
+});
+
+defineEmits([
+  'update:title',
+  'update:ingredients',
+  'update:steps',
+  'update:time',
+  'update:quantity',
+  'update:notes',
+  'update:tags',
+  'update:image',
+  'submit',
+]);
+
+const titleNode = ref<typeof Field | null>(null);
+
+const schema = {
+  title: 'required',
+  time: 'integer|min_value:1',
+  quantity: 'integer|min_value:1',
 };
+
+onMounted(() => {
+  titleNode?.value?.$el?.focus();
+});
 </script>

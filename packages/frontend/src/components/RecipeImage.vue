@@ -11,42 +11,42 @@
   </div>
 </template>
 
-<script>
-import { crop, hdpiSources, imageUrl } from '../helpers/images.js';
+<script lang="ts" setup>
+import { computed, PropType } from 'vue';
+
+import { crop, hdpiSources, imageUrl } from '@/helpers/images';
+import { GQLUploadFile } from '@/types/graphqlTypes';
+
 import recipePlaceholder from '../assets/images/recipe-placeholder.svg';
 
-export default {
-  props: {
-    image: {
-      type: Object,
-      default: null,
-    },
-    width: {
-      type: [Number, String],
-      required: true,
-    },
-    height: {
-      type: [Number, String],
-      required: true,
-    },
+const props = defineProps({
+  image: {
+    type: Object as PropType<Pick<GQLUploadFile, 'hash' | 'ext'>>,
+    default: null,
   },
+  width: {
+    type: [Number, String],
+    required: true,
+  },
+  height: {
+    type: [Number, String],
+    required: true,
+  },
+});
 
-  computed: {
-    picture() {
-      const url = imageUrl(this.image);
-      const cropOptions = {
-        w: this.width,
-        h: this.height,
+const picture = computed(() => {
+  const url = imageUrl(props.image);
+  const cropOptions = {
+    w: props.width,
+    h: props.height,
+  };
+  return url
+    ? {
+        src: crop(url, cropOptions),
+        sources: hdpiSources(url, cropOptions),
+      }
+    : {
+        src: recipePlaceholder,
       };
-      return url
-        ? {
-            src: crop(url, cropOptions),
-            sources: hdpiSources(url, cropOptions),
-          }
-        : {
-            src: recipePlaceholder,
-          };
-    },
-  },
-};
+});
 </script>

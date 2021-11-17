@@ -34,35 +34,27 @@
   </transition-group>
 </template>
 
-<script>
+<script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue';
 import { useWindowScroll, useMediaQuery } from '@vueuse/core';
 
 import { notifications, hide } from '@/composables/useNotifications';
 
-export default {
-  setup() {
-    const { y } = useWindowScroll();
-    const isHeaderNotSticky = useMediaQuery('(min-width: 768px)');
-    const header = document.querySelector('#app-header');
-    let headerHeight = ref(0);
+const { y } = useWindowScroll();
+const isHeaderNotSticky = useMediaQuery('(min-width: 768px)');
+const header = document.querySelector('#app-header');
+let headerHeight = ref(0);
 
-    onMounted(() => {
-      headerHeight.value = header ? header.getBoundingClientRect().height : 0;
-    });
+onMounted(() => {
+  headerHeight.value = header ? header.getBoundingClientRect().height : 0;
+});
 
+const style = computed(() => {
+  if (isHeaderNotSticky.value) {
     return {
-      notifications: notifications.value,
-      hide,
-      style: computed(() => {
-        if (isHeaderNotSticky.value) {
-          return {
-            top: `${Math.max(16, headerHeight.value - y.value + 20)}px`,
-          };
-        }
-        return null;
-      }),
+      top: `${Math.max(16, headerHeight.value - y.value + 20)}px`,
     };
-  },
-};
+  }
+  return null;
+});
 </script>

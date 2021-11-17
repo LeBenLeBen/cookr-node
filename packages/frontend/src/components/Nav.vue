@@ -41,13 +41,15 @@
   </nav>
 </template>
 
-<script>
-export default {
-  props: {
-    menu: {
-      type: Array,
-      required: true,
-    },
+<script lang="ts" setup>
+import { PropType } from 'vue';
+
+import { MenuGroup } from '@/components/layouts/AppLayout.vue';
+
+defineProps({
+  menu: {
+    type: Array as PropType<MenuGroup[]>,
+    required: true,
   },
-};
+});
 </script>

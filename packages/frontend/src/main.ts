@@ -1,16 +1,19 @@
 import { createApp } from 'vue';
 import urql from '@urql/vue';
 import Chusho, { $chusho } from 'chusho';
-import chushoConfig from '../chusho.config.js';
-
-import router from './router';
-import i18n from './i18n';
-import '@/rules';
-import App from './App.vue';
-
 import 'windi.css';
-import './assets/css/main.css';
-import apiClient from './services/apiClient.js';
+
+import '@/assets/css/main.css';
+
+import i18n from '@/i18n';
+import router from '@/router';
+import '@/rules';
+
+import apiClient from '@/services/apiClient';
+
+import App from '@/App.vue';
+
+import chushoConfig from '../chusho.config';
 
 createApp(App)
   .use(urql, apiClient)
@@ -20,7 +23,7 @@ createApp(App)
   .mount('#app');
 
 if (import.meta.hot) {
-  import.meta.hot.accept('../chusho.config.js', (newConfig) => {
+  import.meta.hot.accept('../chusho.config.ts', (newConfig) => {
     $chusho.options = Object.assign({}, $chusho.options, newConfig.default);
   });
 }

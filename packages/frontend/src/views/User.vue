@@ -16,8 +16,8 @@
   </div>
 </template>
 
-<script setup>
-import { computed, inject } from 'vue';
+<script lang="ts" setup>
+import { watchEffect, computed } from 'vue';
 import { useQuery } from '@urql/vue';
 import gql from 'graphql-tag';
 
@@ -25,9 +25,8 @@ import store from '@/store';
 import router from '@/router';
 
 import useRecipesList from '@/composables/useRecipesList';
-import { useResult } from '@/composables/useResult';
-
-const setPageTitle = inject('setPageTitle');
+import useResult from '@/composables/useResult';
+import usePageTitle from '@/composables/usePageTitle';
 
 const props = defineProps({
   username: {
@@ -45,26 +44,28 @@ const result = await useQuery({
       }
     }
   `,
-  variables: { username: props.username },
+  variables: { username: computed(() => props.username) },
 });
 
-if (result.data.value.users?.[0]) {
-  setPageTitle(result.data.value.users[0].username);
-} else {
-  router.replace({ name: 'not-found' });
-}
+watchEffect(() => {
+  if (result.data.value.users?.[0]) {
+    usePageTitle(result.data.value.users[0].username);
+  } else {
+    router.replace({ name: 'not-found' });
+  }
+});
 
 const user = useResult(result.data, null, (data) => data.users?.[0]);
 
 const isCurrentUser = computed(
-  () => props.username === store.state.currentUser?.username
+  () => props.username === store.state.currentUser!.username
 );
 
 const collection = useRecipesList({
   sort: 'title:asc',
   where: {
     author: {
-      username: props.username,
+      username: computed(() => props.username),
     },
   },
 });

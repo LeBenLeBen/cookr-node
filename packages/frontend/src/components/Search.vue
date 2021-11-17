@@ -187,159 +187,162 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
+import { clickOutside } from 'chusho';
+
+export default defineComponent({
+  directives: { clickOutside },
+});
+</script>
+
+<script lang="ts" setup>
 import algoliasearch from 'algoliasearch/lite';
 import { ref, watch } from 'vue';
-import { clickOutside } from 'chusho';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import { debouncedWatch, useEventListener } from '@vueuse/core';
+import router from '@/router';
 
-export default {
-  directives: { clickOutside },
-
-  props: {
-    isOpen: {
-      type: Boolean,
-      required: true,
-    },
-  },
-
-  emits: ['update:is-open'],
-
-  setup() {
-    const client = algoliasearch(
-      import.meta.env.VITE_ALGOLIA_APP_ID,
-      import.meta.env.VITE_ALGOLIA_SEARCH_ONLY_API_KEY
-    );
-    const index = client.initIndex(import.meta.env.VITE_ALGOLIA_INDEX);
-    const searchInput = ref(null);
-    const isLoading = ref(false);
-    const query = ref(null);
-    const results = ref([]);
-    const indexHighlighted = ref(null);
-
-    watch(
-      () => query.value,
-      () => {
-        isLoading.value = true;
-      }
-    );
-
-    debouncedWatch(
-      () => query.value,
-      async (query) => {
-        if (!query) {
-          results.value = [];
-          indexHighlighted.value = null;
-          isLoading.value = false;
-          return;
-        }
-
-        const { hits } = await index.search(query, {
-          hitsPerPage: 10,
-        });
-        results.value = hits;
-        isLoading.value = false;
-      },
-      { debounce: 300 }
-    );
-
-    useEventListener(document, 'keydown', (e) => {
-      if (e.metaKey && e.key === 'k') {
-        searchInput.value?.focus();
-        e.preventDefault();
-      }
-    });
-
-    return {
-      isLoading,
-      query,
-      results,
-      indexHighlighted,
-      searchInput,
-    };
-  },
-
-  methods: {
-    open() {
-      this.$emit('update:is-open', true);
-    },
-
-    close() {
-      this.$emit('update:is-open', false);
-    },
-
-    handleBlur() {
-      if (!this.query) {
-        this.close();
-      }
-    },
-
-    handleKeydown(e) {
-      switch (e.key) {
-        case 'ArrowDown': {
-          e.preventDefault();
-          if (this.indexHighlighted === this.results.length - 1) return;
-          this.indexHighlighted =
-            this.indexHighlighted !== null ? this.indexHighlighted + 1 : 0;
-          this.scrollToHighlightedElement();
-          break;
-        }
-
-        case 'ArrowUp': {
-          e.preventDefault();
-          if (this.indexHighlighted === 0) return;
-          const index =
-            this.indexHighlighted !== null
-              ? this.indexHighlighted
-              : this.results.length;
-          this.indexHighlighted = index - 1;
-          this.scrollToHighlightedElement();
-          break;
-        }
-
-        case 'Enter': {
-          e.preventDefault();
-          const result = this.results?.[this.indexHighlighted];
-          const id = result?.id;
-          const slug = result?.slug;
-          if (id && slug) {
-            this.$router.push({ name: 'recipe', params: { id, slug } });
-            this.reset();
-          }
-          break;
-        }
-
-        case 'Escape': {
-          e.preventDefault();
-          this.reset();
-          break;
-        }
-
-        default:
-          this.indexHighlighted = null;
-          break;
-      }
-    },
-
-    scrollToHighlightedElement() {
-      const el = document.querySelector(
-        `#search-result-${this.indexHighlighted}`
-      );
-      if (el) {
-        scrollIntoView(el, { scrollMode: 'if-needed', behavior: 'smooth' });
-      }
-    },
-
-    reset() {
-      this.query = '';
-      this.results = [];
-      this.indexHighlighted = null;
-      this.close();
-      document.activeElement.blur();
-    },
-  },
+type Hit = {
+  id: number;
+  title: string;
+  slug: string;
+  author: string;
+  tags: string[];
+  objectID: string;
 };
+
+defineProps({
+  isOpen: {
+    type: Boolean,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['update:is-open']);
+
+const client = algoliasearch(
+  import.meta.env.VITE_ALGOLIA_APP_ID as string,
+  import.meta.env.VITE_ALGOLIA_SEARCH_ONLY_API_KEY as string
+);
+const recipesIndex = client.initIndex(
+  import.meta.env.VITE_ALGOLIA_INDEX as string
+);
+const searchInput = ref<HTMLInputElement | null>(null);
+const isLoading = ref<boolean>(false);
+const query = ref<string | null>(null);
+const results = ref<Hit[]>([]);
+const indexHighlighted = ref<number | null>(null);
+
+watch(
+  () => query.value,
+  () => {
+    isLoading.value = true;
+  }
+);
+
+debouncedWatch(
+  () => query.value,
+  async (query) => {
+    if (!query) {
+      results.value = [];
+      indexHighlighted.value = null;
+      isLoading.value = false;
+      return;
+    }
+
+    const { hits } = await recipesIndex.search<Hit>(query, {
+      hitsPerPage: 10,
+    });
+    results.value = hits;
+    isLoading.value = false;
+  },
+  { debounce: 300 }
+);
+
+useEventListener(document, 'keydown', (e) => {
+  if (e.metaKey && e.key === 'k') {
+    searchInput.value?.focus();
+    e.preventDefault();
+  }
+});
+
+function open() {
+  emit('update:is-open', true);
+}
+
+function close() {
+  emit('update:is-open', false);
+}
+
+function handleBlur() {
+  if (!query.value) {
+    close();
+  }
+}
+
+function handleKeydown(e: KeyboardEvent) {
+  switch (e.key) {
+    case 'ArrowDown': {
+      e.preventDefault();
+      if (indexHighlighted.value === results.value.length - 1) return;
+      indexHighlighted.value =
+        indexHighlighted.value !== null ? indexHighlighted.value + 1 : 0;
+      scrollToHighlightedElement();
+      break;
+    }
+
+    case 'ArrowUp': {
+      e.preventDefault();
+      if (indexHighlighted.value === 0) return;
+      const index =
+        indexHighlighted.value !== null
+          ? indexHighlighted.value
+          : results.value.length;
+      indexHighlighted.value = index - 1;
+      scrollToHighlightedElement();
+      break;
+    }
+
+    case 'Enter': {
+      e.preventDefault();
+      if (indexHighlighted.value === null) return;
+      const result = results.value?.[indexHighlighted.value];
+      const id = result?.id;
+      const slug = result?.slug;
+      if (id && slug) {
+        router.push({ name: 'recipe', params: { id, slug } });
+        reset();
+      }
+      break;
+    }
+
+    case 'Escape': {
+      e.preventDefault();
+      reset();
+      break;
+    }
+
+    default:
+      indexHighlighted.value = null;
+      break;
+  }
+}
+
+function scrollToHighlightedElement() {
+  const el = document.querySelector(`#search-result-${indexHighlighted.value}`);
+  if (el) {
+    scrollIntoView(el, { scrollMode: 'if-needed', behavior: 'smooth' });
+  }
+}
+
+function reset() {
+  query.value = '';
+  results.value = [];
+  indexHighlighted.value = null;
+  close();
+  (document.activeElement as HTMLInputElement)?.blur();
+}
 </script>
 
 <style lang="postcss">

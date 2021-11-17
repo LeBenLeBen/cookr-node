@@ -4,14 +4,17 @@
     :options="tags"
     mode="tags"
     searchable
-    @change="(val) => $emit('update:model-value', val)"
+    @change="(val: any[]) => $emit('update:model-value', val)"
   />
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import gql from 'graphql-tag';
 import { useQuery } from '@urql/vue';
-import { useResult } from '@/composables/useResult';
+
+import { GQLQuery } from '@/types/graphqlTypes';
+
+import useResult from '@/composables/useResult';
 
 defineProps({
   modelValue: {
@@ -22,7 +25,7 @@ defineProps({
 
 defineEmits(['update:model-value']);
 
-const result = useQuery({
+const result = useQuery<Pick<GQLQuery, 'tags'>>({
   query: gql`
     query allTags {
       tags {

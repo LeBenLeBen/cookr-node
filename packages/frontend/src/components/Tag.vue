@@ -20,17 +20,15 @@
   </CBtn>
 </template>
 
-<script>
-export default {
-  props: {
-    title: {
-      type: String,
-      required: true,
-    },
-    slug: {
-      type: String,
-      default: null,
-    },
+<script lang="ts" setup>
+defineProps({
+  title: {
+    type: String,
+    required: true,
   },
-};
+  slug: {
+    type: String,
+    default: null,
+  },
+});
 </script>

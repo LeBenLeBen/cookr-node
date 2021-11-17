@@ -143,99 +143,95 @@
   </div>
 </template>
 
-<script>
-import { inject } from 'vue';
+<script lang="ts" setup>
+import { watchEffect, computed } from 'vue';
 import { useQuery, useMutation } from '@urql/vue';
 import gql from 'graphql-tag';
 
 import router from '@/router';
 import store from '@/store';
 import { recipeFragment } from '@/services/fragments';
-import { useResult } from '@/composables/useResult';
+import useResult from '@/composables/useResult';
+import usePageTitle from '@/composables/usePageTitle';
+import {
+  GQLMutation,
+  GQLQuery,
+  MutationToDeleteRecipeArgs,
+} from '@/types/graphqlTypes';
 
-export default {
-  props: {
-    id: {
-      type: String,
-      required: true,
-    },
-    slug: {
-      type: String,
-      required: true,
-    },
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
   },
+  slug: {
+    type: String,
+    required: true,
+  },
+});
 
-  async setup(props) {
-    const setPageTitle = inject('setPageTitle');
-
-    const { executeMutation } = useMutation(
-      gql`
-        mutation deleteRecipe($id: ID!) {
-          deleteRecipe(input: { where: { id: $id } }) {
-            recipe {
-              id
-            }
-          }
+const { executeMutation: deleteRecipe } = useMutation<
+  Pick<GQLMutation, 'deleteRecipe'>,
+  MutationToDeleteRecipeArgs
+>(
+  gql`
+    mutation deleteRecipe($input: deleteRecipeInput!) {
+      deleteRecipe(input: $input) {
+        recipe {
+          id
         }
-      `
-    );
-
-    const result = await useQuery({
-      query: gql`
-        query getRecipe($id: ID!) {
-          recipe(id: $id) {
-            ...RecipeFragment
-          }
-        }
-        ${recipeFragment}
-      `,
-      variables: { id: props.id },
-    });
-
-    if (result.data.value.recipe) {
-      setPageTitle(result.data.value.recipe?.title);
-    } else {
-      router.replace({ name: 'not-found' });
-      return;
-    }
-
-    const recipe = useResult(result.data, null, (data) => data.recipe);
-
-    return {
-      recipe,
-      deleteRecipe(params) {
-        executeMutation(params).then(() => {
-          router.replace({
-            name: 'user',
-            params: { username: store.state.currentUser.username },
-          });
-        });
-      },
-    };
-  },
-
-  computed: {
-    steps() {
-      return this.recipe?.steps?.length
-        ? this.recipe.steps.split(/\r?\n/).filter((s) => !!s.trim())
-        : [];
-    },
-
-    isOwner() {
-      return this.recipe.author.id === store.state.currentUser?.id;
-    },
-  },
-
-  methods: {
-    confirmToDelete() {
-      if (
-        confirm(
-          'Êtes-vous sûr·e de vouloir supprimer cette recette? Cette action est irréversible.'
-        )
-      ) {
-        this.deleteRecipe({ id: this.recipe.id });
       }
-    },
-  },
-};
+    }
+  `
+);
+
+const result = await useQuery<Pick<GQLQuery, 'recipe'>>({
+  query: gql`
+    query getRecipe($id: ID!) {
+      recipe(id: $id) {
+        ...RecipeFragment
+      }
+    }
+    ${recipeFragment}
+  `,
+  variables: { id: computed(() => props.id) },
+});
+
+watchEffect(() => {
+  if (result.data.value?.recipe) {
+    usePageTitle(result.data.value.recipe.title);
+  } else {
+    router.replace({ name: 'not-found' });
+  }
+});
+
+const recipe = useResult(result.data, null, (data) => data.recipe);
+
+const steps = useResult(result.data, [], (data) => {
+  return data.recipe.steps.length
+    ? data.recipe.steps.split(/\r?\n/).filter((s) => !!s.trim())
+    : [];
+});
+
+const isOwner = useResult(result.data, false, (data) => {
+  return data.recipe.author.id === store.state.currentUser!.id;
+});
+
+function confirmToDelete() {
+  if (
+    recipe.value &&
+    confirm(
+      'Êtes-vous sûr·e de vouloir supprimer cette recette? Cette action est irréversible.'
+    )
+  ) {
+    deleteRecipe({ input: { where: { id: recipe.value.id } } }).then(() => {
+      if (store.state.currentUser) {
+        router.replace({
+          name: 'user',
+          params: { username: store.state.currentUser.username },
+        });
+      }
+    });
+  }
+}
 </script>

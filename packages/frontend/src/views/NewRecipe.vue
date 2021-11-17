@@ -16,8 +16,8 @@
   </div>
 </template>
 
-<script setup>
-import { inject, onMounted, reactive, watch } from 'vue';
+<script lang="ts" setup>
+import { reactive, watch } from 'vue';
 import { useMutation } from '@urql/vue';
 import gql from 'graphql-tag';
 import deburr from 'lodash/deburr';
@@ -29,26 +29,32 @@ import router from '@/router';
 import store from '@/store';
 import i18n from '@/i18n';
 
-const setPageTitle = inject('setPageTitle');
+import usePageTitle from '@/composables/usePageTitle';
+import {
+  GQLMutation,
+  GQLRecipeInput,
+  MutationToCreateRecipeArgs,
+} from '@/types/graphqlTypes';
 
-onMounted(() => {
-  setPageTitle(i18n.global.t('recipe.new.title'));
-});
+usePageTitle(i18n.global.t('recipe.new.title'));
 
-const input = reactive({
-  author: store.state.currentUser.id,
-  title: null,
-  slug: null,
-  ingredients: [{ title: null, amount: null }],
-  steps: null,
-  time: null,
-  quantity: null,
-  notes: null,
+const input = reactive<GQLRecipeInput>({
+  author: store.state.currentUser!.id,
+  title: '',
+  slug: '',
+  ingredients: [{ title: undefined, amount: undefined }],
+  steps: undefined,
+  time: undefined,
+  quantity: undefined,
+  notes: undefined,
   tags: [],
-  image: null,
+  image: undefined,
 });
 
-const { executeMutation: save } = useMutation(
+const { executeMutation: save } = useMutation<
+  Pick<GQLMutation, 'createRecipe'>,
+  MutationToCreateRecipeArgs
+>(
   gql`
     mutation createRecipe($input: createRecipeInput) {
       createRecipe(input: $input) {
@@ -69,18 +75,27 @@ watch(
 );
 
 function prepareToSave() {
-  let data = omitBy(input, isNil);
-  data = omitBy(data, (i) => typeof i === 'string' && i.trim() === '');
-  data.ingredients = data.ingredients.filter((i) => i.title?.trim());
+  let data: GQLRecipeInput = omitBy(input, isNil) as GQLRecipeInput;
+  data = omitBy(
+    data,
+    (val) => typeof val === 'string' && val.trim() === ''
+  ) as GQLRecipeInput;
+  data.ingredients = data.ingredients?.filter((i) => i?.title?.trim());
 
   save({ input: { data } }).then((result) => {
-    router.push({
-      name: 'recipe',
-      params: {
-        id: result.data.createRecipe.recipe.id,
-        slug: result.data.createRecipe.recipe.slug,
-      },
-    });
+    if (result.error) return;
+
+    const recipe = result.data?.createRecipe?.recipe;
+
+    if (recipe) {
+      router.push({
+        name: 'recipe',
+        params: {
+          id: recipe.id,
+          slug: recipe.slug,
+        },
+      });
+    }
   });
 }
 </script>

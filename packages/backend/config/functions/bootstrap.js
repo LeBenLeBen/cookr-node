@@ -10,4 +10,5 @@
  * See more details here: https://strapi.io/documentation/developer-docs/latest/concepts/configurations.html#bootstrap
  */
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 module.exports = () => {};

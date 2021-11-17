@@ -8,13 +8,11 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    title: {
-      type: String,
-      default: null,
-    },
+<script lang="ts" setup>
+defineProps({
+  title: {
+    type: String,
+    default: null,
   },
-};
+});
 </script>

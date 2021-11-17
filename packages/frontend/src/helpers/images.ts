@@ -1,9 +1,14 @@
+import { GQLUploadFile } from '@/types/graphqlTypes';
 import { objectToUrlParams } from './url';
+
+type ImgixOptions = Record<string, string | number>;
 
 /**
  * Return an image URL based on its hashed named and file extension
  */
-export function imageUrl(image = {}) {
+export function imageUrl(
+  image: Pick<GQLUploadFile, 'hash' | 'ext'> | null = null
+) {
   if (image) {
     const { hash, ext } = image;
 
@@ -20,7 +25,7 @@ export function imageUrl(image = {}) {
 /**
  * Add cropping params to the given image URL
  */
-export function crop(imageUrl, options) {
+export function crop(imageUrl: string, options: ImgixOptions) {
   options = Object.assign(
     {
       fit: 'crop',
@@ -31,7 +36,7 @@ export function crop(imageUrl, options) {
   return `${imageUrl}${objectToUrlParams(options)}`;
 }
 
-export function hdpiSources(imageUrl, options) {
+export function hdpiSources(imageUrl: string, options: ImgixOptions) {
   return [
     {
       srcset: `${crop(imageUrl, options)}, ${crop(imageUrl, {

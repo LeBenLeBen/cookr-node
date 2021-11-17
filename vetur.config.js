@@ -5,6 +5,7 @@ module.exports = {
       globalComponents: [
         './src/components/**/*.vue',
         './node_modules/chusho/dist/esm/components/**/*.js',
+        './node_modules/chusho/dist/esm/components/**/*.ts',
       ],
     },
   ],

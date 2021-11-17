@@ -14,52 +14,67 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+type MenuItem = {
+  label: string;
+  icon: string;
+  to: RouteLocationRaw;
+};
+
+export type MenuGroup = {
+  label: string;
+  items: MenuItem[];
+};
+</script>
+
+<script lang="ts" setup>
+import { computed } from 'vue';
+import { RouteLocationRaw } from 'vue-router';
+import { useI18n } from 'vue-i18n';
+
 import store from '@/store';
 
-export default {
-  computed: {
-    menu() {
-      return [
+const { t } = useI18n();
+
+const menu = computed<MenuGroup[]>(() => {
+  return [
+    {
+      label: t('app.explore'),
+      items: [
         {
-          label: this.$t('app.explore'),
-          items: [
-            {
-              label: this.$t('app.home'),
-              icon: 'home-alt2',
-              to: { name: 'home' },
-            },
-            {
-              label: this.$t('app.browse'),
-              icon: 'restaurant',
-              to: {
-                name: 'recipes',
-              },
-            },
-          ],
+          label: t('app.home'),
+          icon: 'home-alt2',
+          to: { name: 'home' },
         },
         {
-          label: this.$t('app.mySpace'),
-          items: [
-            {
-              label: this.$t('app.myRecipes'),
-              icon: 'book',
-              to: {
-                name: 'user',
-                params: { username: store?.state?.currentUser?.username },
-              },
-            },
-            {
-              label: this.$t('app.favoritesRecipes'),
-              icon: 'favourite',
-              to: {
-                name: 'favorites-recipes',
-              },
-            },
-          ],
+          label: t('app.browse'),
+          icon: 'restaurant',
+          to: {
+            name: 'recipes',
+          },
         },
-      ];
+      ],
     },
-  },
-};
+    {
+      label: t('app.mySpace'),
+      items: [
+        {
+          label: t('app.myRecipes'),
+          icon: 'book',
+          to: {
+            name: 'user',
+            params: { username: store.state.currentUser!.username },
+          },
+        },
+        {
+          label: t('app.favoritesRecipes'),
+          icon: 'favourite',
+          to: {
+            name: 'favorites-recipes',
+          },
+        },
+      ],
+    },
+  ];
+});
 </script>

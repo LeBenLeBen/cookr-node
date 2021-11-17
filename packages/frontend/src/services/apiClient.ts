@@ -7,44 +7,64 @@ import router from '@/router';
 import store from '@/store';
 
 import { notify } from '@/composables/useNotifications';
+import {
+  MutationToDeleteRecipeArgs,
+  MutationToDeleteUsersFavoriteRecipeArgs,
+} from '@/types/graphqlTypes';
 
 export default createClient({
   url: '/api/graphql',
 
   exchanges: [
     dedupExchange,
+
     cacheExchange({
       keys: {
         RecipeAggregator: () => null,
         UsersFavoriteRecipesAggregator: () => null,
       },
+
       resolvers: {
         Query: {
           recipes: simplePagination({
             offsetArgument: 'start',
           }),
+
           usersFavoriteRecipes: simplePagination({
             offsetArgument: 'start',
           }),
         },
       },
+
       updates: {
         Mutation: {
-          deleteRecipe(_result, args, cache) {
-            cache.invalidate({
-              __typename: 'Recipe',
-              id: args.input.where.id,
-            });
+          deleteRecipe(_result, args: MutationToDeleteRecipeArgs, cache) {
+            const id = args?.input?.where?.id;
+            if (id) {
+              cache.invalidate({
+                __typename: 'Recipe',
+                id,
+              });
+            }
           },
-          deleteUsersFavoriteRecipe(_result, args, cache) {
-            cache.invalidate({
-              __typename: 'UsersFavoriteRecipes',
-              id: args.input.where.id,
-            });
+
+          deleteUsersFavoriteRecipe(
+            _result,
+            args: MutationToDeleteUsersFavoriteRecipeArgs,
+            cache
+          ) {
+            const id = args?.input?.where?.id;
+            if (id) {
+              cache.invalidate({
+                __typename: 'UsersFavoriteRecipes',
+                id,
+              });
+            }
           },
         },
       },
     }),
+
     errorExchange({
       onError: ({ graphQLErrors, networkError }) => {
         if (graphQLErrors) {
@@ -73,6 +93,7 @@ export default createClient({
         }
       },
     }),
+
     multipartFetchExchange,
   ],
 

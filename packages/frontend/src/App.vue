@@ -19,11 +19,10 @@
   </component>
 </template>
 
-<script>
-import { computed, provide, ref } from 'vue';
+<script lang="ts">
+import { defineComponent } from 'vue';
 import gql from 'graphql-tag';
 import { useQuery, provideClient } from '@urql/vue';
-import { useTitle } from '@vueuse/core';
 
 import store from './store';
 
@@ -33,28 +32,13 @@ import client from './services/apiClient';
 import AppLayout from '@/components/layouts/AppLayout.vue';
 import AuthLayout from '@/components/layouts/AuthLayout.vue';
 
-export default {
+export default defineComponent({
   components: {
     AppLayout,
     AuthLayout,
   },
 
   setup() {
-    const pageTitle = ref(null);
-    const setPageTitle = (value) => {
-      pageTitle.value = value;
-    };
-    const fullPageTitle = computed(() => {
-      return pageTitle?.value ? `${pageTitle.value} · Cookr` : 'Cookr';
-    });
-
-    useTitle(fullPageTitle);
-
-    provide(
-      'pageTitle',
-      computed(() => pageTitle.value)
-    );
-    provide('setPageTitle', setPageTitle);
     provideClient(client);
 
     if (store.state.currentUser) {
@@ -68,14 +52,14 @@ export default {
           ${currentUserFragment}
         `,
         context: {
-          requestPolicy: 'no-cache',
+          requestPolicy: 'network-only',
         },
       }).then((result) => {
-        if (result.data.me) {
-          store.setCurrentUser(result.data.me);
+        if (result.data.value.me) {
+          store.setCurrentUser(result.data.value.me);
         }
       });
     }
   },
-};
+});
 </script>

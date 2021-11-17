@@ -38,27 +38,29 @@
   </Alert>
 </template>
 
-<script>
-export default {
-  props: {
-    loading: {
-      type: Boolean,
-      required: true,
-    },
-    recipes: {
-      type: Array,
-      required: true,
-    },
-    total: {
-      type: Number,
-      required: true,
-    },
-    hasMore: {
-      type: Boolean,
-      required: true,
-    },
-  },
+<script lang="ts" setup>
+import { PropType } from 'vue';
 
-  emits: ['load-more'],
-};
+import { GQLRecipe } from '@/types/graphqlTypes';
+
+defineProps({
+  loading: {
+    type: Boolean,
+    required: true,
+  },
+  recipes: {
+    type: Array as PropType<GQLRecipe[]>,
+    required: true,
+  },
+  total: {
+    type: Number,
+    required: true,
+  },
+  hasMore: {
+    type: Boolean,
+    required: true,
+  },
+});
+
+defineEmits(['load-more']);
 </script>

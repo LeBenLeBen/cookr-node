@@ -28,7 +28,7 @@
         />
       </FormGroup>
       <div>
-        <CBtn type="submit" variant="primary block">
+        <CBtn type="submit" variant="primary block" :disabled="loading">
           {{ $t('resetPassword.submit') }}
         </CBtn>
       </div>
@@ -36,25 +36,25 @@
   </div>
 </template>
 
-<script setup>
-import { inject, onMounted, reactive, ref } from 'vue';
+<script lang="ts" setup>
+import { reactive, ref } from 'vue';
 import { useMutation } from '@urql/vue';
 import gql from 'graphql-tag';
 
-import router from '../router';
-import store from '../store';
+import router from '@/router';
+import store from '@/store';
 import i18n from '@/i18n';
 
-import { currentUserFragment } from '../services/fragments';
+import { currentUserFragment } from '@/services/fragments';
+
 import { notify } from '@/composables/useNotifications';
+import usePageTitle from '@/composables/usePageTitle';
+import { getErrorMessages, StrapiErrors } from '@/helpers/api';
 
-const setPageTitle = inject('setPageTitle');
+usePageTitle(i18n.global.t('resetPassword.title'));
 
-onMounted(() => {
-  setPageTitle(i18n.global.t('resetPassword.title'));
-});
-
-const errors = ref(null);
+const loading = ref(false);
+const errors = ref<StrapiErrors | null>(null);
 const input = reactive({ password: '', passwordConfirmation: '' });
 
 const { executeMutation: resetPassword } = useMutation(
@@ -79,30 +79,29 @@ const { executeMutation: resetPassword } = useMutation(
 );
 
 function submit() {
+  loading.value = true;
   errors.value = null;
 
   resetPassword({
     password: input.password,
     passwordConfirmation: input.passwordConfirmation,
     code: router.currentRoute.value.query.code,
-  }).then((result) => {
-    if (result.error) {
-      errors.value = result.error.graphQLErrors.flatMap(
-        (gqlError) =>
-          gqlError.extensions.exception.data?.message?.flatMap(
-            (m) => m.messages
-          ) ?? [gqlError.extensions.exception.message]
-      );
+  })
+    .then((result) => {
+      if (result.error) {
+        errors.value = getErrorMessages(result.error.graphQLErrors);
+        return;
+      }
 
-      return;
-    }
-
-    store.setCurrentUser(result.data.resetPassword.user);
-    router.push({ name: 'home' });
-    notify({
-      type: 'success',
-      message: i18n.global.t('resetPassword.success'),
+      store.setCurrentUser(result.data.resetPassword.user);
+      router.push({ name: 'home' });
+      notify({
+        type: 'success',
+        message: i18n.global.t('resetPassword.success'),
+      });
+    })
+    .finally(() => {
+      loading.value = false;
     });
-  });
 }
 </script>

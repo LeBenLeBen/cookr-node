@@ -43,29 +43,27 @@
   </router-link>
 </template>
 
-<script>
-export default {
-  props: {
-    id: {
-      type: String,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    slug: {
-      type: String,
-      required: true,
-    },
-    image: {
-      type: Object,
-      default: null,
-    },
-    username: {
-      type: String,
-      default: null,
-    },
+<script lang="ts" setup>
+defineProps({
+  id: {
+    type: String,
+    required: true,
   },
-};
+  title: {
+    type: String,
+    required: true,
+  },
+  slug: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: Object,
+    default: null,
+  },
+  username: {
+    type: String,
+    default: null,
+  },
+});
 </script>

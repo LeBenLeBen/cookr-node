@@ -6,15 +6,16 @@
   </div>
 </template>
 
-<script setup>
-import { inject } from 'vue';
+<script lang="ts" setup>
+import { watchEffect } from 'vue';
 import { useQuery } from '@urql/vue';
 
 import gql from 'graphql-tag';
 import router from '@/router';
 
 import useRecipesList from '@/composables/useRecipesList';
-import { useResult } from '@/composables/useResult';
+import useResult from '@/composables/useResult';
+import usePageTitle from '@/composables/usePageTitle';
 
 const props = defineProps({
   slug: {
@@ -22,8 +23,6 @@ const props = defineProps({
     required: true,
   },
 });
-
-const setPageTitle = inject('setPageTitle');
 
 const result = await useQuery({
   query: gql`
@@ -37,11 +36,13 @@ const result = await useQuery({
   variables: { slug: props.slug },
 });
 
-if (result.data.value.tags?.[0]) {
-  setPageTitle(result.data.value.tags[0].title);
-} else {
-  router.replace({ name: 'not-found' });
-}
+watchEffect(() => {
+  if (result.data.value.tags?.[0]) {
+    usePageTitle(result.data.value.tags[0].title);
+  } else {
+    router.replace({ name: 'not-found' });
+  }
+});
 
 const tag = useResult(result.data, null, (data) => data?.tags?.[0]);
 

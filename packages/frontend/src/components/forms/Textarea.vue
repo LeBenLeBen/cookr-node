@@ -13,35 +13,30 @@
       ring-offset-2 ring-offset-alt-100
     "
     v-bind="attrs"
-    @input="(e) => $emit('update:model-value', e.target.value)"
+    @input="(e) => $emit('update:model-value', (e.target as HTMLTextAreaElement).value)"
   />
 </template>
 
-<script>
+<script lang="ts" setup>
 import { inject } from 'vue';
+import { FormGroupProps } from './FormGroup.vue';
 
-export default {
-  props: {
-    modelValue: {
-      type: String,
-      default: '',
-    },
-    required: {
-      type: Boolean,
-      default: null,
-    },
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: '',
   },
-
-  emits: ['update:model-value'],
-
-  setup(props) {
-    const formGroup = inject('formGroup', {});
-
-    return {
-      attrs: {
-        required: props.required ?? formGroup?.required,
-      },
-    };
+  required: {
+    type: Boolean,
+    default: null,
   },
+});
+
+defineEmits(['update:model-value']);
+
+const formGroup = inject<FormGroupProps | null>('formGroup', null);
+
+const attrs = {
+  required: props.required ?? formGroup?.required,
 };
 </script>

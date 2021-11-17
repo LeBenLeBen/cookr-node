@@ -24,26 +24,33 @@
   </div>
 </template>
 
-<script setup>
-import { inject, onMounted, ref } from 'vue';
+<script lang="ts" setup>
+import { ref } from 'vue';
 import { useMutation } from '@urql/vue';
 import gql from 'graphql-tag';
 
 import i18n from '@/i18n';
-import { notify } from '@/composables/useNotifications';
 import router from '@/router';
 
-const setPageTitle = inject('setPageTitle');
+import { notify } from '@/composables/useNotifications';
+import usePageTitle from '@/composables/usePageTitle';
+import { getErrorMessages, StrapiErrors } from '@/helpers/api';
 
-onMounted(() => {
-  setPageTitle(i18n.global.t('forgotPassword.title'));
-});
+import {
+  GQLUserPermissionsPasswordPayload,
+  MutationToForgotPasswordArgs,
+} from '@/types/graphqlTypes';
+
+usePageTitle(i18n.global.t('forgotPassword.title'));
 
 const loading = ref(false);
-const errors = ref(null);
+const errors = ref<StrapiErrors | null>(null);
 const email = ref(null);
 
-const { executeMutation: forgotPassword } = useMutation(
+const { executeMutation: forgotPassword } = useMutation<
+  GQLUserPermissionsPasswordPayload,
+  MutationToForgotPasswordArgs
+>(
   gql`
     mutation forgotPassword($email: String!) {
       forgotPassword(email: $email) {
@@ -54,30 +61,28 @@ const { executeMutation: forgotPassword } = useMutation(
 );
 
 function submit() {
+  if (!email.value) return;
+
   loading.value = true;
   errors.value = null;
 
   forgotPassword({
     email: email.value,
-  }).then((result) => {
-    loading.value = false;
+  })
+    .then((result) => {
+      if (result.error) {
+        errors.value = getErrorMessages(result.error.graphQLErrors);
+        return;
+      }
 
-    if (result.error) {
-      errors.value = result.error.graphQLErrors.flatMap(
-        (gqlError) =>
-          gqlError.extensions.exception.data?.message?.flatMap(
-            (m) => m.messages
-          ) ?? [gqlError.extensions.exception.message]
-      );
-
-      return;
-    }
-
-    router.push({ name: 'login' });
-    notify({
-      type: 'success',
-      message: i18n.global.t('forgotPassword.success'),
+      router.push({ name: 'login' });
+      notify({
+        type: 'success',
+        message: i18n.global.t('forgotPassword.success'),
+      });
+    })
+    .finally(() => {
+      loading.value = false;
     });
-  });
 }
 </script>

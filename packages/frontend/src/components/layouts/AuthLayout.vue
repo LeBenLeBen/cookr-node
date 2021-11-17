@@ -15,7 +15,12 @@
   >
     <div class="container container-xs">
       <header class="mb-8 text-center">
-        <div class="mb-2 font-display text-5xl text-primary-500">Cookr</div>
+        <router-link
+          :to="{ name: 'login' }"
+          class="mb-2 font-display text-5xl text-primary-500"
+        >
+          Cookr
+        </router-link>
         <div
           v-if="pageTitle"
           role="heading"
@@ -31,16 +36,8 @@
   </div>
 </template>
 
-<script>
-import { inject } from 'vue';
-
-export default {
-  setup() {
-    return {
-      pageTitle: inject('pageTitle'),
-    };
-  },
-};
+<script lang="ts" setup>
+import { pageTitle } from '@/composables/usePageTitle';
 </script>
 
 <style scoped>

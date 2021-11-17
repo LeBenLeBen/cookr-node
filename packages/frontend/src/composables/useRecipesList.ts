@@ -1,11 +1,14 @@
 import { ref, reactive, computed } from 'vue';
 import gql from 'graphql-tag';
 import { useQuery } from '@urql/vue';
-import { useResult } from './useResult';
+import useResult from './useResult';
 
 import { recipeCardFragment } from '@/services/fragments';
+import { QueryToRecipesArgs } from '@/types/graphqlTypes';
 
-export default function useRecipesList(params) {
+export default function useRecipesList(
+  params: Pick<QueryToRecipesArgs, 'sort' | 'where'>
+) {
   const limit = 20;
   const start = ref(0);
 

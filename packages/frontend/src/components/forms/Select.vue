@@ -17,7 +17,7 @@
         'py-2 pl-2 pr-6 text-sm rounded': variant.includes('small'),
       }"
       v-bind="attrs"
-      @input="(e) => $emit('update:model-value', e.target.value)"
+      @input="(e) => $emit('update:model-value', (e.target as HTMLSelectElement).value)"
     >
       <option
         v-for="option in options"
@@ -38,39 +38,41 @@
   </div>
 </template>
 
-<script>
-import { inject } from 'vue';
+<script lang="ts">
+export type SelectOption = {
+  value: string | number;
+  label: string;
+};
+</script>
 
-export default {
-  props: {
-    variant: {
-      type: String,
-      default: '',
-    },
-    modelValue: {
-      type: [String, Number],
-      default: '',
-    },
-    options: {
-      type: [Array],
-      default: () => [],
-    },
-    required: {
-      type: Boolean,
-      default: null,
-    },
+<script lang="ts" setup>
+import { inject, PropType } from 'vue';
+import { FormGroupProps } from './FormGroup.vue';
+
+const props = defineProps({
+  variant: {
+    type: String,
+    default: '',
   },
-
-  emits: ['update:model-value'],
-
-  setup(props) {
-    const formGroup = inject('formGroup', {});
-
-    return {
-      attrs: {
-        required: props.required ?? formGroup?.required,
-      },
-    };
+  modelValue: {
+    type: [String, Number],
+    default: '',
   },
+  options: {
+    type: Array as PropType<SelectOption[]>,
+    default: () => [],
+  },
+  required: {
+    type: Boolean,
+    default: null,
+  },
+});
+
+defineEmits(['update:model-value']);
+
+const formGroup = inject<FormGroupProps | null>('formGroup', null);
+
+const attrs = {
+  required: props.required ?? formGroup?.required,
 };
 </script>

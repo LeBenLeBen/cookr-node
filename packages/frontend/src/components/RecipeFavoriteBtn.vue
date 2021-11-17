@@ -18,13 +18,21 @@
   </CBtn>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref } from 'vue';
 import { useQuery, useMutation } from '@urql/vue';
 import gql from 'graphql-tag';
 
 import store from '@/store';
 import { recipeCardFragment } from '@/services/fragments';
+import {
+  GQLMutation,
+  GQLQuery,
+  GQLUsersFavoriteRecipes,
+  MutationToCreateUsersFavoriteRecipeArgs,
+  MutationToDeleteUsersFavoriteRecipeArgs,
+  QueryToUsersFavoriteRecipesArgs,
+} from '@/types/graphqlTypes';
 
 const props = defineProps({
   recipeId: {
@@ -33,9 +41,12 @@ const props = defineProps({
   },
 });
 
-const favoriteRecipe = ref(null);
+const favoriteRecipe = ref<GQLUsersFavoriteRecipes | null>(null);
 
-const result = await useQuery({
+const result = await useQuery<
+  Pick<GQLQuery, 'usersFavoriteRecipes'>,
+  QueryToUsersFavoriteRecipesArgs
+>({
   query: gql`
     query favoriteRecipe($where: JSON!) {
       usersFavoriteRecipes(start: 0, limit: 1, where: $where) {
@@ -46,7 +57,7 @@ const result = await useQuery({
   variables: {
     where: {
       user: {
-        id: store.state.currentUser.id,
+        id: store.state.currentUser!.id,
       },
       recipe: {
         id: props.recipeId,
@@ -55,14 +66,17 @@ const result = await useQuery({
   },
 });
 
-if (result.data.value.usersFavoriteRecipes?.length) {
+if (result.data.value?.usersFavoriteRecipes?.length) {
   favoriteRecipe.value = result.data.value.usersFavoriteRecipes[0];
 }
 
-const { executeMutation: deleteFavoriteRecipe } = useMutation(
+const { executeMutation: deleteFavoriteRecipe } = useMutation<
+  Pick<GQLMutation, 'deleteUsersFavoriteRecipe'>,
+  MutationToDeleteUsersFavoriteRecipeArgs
+>(
   gql`
-    mutation deleteFavoriteRecipe($id: ID!) {
-      deleteUsersFavoriteRecipe(input: { where: { id: $id } }) {
+    mutation deleteFavoriteRecipe($input: deleteUsersFavoriteRecipeInput!) {
+      deleteUsersFavoriteRecipe(input: $input) {
         usersFavoriteRecipe {
           id
         }
@@ -71,10 +85,13 @@ const { executeMutation: deleteFavoriteRecipe } = useMutation(
   `
 );
 
-const { executeMutation: createFavoriteRecipe } = useMutation(
+const { executeMutation: createFavoriteRecipe } = useMutation<
+  Pick<GQLMutation, 'createUsersFavoriteRecipe'>,
+  MutationToCreateUsersFavoriteRecipeArgs
+>(
   gql`
-    mutation createFavoriteRecipe($data: UsersFavoriteRecipeInput!) {
-      createUsersFavoriteRecipe(input: { data: $data }) {
+    mutation createFavoriteRecipe($input: createUsersFavoriteRecipeInput!) {
+      createUsersFavoriteRecipe(input: $input) {
         usersFavoriteRecipe {
           id
           recipe {
@@ -90,19 +107,33 @@ const { executeMutation: createFavoriteRecipe } = useMutation(
 function toggle() {
   if (favoriteRecipe.value) {
     deleteFavoriteRecipe({
-      id: favoriteRecipe.value.id,
+      input: {
+        where: {
+          id: favoriteRecipe.value.id,
+        },
+      },
     }).then(() => {
+      if (result.error) return;
+
       favoriteRecipe.value = null;
     });
   } else {
     createFavoriteRecipe({
-      data: {
-        user: store.state.currentUser.id,
-        recipe: props.recipeId,
+      input: {
+        data: {
+          user: store.state.currentUser!.id,
+          recipe: props.recipeId,
+        },
       },
     }).then((result) => {
-      favoriteRecipe.value =
-        result.data.createUsersFavoriteRecipe.usersFavoriteRecipe;
+      if (result.error) return;
+
+      const usersFavoriteRecipe =
+        result.data?.createUsersFavoriteRecipe?.usersFavoriteRecipe;
+
+      if (usersFavoriteRecipe) {
+        favoriteRecipe.value = usersFavoriteRecipe;
+      }
     });
   }
 }

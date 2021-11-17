@@ -10,13 +10,11 @@
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    username: {
-      type: String,
-      required: true,
-    },
+<script lang="ts" setup>
+defineProps({
+  username: {
+    type: String,
+    required: true,
   },
-};
+});
 </script>

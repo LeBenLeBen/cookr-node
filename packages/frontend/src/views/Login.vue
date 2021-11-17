@@ -30,32 +30,32 @@
         </div>
       </FormGroup>
       <div>
-        <CBtn type="submit" variant="primary block">{{
-          $t('auth.login')
-        }}</CBtn>
+        <CBtn type="submit" variant="primary block" :disabled="loading">
+          {{ $t('auth.login') }}
+        </CBtn>
       </div>
     </form>
   </div>
 </template>
 
-<script setup>
-import { inject, onMounted, reactive, ref } from 'vue';
+<script lang="ts" setup>
+import { reactive, ref } from 'vue';
 import { useMutation } from '@urql/vue';
 import gql from 'graphql-tag';
 
-import router from '../router';
-import store from '../store';
-
-import { currentUserFragment } from '../services/fragments';
+import router from '@/router';
+import store from '@/store';
 import i18n from '@/i18n';
 
-const setPageTitle = inject('setPageTitle');
+import { currentUserFragment } from '@/services/fragments';
 
-onMounted(() => {
-  setPageTitle(i18n.global.t('auth.login'));
-});
+import usePageTitle from '@/composables/usePageTitle';
+import { getErrorMessages, StrapiErrors } from '@/helpers/api';
 
-const errors = ref(null);
+usePageTitle(i18n.global.t('auth.login'));
+
+const loading = ref(false);
+const errors = ref<StrapiErrors | null>(null);
 const input = reactive({ identifier: '', password: '' });
 
 const { executeMutation: authenticate } = useMutation(
@@ -77,21 +77,19 @@ function login() {
 
   authenticate({
     input,
-  }).then((result) => {
-    if (result.error) {
-      errors.value = result.error.graphQLErrors.flatMap(
-        (gqlError) =>
-          gqlError.extensions.exception.data?.message?.flatMap(
-            (m) => m.messages
-          ) ?? [gqlError.extensions.exception.message]
-      );
+  })
+    .then((result) => {
+      if (result.error) {
+        errors.value = getErrorMessages(result.error.graphQLErrors);
+        return;
+      }
 
-      return;
-    }
-
-    store.setToken(result.data.login.jwt);
-    store.setCurrentUser(result.data.login.user);
-    router.push({ name: 'home' });
-  });
+      store.setToken(result.data.login.jwt);
+      store.setCurrentUser(result.data.login.user);
+      router.push({ name: 'home' });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 }
 </script>

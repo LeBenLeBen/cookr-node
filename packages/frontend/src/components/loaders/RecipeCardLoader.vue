@@ -13,12 +13,6 @@
   </div>
 </template>
 
-<script>
+<script lang="ts" setup>
 import { ContentLoader } from 'vue-content-loader';
-
-export default {
-  components: {
-    ContentLoader,
-  },
-};
 </script>

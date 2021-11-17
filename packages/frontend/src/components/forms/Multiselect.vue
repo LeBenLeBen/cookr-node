@@ -8,16 +8,17 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
 import RawMultiselect from '@vueform/multiselect';
 
-export default {
+export default defineComponent({
   name: 'Multiselect',
 
   components: {
     RawMultiselect,
   },
-};
+});
 </script>
 
 <style lang="postcss">

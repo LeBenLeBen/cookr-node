@@ -1,8 +1,16 @@
 import { ref, computed, nextTick } from 'vue';
 
-const _notifications = ref(new Set());
+const _notifications = ref<Set<Notification>>(new Set());
 
-export function notify(notification) {
+type Notification = {
+  type: 'error' | 'info' | 'success';
+  message: string;
+  id?: string;
+  title?: string;
+  duration?: number;
+};
+
+export function notify(notification: Notification) {
   const sameExistingNotification = [..._notifications.value].find(
     (n) => !!n.id && n.id === notification.id
   );
@@ -23,7 +31,7 @@ export function notify(notification) {
   }
 }
 
-export function hide(notification) {
+export function hide(notification: Notification) {
   _notifications.value.delete(notification);
 }
 

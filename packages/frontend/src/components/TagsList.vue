@@ -6,13 +6,11 @@
   </ul>
 </template>
 
-<script>
-export default {
-  props: {
-    tags: {
-      type: Array,
-      required: true,
-    },
+<script lang="ts" setup>
+defineProps({
+  tags: {
+    type: Array,
+    required: true,
   },
-};
+});
 </script>

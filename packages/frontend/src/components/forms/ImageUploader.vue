@@ -51,12 +51,12 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { computed } from 'vue';
 import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@urql/vue';
 
-import { useResult } from '@/composables/useResult';
+import useResult from '@/composables/useResult';
 
 const props = defineProps({
   modelValue: {
@@ -99,8 +99,8 @@ const { executeMutation: upload } = useMutation(
   `
 );
 
-function handleImageChange(e) {
-  const file = e.target.files[0];
+function handleImageChange(e: Event) {
+  const file = (e.target as HTMLInputElement)?.files?.[0];
 
   if (file) {
     upload({ file }).then((response) => {

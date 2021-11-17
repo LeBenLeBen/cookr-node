@@ -1,8 +1,8 @@
-<script>
-import { h, mergeProps } from 'vue';
+<script lang="ts">
+import { VNode, defineComponent, h, mergeProps } from 'vue';
 import { CAlert, CIcon } from 'chusho';
 
-export default {
+export default defineComponent({
   setup(props, { attrs, slots }) {
     const icons = {
       success: 'ok',
@@ -14,16 +14,19 @@ export default {
       error: 'text-red-500',
       info: 'text-blue-500',
     };
-    const iconId = icons[attrs.variant];
+    const iconId = icons[attrs.variant as keyof typeof icons];
 
     return () => {
-      const children = [slots.default()];
+      const children: VNode[] = slots.default ? slots.default() : [];
 
       if (iconId) {
         children.unshift(
           h(CIcon, {
             id: iconId,
-            class: [className[attrs.variant], 'mr-4 flex-shrink-0'],
+            class: [
+              className[attrs.variant as keyof typeof className],
+              'mr-4 flex-shrink-0',
+            ],
           })
         );
       }
@@ -31,5 +34,5 @@ export default {
       return h(CAlert, mergeProps({ class: 'flex' }, attrs), () => children);
     };
   },
-};
+});
 </script>

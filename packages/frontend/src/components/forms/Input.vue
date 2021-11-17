@@ -16,40 +16,36 @@
       'bg-white': !disabled,
     }"
     v-bind="attrs"
-    @input="(e) => $emit('update:model-value', e.target.value)"
+    @input="(e) => $emit('update:model-value', (e.target as HTMLInputElement).value)"
   />
 </template>
 
-<script>
+<script lang="ts" setup>
 import { inject } from 'vue';
 
-export default {
-  props: {
-    modelValue: {
-      type: [String, Number],
-      default: '',
-    },
-    required: {
-      type: Boolean,
-      default: null,
-    },
-    disabled: {
-      type: Boolean,
-      default: false,
-    },
+import { FormGroupProps } from './FormGroup.vue';
+
+const props = defineProps({
+  modelValue: {
+    type: [String, Number],
+    default: '',
   },
-
-  emits: ['update:model-value'],
-
-  setup(props) {
-    const formGroup = inject('formGroup', {});
-
-    return {
-      attrs: {
-        required: props.required ?? formGroup?.required,
-        disabled: props.disabled,
-      },
-    };
+  required: {
+    type: Boolean,
+    default: null,
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+});
+
+defineEmits(['update:model-value']);
+
+const formGroup = inject<FormGroupProps | null>('formGroup', null);
+
+const attrs = {
+  required: props.required ?? formGroup?.required,
+  disabled: props.disabled,
 };
 </script>

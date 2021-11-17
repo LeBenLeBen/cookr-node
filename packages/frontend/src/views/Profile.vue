@@ -6,7 +6,11 @@
       }}</CBtn>
     </PageHeader>
 
-    <Form class="divide-y divide-alt-200 space-y-6" @submit="prepareToSave">
+    <Form
+      class="divide-y divide-alt-200 space-y-6"
+      :validation-schema="schema"
+      @submit="prepareToSave"
+    >
       <FormGroup required class="grid sm:grid-cols-4 gap-4 sm:gap-4">
         <Label for="title" class="sm:mt-3">{{ $t('auth.username') }}</Label>
         <div class="sm:col-span-3">
@@ -48,22 +52,37 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { reactive } from 'vue';
 import { useMutation } from '@urql/vue';
 import gql from 'graphql-tag';
+
 import router from '@/router';
 import store from '@/store';
 import i18n from '@/i18n';
-import { notify } from '@/composables/useNotifications';
 
-const data = reactive({
-  username: store.state.currentUser.username,
-  email: store.state.currentUser.email,
-  password: null,
+import { notify } from '@/composables/useNotifications';
+import {
+  GQLeditUserInput,
+  GQLMutation,
+  MutationToUpdateUserArgs,
+} from '@/types/graphqlTypes';
+
+const schema = {
+  username: 'required',
+  email: 'required',
+};
+
+const data = reactive<GQLeditUserInput>({
+  username: store.state.currentUser!.username,
+  email: store.state.currentUser!.email,
+  password: undefined,
 });
 
-const { executeMutation: save } = useMutation(
+const { executeMutation: save } = useMutation<
+  Pick<GQLMutation, 'updateUser'>,
+  MutationToUpdateUserArgs
+>(
   gql`
     mutation updateProfile($input: updateUserInput!) {
       updateUser(input: $input) {
@@ -86,11 +105,18 @@ function prepareToSave() {
 
   save({
     input: {
-      where: { id: store.state.currentUser.id },
+      where: { id: store.state.currentUser!.id },
       data: payload,
     },
   }).then((result) => {
-    store.updateCurrentUser(result.data.updateUser.user);
+    if (result.error) return;
+
+    const user = result?.data?.updateUser?.user;
+
+    if (user) {
+      store.updateCurrentUser(user);
+    }
+
     notify({
       id: 'profile-update-success',
       type: 'success',

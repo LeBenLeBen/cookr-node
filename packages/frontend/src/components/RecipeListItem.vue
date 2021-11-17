@@ -56,8 +56,10 @@
   </router-link>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   inheritAttrs: false,
 
   props: {
@@ -90,5 +92,5 @@ export default {
       default: null,
     },
   },
-};
+});
 </script>

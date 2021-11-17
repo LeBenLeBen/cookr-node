@@ -1,3 +1,5 @@
+import { LocaleMessageDictionary, VueMessageType } from 'vue-i18n';
+
 export default {
   recipe: {
     title: 'Titre',
@@ -150,4 +152,4 @@ export default {
       disabled: 'Ce service est désactivé.',
     },
   },
-};
+} as LocaleMessageDictionary<VueMessageType>;
