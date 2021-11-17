@@ -82,10 +82,10 @@ function prepareToSave() {
   ) as GQLRecipeInput;
   data.ingredients = data.ingredients?.filter((i) => i?.title?.trim());
 
-  save({ input: { data } }).then((result) => {
-    if (result.error) return;
+  save({ input: { data } }).then((response) => {
+    if (response.error) return;
 
-    const recipe = result.data?.createRecipe?.recipe;
+    const recipe = response.data?.createRecipe?.recipe;
 
     if (recipe) {
       router.push({

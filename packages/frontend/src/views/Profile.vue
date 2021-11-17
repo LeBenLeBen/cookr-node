@@ -108,10 +108,10 @@ function prepareToSave() {
       where: { id: store.state.currentUser!.id },
       data: payload,
     },
-  }).then((result) => {
-    if (result.error) return;
+  }).then((response) => {
+    if (response.error) return;
 
-    const user = result?.data?.updateUser?.user;
+    const user = response?.data?.updateUser?.user;
 
     if (user) {
       store.updateCurrentUser(user);

@@ -87,13 +87,13 @@ function submit() {
     passwordConfirmation: input.passwordConfirmation,
     code: router.currentRoute.value.query.code,
   })
-    .then((result) => {
-      if (result.error) {
-        errors.value = getErrorMessages(result.error.graphQLErrors);
+    .then((response) => {
+      if (response.error) {
+        errors.value = getErrorMessages(response.error.graphQLErrors);
         return;
       }
 
-      store.setCurrentUser(result.data.resetPassword.user);
+      store.setCurrentUser(response.data.resetPassword.user);
       router.push({ name: 'home' });
       notify({
         type: 'success',

@@ -81,14 +81,14 @@ function login() {
   authenticate({
     input,
   })
-    .then((result) => {
-      if (result.error) {
-        errors.value = getErrorMessages(result.error.graphQLErrors);
+    .then((response) => {
+      if (response.error) {
+        errors.value = getErrorMessages(response.error.graphQLErrors);
         return;
       }
 
-      store.setToken(result.data.login.jwt);
-      store.setCurrentUser(result.data.login.user);
+      store.setToken(response.data.login.jwt);
+      store.setCurrentUser(response.data.login.user);
       router.push(
         (route.query?.redirectTo as string | undefined) ?? { name: 'home' }
       );

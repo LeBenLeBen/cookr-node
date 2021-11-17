@@ -54,9 +54,9 @@ export default defineComponent({
         context: {
           requestPolicy: 'network-only',
         },
-      }).then((result) => {
-        if (result.data.value.me) {
-          store.setCurrentUser(result.data.value.me);
+      }).then((response) => {
+        if (response.data.value.me) {
+          store.setCurrentUser(response.data.value.me);
         }
       });
     }

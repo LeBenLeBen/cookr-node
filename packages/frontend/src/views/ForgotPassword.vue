@@ -69,9 +69,9 @@ function submit() {
   forgotPassword({
     email: email.value,
   })
-    .then((result) => {
-      if (result.error) {
-        errors.value = getErrorMessages(result.error.graphQLErrors);
+    .then((response) => {
+      if (response.error) {
+        errors.value = getErrorMessages(response.error.graphQLErrors);
         return;
       }
 

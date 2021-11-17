@@ -112,8 +112,8 @@ function toggle() {
           id: favoriteRecipe.value.id,
         },
       },
-    }).then(() => {
-      if (result.error) return;
+    }).then((response) => {
+      if (response.error) return;
 
       favoriteRecipe.value = null;
     });
@@ -125,11 +125,11 @@ function toggle() {
           recipe: props.recipeId,
         },
       },
-    }).then((result) => {
-      if (result.error) return;
+    }).then((response) => {
+      if (response.error) return;
 
       const usersFavoriteRecipe =
-        result.data?.createUsersFavoriteRecipe?.usersFavoriteRecipe;
+        response.data?.createUsersFavoriteRecipe?.usersFavoriteRecipe;
 
       if (usersFavoriteRecipe) {
         favoriteRecipe.value = usersFavoriteRecipe;

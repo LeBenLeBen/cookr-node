@@ -98,10 +98,10 @@ const input = reactive<GQLRecipeInput>({
 });
 
 function save(params: MutationToUpdateRecipeArgs) {
-  updateRecipe(params).then((result) => {
-    if (result.error) return;
+  updateRecipe(params).then((response) => {
+    if (response.error) return;
 
-    const recipe = result.data?.updateRecipe?.recipe;
+    const recipe = response.data?.updateRecipe?.recipe;
 
     if (recipe) {
       router.push({
