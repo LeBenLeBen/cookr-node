@@ -64,6 +64,9 @@ const result = await useQuery<
       },
     },
   },
+  context: {
+    requestPolicy: 'network-only',
+  },
 });
 
 if (result.data.value?.usersFavoriteRecipes?.length) {

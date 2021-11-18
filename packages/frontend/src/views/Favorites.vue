@@ -69,6 +69,9 @@ const result = useQuery<
       },
     },
   },
+  context: {
+    requestPolicy: 'cache-and-network',
+  },
 });
 
 const total = useResult(
