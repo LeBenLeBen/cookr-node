@@ -32,15 +32,15 @@ import usePageTitle from '@/composables/usePageTitle';
 import {
   GQLRecipe,
   GQLTags,
-  GQLUsersPermissionsMe,
+  GQLUsersViewedRecipes,
 } from '@/types/graphqlTypes';
 
 usePageTitle(i18n.global.t('home.title'));
 
 interface HomeResponse {
   recipes: GQLRecipe[];
-  me: GQLUsersPermissionsMe;
-  tags: GQLTags[];
+  usersViewedRecipes: Pick<GQLUsersViewedRecipes, 'id' | 'recipe'>[];
+  tags: Pick<GQLTags, 'id' | 'title' | 'slug'>[];
 }
 
 const result = useQuery<HomeResponse>({
@@ -49,16 +49,10 @@ const result = useQuery<HomeResponse>({
       recipes(start: 0, limit: 5, sort: "created_at:desc") {
         ...RecipeCard
       }
-      me {
+      usersViewedRecipes(sort: "updated_at:desc") {
         id
-        user {
-          id
-          lastViewedRecipes {
-            id
-            recipe {
-              ...RecipeCard
-            }
-          }
+        recipe {
+          ...RecipeCard
         }
       }
       tags(sort: "title") {
@@ -76,7 +70,7 @@ const result = useQuery<HomeResponse>({
 
 const recipes = useResult(result.data, [], (data) => data.recipes);
 const lastViewedRecipes = useResult(result.data, [], (data) =>
-  data.me.user.lastViewedRecipes.filter((r) => !!r.recipe).map((r) => r.recipe)
+  data.usersViewedRecipes.filter((r) => !!r.recipe).map((r) => r.recipe)
 );
 const tags = useResult(result.data, [], (data) => data.tags);
 const loading = result.fetching;

@@ -425,6 +425,97 @@ export interface GQLdeleteUsersFavoriteRecipePayload {
   usersFavoriteRecipe?: GQLUsersFavoriteRecipes;
 }
 
+export interface GQLUsersViewedRecipes {
+  id: string;
+  created_at: GQLDateTime;
+  updated_at: GQLDateTime;
+  user?: GQLUsersPermissionsUser;
+  recipe?: GQLRecipe;
+}
+
+export interface GQLUsersViewedRecipesConnection {
+  values?: Array<GQLUsersViewedRecipes | null>;
+  groupBy?: GQLUsersViewedRecipesGroupBy;
+  aggregate?: GQLUsersViewedRecipesAggregator;
+}
+
+export interface GQLUsersViewedRecipesAggregator {
+  count?: number;
+  totalCount?: number;
+}
+
+export interface GQLUsersViewedRecipesGroupBy {
+  id?: Array<GQLUsersViewedRecipesConnectionId | null>;
+  created_at?: Array<GQLUsersViewedRecipesConnectionCreated_at | null>;
+  updated_at?: Array<GQLUsersViewedRecipesConnectionUpdated_at | null>;
+  user?: Array<GQLUsersViewedRecipesConnectionUser | null>;
+  recipe?: Array<GQLUsersViewedRecipesConnectionRecipe | null>;
+}
+
+export interface GQLUsersViewedRecipesConnectionId {
+  key?: string;
+  connection?: GQLUsersViewedRecipesConnection;
+}
+
+export interface GQLUsersViewedRecipesConnectionCreated_at {
+  key?: GQLDateTime;
+  connection?: GQLUsersViewedRecipesConnection;
+}
+
+export interface GQLUsersViewedRecipesConnectionUpdated_at {
+  key?: GQLDateTime;
+  connection?: GQLUsersViewedRecipesConnection;
+}
+
+export interface GQLUsersViewedRecipesConnectionUser {
+  key?: string;
+  connection?: GQLUsersViewedRecipesConnection;
+}
+
+export interface GQLUsersViewedRecipesConnectionRecipe {
+  key?: string;
+  connection?: GQLUsersViewedRecipesConnection;
+}
+
+export interface GQLUsersViewedRecipeInput {
+  user?: string;
+  recipe?: string;
+  created_by?: string;
+  updated_by?: string;
+}
+
+export interface GQLeditUsersViewedRecipeInput {
+  user?: string;
+  recipe?: string;
+  created_by?: string;
+  updated_by?: string;
+}
+
+export interface GQLcreateUsersViewedRecipeInput {
+  data?: GQLUsersViewedRecipeInput;
+}
+
+export interface GQLcreateUsersViewedRecipePayload {
+  usersViewedRecipe?: GQLUsersViewedRecipes;
+}
+
+export interface GQLupdateUsersViewedRecipeInput {
+  where?: GQLInputID;
+  data?: GQLeditUsersViewedRecipeInput;
+}
+
+export interface GQLupdateUsersViewedRecipePayload {
+  usersViewedRecipe?: GQLUsersViewedRecipes;
+}
+
+export interface GQLdeleteUsersViewedRecipeInput {
+  where?: GQLInputID;
+}
+
+export interface GQLdeleteUsersViewedRecipePayload {
+  usersViewedRecipe?: GQLUsersViewedRecipes;
+}
+
 export interface GQLUploadFile {
   id: string;
   created_at: GQLDateTime;
@@ -751,7 +842,6 @@ export interface GQLUsersPermissionsUser {
   blocked?: boolean;
   role?: GQLUsersPermissionsRole;
   avatar?: GQLUploadFile;
-  lastViewedRecipes?: Array<GQLComponentUsersLastViewedRecipes | null>;
   recipes?: Array<GQLRecipe | null>;
 }
 
@@ -841,7 +931,6 @@ export interface GQLUserInput {
   role?: string;
   recipes?: Array<string | null>;
   avatar?: string;
-  lastViewedRecipes?: Array<GQLComponentUsersLastViewedRecipeInput | null>;
   created_by?: string;
   updated_by?: string;
 }
@@ -858,7 +947,6 @@ export interface GQLeditUserInput {
   role?: string;
   recipes?: Array<string | null>;
   avatar?: string;
-  lastViewedRecipes?: Array<GQLeditComponentUsersLastViewedRecipeInput | null>;
   created_by?: string;
   updated_by?: string;
 }
@@ -903,23 +991,6 @@ export interface GQLeditComponentRecipesIngredientInput {
   id?: string;
   title?: string;
   amount?: string;
-}
-
-export interface GQLComponentUsersLastViewedRecipes {
-  id: string;
-  recipe?: GQLRecipe;
-  viewedAt?: GQLDateTime;
-}
-
-export interface GQLComponentUsersLastViewedRecipeInput {
-  recipe?: string;
-  viewedAt?: GQLDateTime;
-}
-
-export interface GQLeditComponentUsersLastViewedRecipeInput {
-  id?: string;
-  recipe?: string;
-  viewedAt?: GQLDateTime;
 }
 
 export type GQLMorph =
@@ -974,6 +1045,18 @@ GQLUsersFavoriteRecipesConnectionRecipe |
 GQLcreateUsersFavoriteRecipePayload |
 GQLupdateUsersFavoriteRecipePayload |
 GQLdeleteUsersFavoriteRecipePayload |
+GQLUsersViewedRecipes |
+GQLUsersViewedRecipesConnection |
+GQLUsersViewedRecipesAggregator |
+GQLUsersViewedRecipesGroupBy |
+GQLUsersViewedRecipesConnectionId |
+GQLUsersViewedRecipesConnectionCreated_at |
+GQLUsersViewedRecipesConnectionUpdated_at |
+GQLUsersViewedRecipesConnectionUser |
+GQLUsersViewedRecipesConnectionRecipe |
+GQLcreateUsersViewedRecipePayload |
+GQLupdateUsersViewedRecipePayload |
+GQLdeleteUsersViewedRecipePayload |
 GQLUploadFile |
 GQLUploadFileConnection |
 GQLUploadFileAggregator |
@@ -1029,8 +1112,7 @@ GQLUsersPermissionsUserConnectionAvatar |
 GQLcreateUserPayload |
 GQLupdateUserPayload |
 GQLdeleteUserPayload |
-GQLComponentRecipesIngredients |
-GQLComponentUsersLastViewedRecipes;
+GQLComponentRecipesIngredients;
 
 /** Use this to resolve union type Morph */
 export type GQLPossibleMorphTypeNames =
@@ -1085,6 +1167,18 @@ export type GQLPossibleMorphTypeNames =
 'createUsersFavoriteRecipePayload' |
 'updateUsersFavoriteRecipePayload' |
 'deleteUsersFavoriteRecipePayload' |
+'UsersViewedRecipes' |
+'UsersViewedRecipesConnection' |
+'UsersViewedRecipesAggregator' |
+'UsersViewedRecipesGroupBy' |
+'UsersViewedRecipesConnectionId' |
+'UsersViewedRecipesConnectionCreated_at' |
+'UsersViewedRecipesConnectionUpdated_at' |
+'UsersViewedRecipesConnectionUser' |
+'UsersViewedRecipesConnectionRecipe' |
+'createUsersViewedRecipePayload' |
+'updateUsersViewedRecipePayload' |
+'deleteUsersViewedRecipePayload' |
 'UploadFile' |
 'UploadFileConnection' |
 'UploadFileAggregator' |
@@ -1140,8 +1234,7 @@ export type GQLPossibleMorphTypeNames =
 'createUserPayload' |
 'updateUserPayload' |
 'deleteUserPayload' |
-'ComponentRecipesIngredients' |
-'ComponentUsersLastViewedRecipes';
+'ComponentRecipesIngredients';
 
 export interface GQLMorphNameMap {
   Morph: GQLMorph;
@@ -1196,6 +1289,18 @@ export interface GQLMorphNameMap {
   createUsersFavoriteRecipePayload: GQLcreateUsersFavoriteRecipePayload;
   updateUsersFavoriteRecipePayload: GQLupdateUsersFavoriteRecipePayload;
   deleteUsersFavoriteRecipePayload: GQLdeleteUsersFavoriteRecipePayload;
+  UsersViewedRecipes: GQLUsersViewedRecipes;
+  UsersViewedRecipesConnection: GQLUsersViewedRecipesConnection;
+  UsersViewedRecipesAggregator: GQLUsersViewedRecipesAggregator;
+  UsersViewedRecipesGroupBy: GQLUsersViewedRecipesGroupBy;
+  UsersViewedRecipesConnectionId: GQLUsersViewedRecipesConnectionId;
+  UsersViewedRecipesConnectionCreated_at: GQLUsersViewedRecipesConnectionCreated_at;
+  UsersViewedRecipesConnectionUpdated_at: GQLUsersViewedRecipesConnectionUpdated_at;
+  UsersViewedRecipesConnectionUser: GQLUsersViewedRecipesConnectionUser;
+  UsersViewedRecipesConnectionRecipe: GQLUsersViewedRecipesConnectionRecipe;
+  createUsersViewedRecipePayload: GQLcreateUsersViewedRecipePayload;
+  updateUsersViewedRecipePayload: GQLupdateUsersViewedRecipePayload;
+  deleteUsersViewedRecipePayload: GQLdeleteUsersViewedRecipePayload;
   UploadFile: GQLUploadFile;
   UploadFileConnection: GQLUploadFileConnection;
   UploadFileAggregator: GQLUploadFileAggregator;
@@ -1252,7 +1357,6 @@ export interface GQLMorphNameMap {
   updateUserPayload: GQLupdateUserPayload;
   deleteUserPayload: GQLdeleteUserPayload;
   ComponentRecipesIngredients: GQLComponentRecipesIngredients;
-  ComponentUsersLastViewedRecipes: GQLComponentUsersLastViewedRecipes;
 }
 
 export interface GQLInputID {
@@ -1281,6 +1385,9 @@ export interface GQLQuery {
   usersFavoriteRecipe?: GQLUsersFavoriteRecipes;
   usersFavoriteRecipes?: Array<GQLUsersFavoriteRecipes | null>;
   usersFavoriteRecipesConnection?: GQLUsersFavoriteRecipesConnection;
+  usersViewedRecipe?: GQLUsersViewedRecipes;
+  usersViewedRecipes?: Array<GQLUsersViewedRecipes | null>;
+  usersViewedRecipesConnection?: GQLUsersViewedRecipesConnection;
   files?: Array<GQLUploadFile | null>;
   filesConnection?: GQLUploadFileConnection;
   role?: GQLUsersPermissionsRole;
@@ -1306,6 +1413,9 @@ export interface GQLMutation {
   createUsersFavoriteRecipe?: GQLcreateUsersFavoriteRecipePayload;
   updateUsersFavoriteRecipe?: GQLupdateUsersFavoriteRecipePayload;
   deleteUsersFavoriteRecipe?: GQLdeleteUsersFavoriteRecipePayload;
+  createUsersViewedRecipe?: GQLcreateUsersViewedRecipePayload;
+  updateUsersViewedRecipe?: GQLupdateUsersViewedRecipePayload;
+  deleteUsersViewedRecipe?: GQLdeleteUsersViewedRecipePayload;
   
   /**
    * Delete one file
@@ -1443,6 +1553,18 @@ export interface GQLResolver {
   createUsersFavoriteRecipePayload?: GQLcreateUsersFavoriteRecipePayloadTypeResolver;
   updateUsersFavoriteRecipePayload?: GQLupdateUsersFavoriteRecipePayloadTypeResolver;
   deleteUsersFavoriteRecipePayload?: GQLdeleteUsersFavoriteRecipePayloadTypeResolver;
+  UsersViewedRecipes?: GQLUsersViewedRecipesTypeResolver;
+  UsersViewedRecipesConnection?: GQLUsersViewedRecipesConnectionTypeResolver;
+  UsersViewedRecipesAggregator?: GQLUsersViewedRecipesAggregatorTypeResolver;
+  UsersViewedRecipesGroupBy?: GQLUsersViewedRecipesGroupByTypeResolver;
+  UsersViewedRecipesConnectionId?: GQLUsersViewedRecipesConnectionIdTypeResolver;
+  UsersViewedRecipesConnectionCreated_at?: GQLUsersViewedRecipesConnectionCreated_atTypeResolver;
+  UsersViewedRecipesConnectionUpdated_at?: GQLUsersViewedRecipesConnectionUpdated_atTypeResolver;
+  UsersViewedRecipesConnectionUser?: GQLUsersViewedRecipesConnectionUserTypeResolver;
+  UsersViewedRecipesConnectionRecipe?: GQLUsersViewedRecipesConnectionRecipeTypeResolver;
+  createUsersViewedRecipePayload?: GQLcreateUsersViewedRecipePayloadTypeResolver;
+  updateUsersViewedRecipePayload?: GQLupdateUsersViewedRecipePayloadTypeResolver;
+  deleteUsersViewedRecipePayload?: GQLdeleteUsersViewedRecipePayloadTypeResolver;
   UploadFile?: GQLUploadFileTypeResolver;
   UploadFileConnection?: GQLUploadFileConnectionTypeResolver;
   UploadFileAggregator?: GQLUploadFileAggregatorTypeResolver;
@@ -1499,7 +1621,6 @@ export interface GQLResolver {
   updateUserPayload?: GQLupdateUserPayloadTypeResolver;
   deleteUserPayload?: GQLdeleteUserPayloadTypeResolver;
   ComponentRecipesIngredients?: GQLComponentRecipesIngredientsTypeResolver;
-  ComponentUsersLastViewedRecipes?: GQLComponentUsersLastViewedRecipesTypeResolver;
   Morph?: {
     __resolveType: GQLMorphTypeResolver
   };
@@ -2384,6 +2505,182 @@ export interface deleteUsersFavoriteRecipePayloadToUsersFavoriteRecipeResolver<T
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
+export interface GQLUsersViewedRecipesTypeResolver<TParent = any> {
+  id?: UsersViewedRecipesToIdResolver<TParent>;
+  created_at?: UsersViewedRecipesToCreated_atResolver<TParent>;
+  updated_at?: UsersViewedRecipesToUpdated_atResolver<TParent>;
+  user?: UsersViewedRecipesToUserResolver<TParent>;
+  recipe?: UsersViewedRecipesToRecipeResolver<TParent>;
+}
+
+export interface UsersViewedRecipesToIdResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UsersViewedRecipesToCreated_atResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UsersViewedRecipesToUpdated_atResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UsersViewedRecipesToUserResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UsersViewedRecipesToRecipeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLUsersViewedRecipesConnectionTypeResolver<TParent = any> {
+  values?: UsersViewedRecipesConnectionToValuesResolver<TParent>;
+  groupBy?: UsersViewedRecipesConnectionToGroupByResolver<TParent>;
+  aggregate?: UsersViewedRecipesConnectionToAggregateResolver<TParent>;
+}
+
+export interface UsersViewedRecipesConnectionToValuesResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UsersViewedRecipesConnectionToGroupByResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UsersViewedRecipesConnectionToAggregateResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLUsersViewedRecipesAggregatorTypeResolver<TParent = any> {
+  count?: UsersViewedRecipesAggregatorToCountResolver<TParent>;
+  totalCount?: UsersViewedRecipesAggregatorToTotalCountResolver<TParent>;
+}
+
+export interface UsersViewedRecipesAggregatorToCountResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UsersViewedRecipesAggregatorToTotalCountResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLUsersViewedRecipesGroupByTypeResolver<TParent = any> {
+  id?: UsersViewedRecipesGroupByToIdResolver<TParent>;
+  created_at?: UsersViewedRecipesGroupByToCreated_atResolver<TParent>;
+  updated_at?: UsersViewedRecipesGroupByToUpdated_atResolver<TParent>;
+  user?: UsersViewedRecipesGroupByToUserResolver<TParent>;
+  recipe?: UsersViewedRecipesGroupByToRecipeResolver<TParent>;
+}
+
+export interface UsersViewedRecipesGroupByToIdResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UsersViewedRecipesGroupByToCreated_atResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UsersViewedRecipesGroupByToUpdated_atResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UsersViewedRecipesGroupByToUserResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UsersViewedRecipesGroupByToRecipeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLUsersViewedRecipesConnectionIdTypeResolver<TParent = any> {
+  key?: UsersViewedRecipesConnectionIdToKeyResolver<TParent>;
+  connection?: UsersViewedRecipesConnectionIdToConnectionResolver<TParent>;
+}
+
+export interface UsersViewedRecipesConnectionIdToKeyResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UsersViewedRecipesConnectionIdToConnectionResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLUsersViewedRecipesConnectionCreated_atTypeResolver<TParent = any> {
+  key?: UsersViewedRecipesConnectionCreated_atToKeyResolver<TParent>;
+  connection?: UsersViewedRecipesConnectionCreated_atToConnectionResolver<TParent>;
+}
+
+export interface UsersViewedRecipesConnectionCreated_atToKeyResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UsersViewedRecipesConnectionCreated_atToConnectionResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLUsersViewedRecipesConnectionUpdated_atTypeResolver<TParent = any> {
+  key?: UsersViewedRecipesConnectionUpdated_atToKeyResolver<TParent>;
+  connection?: UsersViewedRecipesConnectionUpdated_atToConnectionResolver<TParent>;
+}
+
+export interface UsersViewedRecipesConnectionUpdated_atToKeyResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UsersViewedRecipesConnectionUpdated_atToConnectionResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLUsersViewedRecipesConnectionUserTypeResolver<TParent = any> {
+  key?: UsersViewedRecipesConnectionUserToKeyResolver<TParent>;
+  connection?: UsersViewedRecipesConnectionUserToConnectionResolver<TParent>;
+}
+
+export interface UsersViewedRecipesConnectionUserToKeyResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UsersViewedRecipesConnectionUserToConnectionResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLUsersViewedRecipesConnectionRecipeTypeResolver<TParent = any> {
+  key?: UsersViewedRecipesConnectionRecipeToKeyResolver<TParent>;
+  connection?: UsersViewedRecipesConnectionRecipeToConnectionResolver<TParent>;
+}
+
+export interface UsersViewedRecipesConnectionRecipeToKeyResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface UsersViewedRecipesConnectionRecipeToConnectionResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLcreateUsersViewedRecipePayloadTypeResolver<TParent = any> {
+  usersViewedRecipe?: createUsersViewedRecipePayloadToUsersViewedRecipeResolver<TParent>;
+}
+
+export interface createUsersViewedRecipePayloadToUsersViewedRecipeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLupdateUsersViewedRecipePayloadTypeResolver<TParent = any> {
+  usersViewedRecipe?: updateUsersViewedRecipePayloadToUsersViewedRecipeResolver<TParent>;
+}
+
+export interface updateUsersViewedRecipePayloadToUsersViewedRecipeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface GQLdeleteUsersViewedRecipePayloadTypeResolver<TParent = any> {
+  usersViewedRecipe?: deleteUsersViewedRecipePayloadToUsersViewedRecipeResolver<TParent>;
+}
+
+export interface deleteUsersViewedRecipePayloadToUsersViewedRecipeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface GQLUploadFileTypeResolver<TParent = any> {
   id?: UploadFileToIdResolver<TParent>;
   created_at?: UploadFileToCreated_atResolver<TParent>;
@@ -3147,7 +3444,6 @@ export interface GQLUsersPermissionsUserTypeResolver<TParent = any> {
   blocked?: UsersPermissionsUserToBlockedResolver<TParent>;
   role?: UsersPermissionsUserToRoleResolver<TParent>;
   avatar?: UsersPermissionsUserToAvatarResolver<TParent>;
-  lastViewedRecipes?: UsersPermissionsUserToLastViewedRecipesResolver<TParent>;
   recipes?: UsersPermissionsUserToRecipesResolver<TParent>;
 }
 
@@ -3188,10 +3484,6 @@ export interface UsersPermissionsUserToRoleResolver<TParent = any, TResult = any
 }
 
 export interface UsersPermissionsUserToAvatarResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface UsersPermissionsUserToLastViewedRecipesResolver<TParent = any, TResult = any> {
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
@@ -3461,26 +3753,8 @@ export interface ComponentRecipesIngredientsToAmountResolver<TParent = any, TRes
   (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
 }
 
-export interface GQLComponentUsersLastViewedRecipesTypeResolver<TParent = any> {
-  id?: ComponentUsersLastViewedRecipesToIdResolver<TParent>;
-  recipe?: ComponentUsersLastViewedRecipesToRecipeResolver<TParent>;
-  viewedAt?: ComponentUsersLastViewedRecipesToViewedAtResolver<TParent>;
-}
-
-export interface ComponentUsersLastViewedRecipesToIdResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface ComponentUsersLastViewedRecipesToRecipeResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
-export interface ComponentUsersLastViewedRecipesToViewedAtResolver<TParent = any, TResult = any> {
-  (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-}
-
 export interface GQLMorphTypeResolver<TParent = any> {
-  (parent: TParent, context: any, info: GraphQLResolveInfo): 'UsersPermissionsMe' | 'UsersPermissionsMeRole' | 'UsersPermissionsLoginPayload' | 'UserPermissionsPasswordPayload' | 'Recipe' | 'RecipeConnection' | 'RecipeAggregator' | 'RecipeAggregatorSum' | 'RecipeAggregatorAvg' | 'RecipeAggregatorMin' | 'RecipeAggregatorMax' | 'RecipeGroupBy' | 'RecipeConnectionId' | 'RecipeConnectionCreated_at' | 'RecipeConnectionUpdated_at' | 'RecipeConnectionTitle' | 'RecipeConnectionSlug' | 'RecipeConnectionImage' | 'RecipeConnectionNotes' | 'RecipeConnectionTime' | 'RecipeConnectionQuantity' | 'RecipeConnectionSteps' | 'RecipeConnectionAuthor' | 'RecipeConnectionPublished_at' | 'createRecipePayload' | 'updateRecipePayload' | 'deleteRecipePayload' | 'Tags' | 'TagsConnection' | 'TagsAggregator' | 'TagsGroupBy' | 'TagsConnectionId' | 'TagsConnectionCreated_at' | 'TagsConnectionUpdated_at' | 'TagsConnectionTitle' | 'TagsConnectionSlug' | 'createTagPayload' | 'updateTagPayload' | 'deleteTagPayload' | 'UsersFavoriteRecipes' | 'UsersFavoriteRecipesConnection' | 'UsersFavoriteRecipesAggregator' | 'UsersFavoriteRecipesGroupBy' | 'UsersFavoriteRecipesConnectionId' | 'UsersFavoriteRecipesConnectionCreated_at' | 'UsersFavoriteRecipesConnectionUpdated_at' | 'UsersFavoriteRecipesConnectionUser' | 'UsersFavoriteRecipesConnectionRecipe' | 'createUsersFavoriteRecipePayload' | 'updateUsersFavoriteRecipePayload' | 'deleteUsersFavoriteRecipePayload' | 'UploadFile' | 'UploadFileConnection' | 'UploadFileAggregator' | 'UploadFileAggregatorSum' | 'UploadFileAggregatorAvg' | 'UploadFileAggregatorMin' | 'UploadFileAggregatorMax' | 'UploadFileGroupBy' | 'UploadFileConnectionId' | 'UploadFileConnectionCreated_at' | 'UploadFileConnectionUpdated_at' | 'UploadFileConnectionName' | 'UploadFileConnectionAlternativeText' | 'UploadFileConnectionCaption' | 'UploadFileConnectionWidth' | 'UploadFileConnectionHeight' | 'UploadFileConnectionFormats' | 'UploadFileConnectionHash' | 'UploadFileConnectionExt' | 'UploadFileConnectionMime' | 'UploadFileConnectionSize' | 'UploadFileConnectionUrl' | 'UploadFileConnectionPreviewUrl' | 'UploadFileConnectionProvider' | 'UploadFileConnectionProvider_metadata' | 'deleteFilePayload' | 'UsersPermissionsPermission' | 'UsersPermissionsRole' | 'UsersPermissionsRoleConnection' | 'UsersPermissionsRoleAggregator' | 'UsersPermissionsRoleGroupBy' | 'UsersPermissionsRoleConnectionId' | 'UsersPermissionsRoleConnectionName' | 'UsersPermissionsRoleConnectionDescription' | 'UsersPermissionsRoleConnectionType' | 'createRolePayload' | 'updateRolePayload' | 'deleteRolePayload' | 'UsersPermissionsUser' | 'UsersPermissionsUserConnection' | 'UsersPermissionsUserAggregator' | 'UsersPermissionsUserGroupBy' | 'UsersPermissionsUserConnectionId' | 'UsersPermissionsUserConnectionCreated_at' | 'UsersPermissionsUserConnectionUpdated_at' | 'UsersPermissionsUserConnectionUsername' | 'UsersPermissionsUserConnectionEmail' | 'UsersPermissionsUserConnectionProvider' | 'UsersPermissionsUserConnectionConfirmed' | 'UsersPermissionsUserConnectionBlocked' | 'UsersPermissionsUserConnectionRole' | 'UsersPermissionsUserConnectionAvatar' | 'createUserPayload' | 'updateUserPayload' | 'deleteUserPayload' | 'ComponentRecipesIngredients' | 'ComponentUsersLastViewedRecipes' | Promise<'UsersPermissionsMe' | 'UsersPermissionsMeRole' | 'UsersPermissionsLoginPayload' | 'UserPermissionsPasswordPayload' | 'Recipe' | 'RecipeConnection' | 'RecipeAggregator' | 'RecipeAggregatorSum' | 'RecipeAggregatorAvg' | 'RecipeAggregatorMin' | 'RecipeAggregatorMax' | 'RecipeGroupBy' | 'RecipeConnectionId' | 'RecipeConnectionCreated_at' | 'RecipeConnectionUpdated_at' | 'RecipeConnectionTitle' | 'RecipeConnectionSlug' | 'RecipeConnectionImage' | 'RecipeConnectionNotes' | 'RecipeConnectionTime' | 'RecipeConnectionQuantity' | 'RecipeConnectionSteps' | 'RecipeConnectionAuthor' | 'RecipeConnectionPublished_at' | 'createRecipePayload' | 'updateRecipePayload' | 'deleteRecipePayload' | 'Tags' | 'TagsConnection' | 'TagsAggregator' | 'TagsGroupBy' | 'TagsConnectionId' | 'TagsConnectionCreated_at' | 'TagsConnectionUpdated_at' | 'TagsConnectionTitle' | 'TagsConnectionSlug' | 'createTagPayload' | 'updateTagPayload' | 'deleteTagPayload' | 'UsersFavoriteRecipes' | 'UsersFavoriteRecipesConnection' | 'UsersFavoriteRecipesAggregator' | 'UsersFavoriteRecipesGroupBy' | 'UsersFavoriteRecipesConnectionId' | 'UsersFavoriteRecipesConnectionCreated_at' | 'UsersFavoriteRecipesConnectionUpdated_at' | 'UsersFavoriteRecipesConnectionUser' | 'UsersFavoriteRecipesConnectionRecipe' | 'createUsersFavoriteRecipePayload' | 'updateUsersFavoriteRecipePayload' | 'deleteUsersFavoriteRecipePayload' | 'UploadFile' | 'UploadFileConnection' | 'UploadFileAggregator' | 'UploadFileAggregatorSum' | 'UploadFileAggregatorAvg' | 'UploadFileAggregatorMin' | 'UploadFileAggregatorMax' | 'UploadFileGroupBy' | 'UploadFileConnectionId' | 'UploadFileConnectionCreated_at' | 'UploadFileConnectionUpdated_at' | 'UploadFileConnectionName' | 'UploadFileConnectionAlternativeText' | 'UploadFileConnectionCaption' | 'UploadFileConnectionWidth' | 'UploadFileConnectionHeight' | 'UploadFileConnectionFormats' | 'UploadFileConnectionHash' | 'UploadFileConnectionExt' | 'UploadFileConnectionMime' | 'UploadFileConnectionSize' | 'UploadFileConnectionUrl' | 'UploadFileConnectionPreviewUrl' | 'UploadFileConnectionProvider' | 'UploadFileConnectionProvider_metadata' | 'deleteFilePayload' | 'UsersPermissionsPermission' | 'UsersPermissionsRole' | 'UsersPermissionsRoleConnection' | 'UsersPermissionsRoleAggregator' | 'UsersPermissionsRoleGroupBy' | 'UsersPermissionsRoleConnectionId' | 'UsersPermissionsRoleConnectionName' | 'UsersPermissionsRoleConnectionDescription' | 'UsersPermissionsRoleConnectionType' | 'createRolePayload' | 'updateRolePayload' | 'deleteRolePayload' | 'UsersPermissionsUser' | 'UsersPermissionsUserConnection' | 'UsersPermissionsUserAggregator' | 'UsersPermissionsUserGroupBy' | 'UsersPermissionsUserConnectionId' | 'UsersPermissionsUserConnectionCreated_at' | 'UsersPermissionsUserConnectionUpdated_at' | 'UsersPermissionsUserConnectionUsername' | 'UsersPermissionsUserConnectionEmail' | 'UsersPermissionsUserConnectionProvider' | 'UsersPermissionsUserConnectionConfirmed' | 'UsersPermissionsUserConnectionBlocked' | 'UsersPermissionsUserConnectionRole' | 'UsersPermissionsUserConnectionAvatar' | 'createUserPayload' | 'updateUserPayload' | 'deleteUserPayload' | 'ComponentRecipesIngredients' | 'ComponentUsersLastViewedRecipes'>;
+  (parent: TParent, context: any, info: GraphQLResolveInfo): 'UsersPermissionsMe' | 'UsersPermissionsMeRole' | 'UsersPermissionsLoginPayload' | 'UserPermissionsPasswordPayload' | 'Recipe' | 'RecipeConnection' | 'RecipeAggregator' | 'RecipeAggregatorSum' | 'RecipeAggregatorAvg' | 'RecipeAggregatorMin' | 'RecipeAggregatorMax' | 'RecipeGroupBy' | 'RecipeConnectionId' | 'RecipeConnectionCreated_at' | 'RecipeConnectionUpdated_at' | 'RecipeConnectionTitle' | 'RecipeConnectionSlug' | 'RecipeConnectionImage' | 'RecipeConnectionNotes' | 'RecipeConnectionTime' | 'RecipeConnectionQuantity' | 'RecipeConnectionSteps' | 'RecipeConnectionAuthor' | 'RecipeConnectionPublished_at' | 'createRecipePayload' | 'updateRecipePayload' | 'deleteRecipePayload' | 'Tags' | 'TagsConnection' | 'TagsAggregator' | 'TagsGroupBy' | 'TagsConnectionId' | 'TagsConnectionCreated_at' | 'TagsConnectionUpdated_at' | 'TagsConnectionTitle' | 'TagsConnectionSlug' | 'createTagPayload' | 'updateTagPayload' | 'deleteTagPayload' | 'UsersFavoriteRecipes' | 'UsersFavoriteRecipesConnection' | 'UsersFavoriteRecipesAggregator' | 'UsersFavoriteRecipesGroupBy' | 'UsersFavoriteRecipesConnectionId' | 'UsersFavoriteRecipesConnectionCreated_at' | 'UsersFavoriteRecipesConnectionUpdated_at' | 'UsersFavoriteRecipesConnectionUser' | 'UsersFavoriteRecipesConnectionRecipe' | 'createUsersFavoriteRecipePayload' | 'updateUsersFavoriteRecipePayload' | 'deleteUsersFavoriteRecipePayload' | 'UsersViewedRecipes' | 'UsersViewedRecipesConnection' | 'UsersViewedRecipesAggregator' | 'UsersViewedRecipesGroupBy' | 'UsersViewedRecipesConnectionId' | 'UsersViewedRecipesConnectionCreated_at' | 'UsersViewedRecipesConnectionUpdated_at' | 'UsersViewedRecipesConnectionUser' | 'UsersViewedRecipesConnectionRecipe' | 'createUsersViewedRecipePayload' | 'updateUsersViewedRecipePayload' | 'deleteUsersViewedRecipePayload' | 'UploadFile' | 'UploadFileConnection' | 'UploadFileAggregator' | 'UploadFileAggregatorSum' | 'UploadFileAggregatorAvg' | 'UploadFileAggregatorMin' | 'UploadFileAggregatorMax' | 'UploadFileGroupBy' | 'UploadFileConnectionId' | 'UploadFileConnectionCreated_at' | 'UploadFileConnectionUpdated_at' | 'UploadFileConnectionName' | 'UploadFileConnectionAlternativeText' | 'UploadFileConnectionCaption' | 'UploadFileConnectionWidth' | 'UploadFileConnectionHeight' | 'UploadFileConnectionFormats' | 'UploadFileConnectionHash' | 'UploadFileConnectionExt' | 'UploadFileConnectionMime' | 'UploadFileConnectionSize' | 'UploadFileConnectionUrl' | 'UploadFileConnectionPreviewUrl' | 'UploadFileConnectionProvider' | 'UploadFileConnectionProvider_metadata' | 'deleteFilePayload' | 'UsersPermissionsPermission' | 'UsersPermissionsRole' | 'UsersPermissionsRoleConnection' | 'UsersPermissionsRoleAggregator' | 'UsersPermissionsRoleGroupBy' | 'UsersPermissionsRoleConnectionId' | 'UsersPermissionsRoleConnectionName' | 'UsersPermissionsRoleConnectionDescription' | 'UsersPermissionsRoleConnectionType' | 'createRolePayload' | 'updateRolePayload' | 'deleteRolePayload' | 'UsersPermissionsUser' | 'UsersPermissionsUserConnection' | 'UsersPermissionsUserAggregator' | 'UsersPermissionsUserGroupBy' | 'UsersPermissionsUserConnectionId' | 'UsersPermissionsUserConnectionCreated_at' | 'UsersPermissionsUserConnectionUpdated_at' | 'UsersPermissionsUserConnectionUsername' | 'UsersPermissionsUserConnectionEmail' | 'UsersPermissionsUserConnectionProvider' | 'UsersPermissionsUserConnectionConfirmed' | 'UsersPermissionsUserConnectionBlocked' | 'UsersPermissionsUserConnectionRole' | 'UsersPermissionsUserConnectionAvatar' | 'createUserPayload' | 'updateUserPayload' | 'deleteUserPayload' | 'ComponentRecipesIngredients' | Promise<'UsersPermissionsMe' | 'UsersPermissionsMeRole' | 'UsersPermissionsLoginPayload' | 'UserPermissionsPasswordPayload' | 'Recipe' | 'RecipeConnection' | 'RecipeAggregator' | 'RecipeAggregatorSum' | 'RecipeAggregatorAvg' | 'RecipeAggregatorMin' | 'RecipeAggregatorMax' | 'RecipeGroupBy' | 'RecipeConnectionId' | 'RecipeConnectionCreated_at' | 'RecipeConnectionUpdated_at' | 'RecipeConnectionTitle' | 'RecipeConnectionSlug' | 'RecipeConnectionImage' | 'RecipeConnectionNotes' | 'RecipeConnectionTime' | 'RecipeConnectionQuantity' | 'RecipeConnectionSteps' | 'RecipeConnectionAuthor' | 'RecipeConnectionPublished_at' | 'createRecipePayload' | 'updateRecipePayload' | 'deleteRecipePayload' | 'Tags' | 'TagsConnection' | 'TagsAggregator' | 'TagsGroupBy' | 'TagsConnectionId' | 'TagsConnectionCreated_at' | 'TagsConnectionUpdated_at' | 'TagsConnectionTitle' | 'TagsConnectionSlug' | 'createTagPayload' | 'updateTagPayload' | 'deleteTagPayload' | 'UsersFavoriteRecipes' | 'UsersFavoriteRecipesConnection' | 'UsersFavoriteRecipesAggregator' | 'UsersFavoriteRecipesGroupBy' | 'UsersFavoriteRecipesConnectionId' | 'UsersFavoriteRecipesConnectionCreated_at' | 'UsersFavoriteRecipesConnectionUpdated_at' | 'UsersFavoriteRecipesConnectionUser' | 'UsersFavoriteRecipesConnectionRecipe' | 'createUsersFavoriteRecipePayload' | 'updateUsersFavoriteRecipePayload' | 'deleteUsersFavoriteRecipePayload' | 'UsersViewedRecipes' | 'UsersViewedRecipesConnection' | 'UsersViewedRecipesAggregator' | 'UsersViewedRecipesGroupBy' | 'UsersViewedRecipesConnectionId' | 'UsersViewedRecipesConnectionCreated_at' | 'UsersViewedRecipesConnectionUpdated_at' | 'UsersViewedRecipesConnectionUser' | 'UsersViewedRecipesConnectionRecipe' | 'createUsersViewedRecipePayload' | 'updateUsersViewedRecipePayload' | 'deleteUsersViewedRecipePayload' | 'UploadFile' | 'UploadFileConnection' | 'UploadFileAggregator' | 'UploadFileAggregatorSum' | 'UploadFileAggregatorAvg' | 'UploadFileAggregatorMin' | 'UploadFileAggregatorMax' | 'UploadFileGroupBy' | 'UploadFileConnectionId' | 'UploadFileConnectionCreated_at' | 'UploadFileConnectionUpdated_at' | 'UploadFileConnectionName' | 'UploadFileConnectionAlternativeText' | 'UploadFileConnectionCaption' | 'UploadFileConnectionWidth' | 'UploadFileConnectionHeight' | 'UploadFileConnectionFormats' | 'UploadFileConnectionHash' | 'UploadFileConnectionExt' | 'UploadFileConnectionMime' | 'UploadFileConnectionSize' | 'UploadFileConnectionUrl' | 'UploadFileConnectionPreviewUrl' | 'UploadFileConnectionProvider' | 'UploadFileConnectionProvider_metadata' | 'deleteFilePayload' | 'UsersPermissionsPermission' | 'UsersPermissionsRole' | 'UsersPermissionsRoleConnection' | 'UsersPermissionsRoleAggregator' | 'UsersPermissionsRoleGroupBy' | 'UsersPermissionsRoleConnectionId' | 'UsersPermissionsRoleConnectionName' | 'UsersPermissionsRoleConnectionDescription' | 'UsersPermissionsRoleConnectionType' | 'createRolePayload' | 'updateRolePayload' | 'deleteRolePayload' | 'UsersPermissionsUser' | 'UsersPermissionsUserConnection' | 'UsersPermissionsUserAggregator' | 'UsersPermissionsUserGroupBy' | 'UsersPermissionsUserConnectionId' | 'UsersPermissionsUserConnectionCreated_at' | 'UsersPermissionsUserConnectionUpdated_at' | 'UsersPermissionsUserConnectionUsername' | 'UsersPermissionsUserConnectionEmail' | 'UsersPermissionsUserConnectionProvider' | 'UsersPermissionsUserConnectionConfirmed' | 'UsersPermissionsUserConnectionBlocked' | 'UsersPermissionsUserConnectionRole' | 'UsersPermissionsUserConnectionAvatar' | 'createUserPayload' | 'updateUserPayload' | 'deleteUserPayload' | 'ComponentRecipesIngredients'>;
 }
 export interface GQLAdminUserTypeResolver<TParent = any> {
   id?: AdminUserToIdResolver<TParent>;
@@ -3515,6 +3789,9 @@ export interface GQLQueryTypeResolver<TParent = any> {
   usersFavoriteRecipe?: QueryToUsersFavoriteRecipeResolver<TParent>;
   usersFavoriteRecipes?: QueryToUsersFavoriteRecipesResolver<TParent>;
   usersFavoriteRecipesConnection?: QueryToUsersFavoriteRecipesConnectionResolver<TParent>;
+  usersViewedRecipe?: QueryToUsersViewedRecipeResolver<TParent>;
+  usersViewedRecipes?: QueryToUsersViewedRecipesResolver<TParent>;
+  usersViewedRecipesConnection?: QueryToUsersViewedRecipesConnectionResolver<TParent>;
   files?: QueryToFilesResolver<TParent>;
   filesConnection?: QueryToFilesConnectionResolver<TParent>;
   role?: QueryToRoleResolver<TParent>;
@@ -3613,6 +3890,35 @@ export interface QueryToUsersFavoriteRecipesConnectionResolver<TParent = any, TR
   (parent: TParent, args: QueryToUsersFavoriteRecipesConnectionArgs, context: any, info: GraphQLResolveInfo): TResult;
 }
 
+export interface QueryToUsersViewedRecipeArgs {
+  id: string;
+  publicationState?: GQLPublicationState;
+}
+export interface QueryToUsersViewedRecipeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: QueryToUsersViewedRecipeArgs, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface QueryToUsersViewedRecipesArgs {
+  sort?: string;
+  limit?: number;
+  start?: number;
+  where?: GQLJSON;
+  publicationState?: GQLPublicationState;
+}
+export interface QueryToUsersViewedRecipesResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: QueryToUsersViewedRecipesArgs, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface QueryToUsersViewedRecipesConnectionArgs {
+  sort?: string;
+  limit?: number;
+  start?: number;
+  where?: GQLJSON;
+}
+export interface QueryToUsersViewedRecipesConnectionResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: QueryToUsersViewedRecipesConnectionArgs, context: any, info: GraphQLResolveInfo): TResult;
+}
+
 export interface QueryToFilesArgs {
   sort?: string;
   limit?: number;
@@ -3706,6 +4012,9 @@ export interface GQLMutationTypeResolver<TParent = any> {
   createUsersFavoriteRecipe?: MutationToCreateUsersFavoriteRecipeResolver<TParent>;
   updateUsersFavoriteRecipe?: MutationToUpdateUsersFavoriteRecipeResolver<TParent>;
   deleteUsersFavoriteRecipe?: MutationToDeleteUsersFavoriteRecipeResolver<TParent>;
+  createUsersViewedRecipe?: MutationToCreateUsersViewedRecipeResolver<TParent>;
+  updateUsersViewedRecipe?: MutationToUpdateUsersViewedRecipeResolver<TParent>;
+  deleteUsersViewedRecipe?: MutationToDeleteUsersViewedRecipeResolver<TParent>;
   deleteFile?: MutationToDeleteFileResolver<TParent>;
   createRole?: MutationToCreateRoleResolver<TParent>;
   updateRole?: MutationToUpdateRoleResolver<TParent>;
@@ -3784,6 +4093,27 @@ export interface MutationToDeleteUsersFavoriteRecipeArgs {
 }
 export interface MutationToDeleteUsersFavoriteRecipeResolver<TParent = any, TResult = any> {
   (parent: TParent, args: MutationToDeleteUsersFavoriteRecipeArgs, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MutationToCreateUsersViewedRecipeArgs {
+  input?: GQLcreateUsersViewedRecipeInput;
+}
+export interface MutationToCreateUsersViewedRecipeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: MutationToCreateUsersViewedRecipeArgs, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MutationToUpdateUsersViewedRecipeArgs {
+  input?: GQLupdateUsersViewedRecipeInput;
+}
+export interface MutationToUpdateUsersViewedRecipeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: MutationToUpdateUsersViewedRecipeArgs, context: any, info: GraphQLResolveInfo): TResult;
+}
+
+export interface MutationToDeleteUsersViewedRecipeArgs {
+  input?: GQLdeleteUsersViewedRecipeInput;
+}
+export interface MutationToDeleteUsersViewedRecipeResolver<TParent = any, TResult = any> {
+  (parent: TParent, args: MutationToDeleteUsersViewedRecipeArgs, context: any, info: GraphQLResolveInfo): TResult;
 }
 
 export interface MutationToDeleteFileArgs {

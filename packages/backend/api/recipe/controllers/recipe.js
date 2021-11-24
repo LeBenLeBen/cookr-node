@@ -40,29 +40,42 @@ module.exports = {
     if (entity) {
       const user = await strapi.plugins[
         'users-permissions'
-      ].services.user.fetch({ id: ctx.state.user.id }, ['lastViewedRecipes']);
+      ].services.user.fetch({ id: ctx.state.user.id });
 
       if (user) {
-        let lastViewedRecipes = user.lastViewedRecipes.filter(
-          (r) => r && r.recipe && r.recipe.id
-        );
-        // Add the viewed recipe to the beginnning of the list
-        lastViewedRecipes.unshift({
-          recipe: { id: entity.id },
-          viewedAt: Date.now(),
+        const lastViewedRecipes = await strapi.services[
+          'users-viewed-recipes'
+        ].find({ user: user.id, _sort: 'updated_at:desc' });
+        const existingRecipe = lastViewedRecipes.find((r) => {
+          return r.recipe.id === Number(id);
         });
-        // Remove duplicates
-        lastViewedRecipes = _.uniqWith(
-          lastViewedRecipes,
-          (val, otherVal) => val.recipe.id === otherVal.recipe.id
-        );
-        // Never store more than 5 recipes
-        lastViewedRecipes = lastViewedRecipes.slice(0, 5);
 
-        await strapi.plugins['users-permissions'].services.user.edit(
-          { id: ctx.state.user.id },
-          { lastViewedRecipes: lastViewedRecipes }
-        );
+        if (existingRecipe) {
+          // Recipe has already been viewed, let’s update it with the same data
+          // So the updated_at is refreshed
+          await strapi.services['users-viewed-recipes'].update(
+            {
+              id: existingRecipe.id,
+            },
+            existingRecipe
+          );
+        } else {
+          const newView = await strapi.services['users-viewed-recipes'].create({
+            user: user.id,
+            recipe: id,
+          });
+
+          lastViewedRecipes.unshift(newView);
+
+          if (lastViewedRecipes.length > 5) {
+            for (let i = 5; i < lastViewedRecipes.length; i++) {
+              const viewToDelete = lastViewedRecipes[i];
+              await strapi.services['users-viewed-recipes'].delete({
+                id: viewToDelete.id,
+              });
+            }
+          }
+        }
       }
     }
 
@@ -74,6 +87,22 @@ module.exports = {
   },
 
   async delete(ctx) {
-    return await withOwnership('delete', ctx);
+    const entity = await withOwnership('delete', ctx);
+
+    if (entity) {
+      // Remove recently viewed recipes without recipe
+      await strapi.services['users-viewed-recipes'].delete({
+        user: ctx.state.user.id,
+        recipe_null: true,
+      });
+
+      // Delete favorites recipes without recipe
+      await strapi.services['users-favorite-recipes'].delete({
+        user: ctx.state.user.id,
+        recipe_null: true,
+      });
+    }
+
+    return entity;
   },
 };

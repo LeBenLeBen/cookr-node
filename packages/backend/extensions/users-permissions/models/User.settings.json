@@ -72,11 +72,6 @@
       "plugin": "upload",
       "required": false,
       "pluginOptions": {}
-    },
-    "lastViewedRecipes": {
-      "type": "component",
-      "repeatable": true,
-      "component": "users.last-viewed-recipes"
     }
   }
 }
