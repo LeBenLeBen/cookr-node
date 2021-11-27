@@ -1,24 +1,13 @@
 'use strict';
 
-const index = 'recipe';
+const { serializeForSearch, RECIPE_INDEX } = require('../helpers');
 
 function pushToIndex(recipe) {
-  const { id, title, slug, author, tags } = recipe;
-
-  strapi.services.algolia.saveObject(
-    {
-      id,
-      title,
-      slug,
-      author: author.username,
-      tags: tags.map((t) => t.title),
-    },
-    index
-  );
+  strapi.services.algolia.saveObject(serializeForSearch(recipe), RECIPE_INDEX);
 }
 
 function removeFromIndex(id) {
-  strapi.services.algolia.deleteObject(id, index);
+  strapi.services.algolia.deleteObject(id, RECIPE_INDEX);
 }
 
 module.exports = {

@@ -1,7 +1,7 @@
 'use strict';
 
-const _ = require('lodash');
 const { parseMultipartData, sanitizeEntity } = require('strapi-utils');
+const { serializeForSearch, RECIPE_INDEX } = require('../helpers');
 
 async function withOwnership(action, ctx) {
   const { id } = ctx.params;
@@ -104,5 +104,25 @@ module.exports = {
     }
 
     return entity;
+  },
+
+  /**
+   * Reindex all recipes into Algolia
+   * Easiest way to run it is through Strapi console
+   */
+  async indexAll() {
+    const prefix =
+      strapi.config.hook.settings.algolia.prefix || strapi.config.environment;
+    const recipes = await strapi.services.recipe.find({});
+
+    const objects = recipes.map((recipe) => serializeForSearch(recipe));
+    const index = strapi.services.algolia.client.initIndex(
+      `${prefix}_${RECIPE_INDEX}`
+    );
+
+    return index.replaceAllObjects(objects).then(({ objectIDs }) =>
+      // eslint-disable-next-line no-console
+      console.log(`Succesfully indexed ${objectIDs.length} objects`)
+    );
   },
 };

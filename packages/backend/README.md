@@ -25,3 +25,13 @@ Where `backend` is the target container, see `container_name` in `docker-compose
 ## Emails
 
 By default, in development, the backend is configured to send emails to [Mailhog](https://github.com/mailhog/MailHog). You can browse outgoing emails at [localhost:8025](http://localhost:8025).
+
+## Reindexing recipes
+
+To reindex all the recipes in Algolia, you can do so using the Strapi console:
+
+```sh
+docker-compose exec backend /bin/bash
+PORT=1338 strapi console
+strapi.controllers.recipe.indexAll();
+```
