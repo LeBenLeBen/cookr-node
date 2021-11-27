@@ -104,22 +104,24 @@
         <h2 class="mb-3 text-alt-600 font-bold text-sm uppercase">
           {{ $t('recipe.ingredients') }}
         </h2>
-        <table class="w-full">
-          <tbody class="divide-y divide-alt-200">
-            <tr
-              v-for="(ingredient, i) in recipe.ingredients"
-              :key="i"
-              class="align-top"
-            >
-              <td class="pr-3 py-2 font-bold text-right">
-                {{ ingredient.amount }}
-              </td>
-              <td class="py-2">
-                {{ ingredient.title }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="-mx-4 sm:mx-0">
+          <table class="w-full">
+            <tbody class="divide-y divide-alt-200">
+              <tr
+                v-for="(ingredient, i) in recipe.ingredients"
+                :key="i"
+                class="align-top"
+              >
+                <td class="pl-4 sm:pl-0 pr-3 py-2 font-bold text-right">
+                  {{ ingredient.amount }}
+                </td>
+                <td class="py-2 pr-4 sm:pr-0">
+                  {{ ingredient.title }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <div class="grid gap-10 lg:col-span-2">
