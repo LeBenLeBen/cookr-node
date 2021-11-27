@@ -13,7 +13,7 @@ export function imageUrl(
     const { hash, ext } = image;
 
     if (hash && ext) {
-      return `http://${
+      return `https://${
         import.meta.env.VITE_IMGIX_SOURCE
       }.imgix.net/${hash}${ext}`;
     }
