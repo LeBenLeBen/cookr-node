@@ -55,7 +55,7 @@ export default defineComponent({
           requestPolicy: 'network-only',
         },
       }).then((response) => {
-        if (response.data.value.me) {
+        if (response.data?.value?.me) {
           store.setCurrentUser(response.data.value.me);
         }
       });

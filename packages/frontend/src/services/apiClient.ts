@@ -67,7 +67,7 @@ export default createClient({
 
     errorExchange({
       onError: ({ graphQLErrors, networkError }) => {
-        if (graphQLErrors) {
+        if (graphQLErrors?.length) {
           graphQLErrors.map(({ message, extensions }) => {
             if (message === 'User Not Found' || message === 'Invalid token.') {
               store.setToken(null);

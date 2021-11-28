@@ -2,10 +2,12 @@
   <div>
     <h1 class="h1 sr-only">{{ $t('home.title') }}</h1>
 
-    <h2 class="h2 mb-4">
-      {{ $t('home.recentlyAdded') }}
-    </h2>
-    <RecipesCarousel :recipes="recipes" :loading="loading" />
+    <template v-if="recipes?.length">
+      <h2 class="h2 mb-4">
+        {{ $t('home.recentlyAdded') }}
+      </h2>
+      <RecipesCarousel :recipes="recipes" :loading="loading" />
+    </template>
 
     <template v-if="lastViewedRecipes?.length">
       <h2 class="h2 mt-8 mb-4">
