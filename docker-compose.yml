@@ -42,5 +42,15 @@ services:
       - db
       - mailhog
 
+  frontend:
+    container_name: frontend
+    build: packages/frontend
+    command: npm run dev
+    volumes:
+      - ./packages/frontend:/srv/app
+      - /srv/app/node_modules
+    ports:
+      - 3000:3000
+
 volumes:
   pgdata:

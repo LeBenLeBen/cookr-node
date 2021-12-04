@@ -14,9 +14,10 @@ export default {
     },
   },
   server: {
+    host: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:1337',
+        target: 'http://backend:1337',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
