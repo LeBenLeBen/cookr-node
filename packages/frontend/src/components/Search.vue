@@ -6,7 +6,7 @@
   <div v-clickOutside="close" class="relative z-40 w-full" role="search">
     <label for="search" class="sr-only">{{ $t('search.label') }}</label>
     <div
-      class="relative max-w-xs text-alt-400"
+      class="relative sm:max-w-xs text-alt-400"
       role="combobox"
       :aria-expanded="isOpen ? 'true' : 'false'"
       aria-owns="search-results"

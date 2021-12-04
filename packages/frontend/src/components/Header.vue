@@ -32,10 +32,10 @@
         >
           <div
             :class="{
-              'w-0 md:w-auto overflow-hidden': searchIsOpen,
-              'mr-4 sm:mr-6': !searchIsOpen,
+              'w-0 sm:w-auto overflow-hidden': searchIsOpen,
+              'mr-4': !searchIsOpen,
             }"
-            class="flex-shrink-0"
+            class="flex-shrink-0 sm:mr-6"
           >
             <router-link
               :to="{ name: 'home' }"
@@ -71,7 +71,7 @@
 
           <div
             :class="{
-              'w-0 md:w-auto overflow-hidden': searchIsOpen,
+              'w-0 sm:w-auto overflow-hidden': searchIsOpen,
               'ml-2 sm:ml-4': !searchIsOpen,
             }"
             class="md:hidden flex-shrink-0"
