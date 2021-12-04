@@ -145,8 +145,7 @@
               params: { id: result.id, slug: result.slug },
             }"
             class="
-              flex
-              items-center
+              block
               py-3
               pr-4
               pl-5
@@ -155,25 +154,13 @@
             "
             :class="{ 'bg-alt-100': index == indexHighlighted }"
           >
-            <div class="flex-grow">
-              <div class="mb-1 text-lg leading-tight font-bold">
-                {{ result.title }}
-              </div>
-              <RecipeAuthor
-                :username="result.author"
-                class="text-sm text-alt-600"
-              />
+            <div class="mb-1 text-lg leading-tight font-bold">
+              {{ result.title }}
             </div>
-            <div>
-              <TagsList
-                :tags="
-                  result.tags.map((t) => ({
-                    title: t,
-                  }))
-                "
-                class="justify-items-end"
-              />
-            </div>
+            <RecipeAuthor
+              :username="result.author"
+              class="text-sm text-alt-600"
+            />
           </router-link>
         </li>
       </ul>
@@ -208,7 +195,6 @@ type Hit = {
   title: string;
   slug: string;
   author: string;
-  tags: string[];
   objectID: string;
 };
 

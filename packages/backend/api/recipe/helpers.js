@@ -2,7 +2,7 @@ module.exports = {
   RECIPE_INDEX: 'recipe',
 
   serializeForSearch(recipe) {
-    const { id, title, slug, author, tags } = recipe;
+    const { id, title, slug, author } = recipe;
 
     return {
       objectID: id,
@@ -10,7 +10,6 @@ module.exports = {
       title,
       slug,
       author: author.username,
-      tags: tags.map((t) => t.title),
     };
   },
 };
