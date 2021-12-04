@@ -11,8 +11,12 @@
     </h2>
 
     <ul class="space-y-4">
-      <li v-for="recipe in recipes" :key="recipe.id">
-        <RecipeListItem v-bind="recipe" :username="recipe.author?.username" />
+      <li v-for="recipe in recipes" :key="recipe.id!">
+        <RecipeListItem
+          :id="recipe.id!"
+          v-bind="recipe.attributes"
+          :username="recipe.attributes?.author?.data?.attributes?.username"
+        />
       </li>
 
       <template v-if="!recipes.length && loading">
@@ -41,7 +45,7 @@
 <script lang="ts" setup>
 import { PropType } from 'vue';
 
-import { GQLRecipe } from '@/types/graphqlTypes';
+import { RecipeEntity } from '@/gql/graphql';
 
 defineProps({
   loading: {
@@ -49,7 +53,7 @@ defineProps({
     required: true,
   },
   recipes: {
-    type: Array as PropType<GQLRecipe[]>,
+    type: Array as PropType<RecipeEntity[]>,
     required: true,
   },
   total: {

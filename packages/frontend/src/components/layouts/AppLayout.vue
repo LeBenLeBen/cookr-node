@@ -37,7 +37,7 @@ import store from '@/store';
 const { t } = useI18n();
 
 const menu = computed<MenuGroup[]>(() => {
-  return store.state.currentUser?.username
+  return store.state.currentUser?.user?.data?.attributes?.username
     ? [
         {
           label: t('app.explore'),
@@ -64,7 +64,10 @@ const menu = computed<MenuGroup[]>(() => {
               icon: 'book',
               to: {
                 name: 'user',
-                params: { username: store.state.currentUser.username },
+                params: {
+                  username:
+                    store.state.currentUser?.user?.data?.attributes?.username,
+                },
               },
             },
             {

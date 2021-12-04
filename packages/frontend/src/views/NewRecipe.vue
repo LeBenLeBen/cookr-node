@@ -3,12 +3,12 @@
     <PageHeader :title="$t('recipe.new.title')" />
 
     <RecipeForm
-      v-model:title.trim="input.title"
+      v-model:title="input.title"
       v-model:ingredients="input.ingredients"
-      v-model:steps.trim="input.steps"
+      v-model:steps="input.steps"
       v-model:time.number="input.time"
       v-model:quantity.number="input.quantity"
-      v-model:notes.trim="input.notes"
+      v-model:notes="input.notes"
       v-model:tags="input.tags"
       v-model:image="input.image"
       @submit="prepareToSave"
@@ -30,15 +30,11 @@ import store from '@/store';
 import i18n from '@/i18n';
 
 import usePageTitle from '@/composables/usePageTitle';
-import {
-  GQLMutation,
-  GQLRecipeInput,
-  MutationToCreateRecipeArgs,
-} from '@/types/graphqlTypes';
+import { Mutation, MutationCreateRecipeArgs, RecipeInput } from '@/gql/graphql';
 
 usePageTitle(i18n.global.t('recipe.new.title'));
 
-const input = reactive<GQLRecipeInput>({
+const input = reactive<RecipeInput>({
   author: store.state.currentUser!.id,
   title: '',
   slug: '',
@@ -52,15 +48,17 @@ const input = reactive<GQLRecipeInput>({
 });
 
 const { executeMutation: save } = useMutation<
-  Pick<GQLMutation, 'createRecipe'>,
-  MutationToCreateRecipeArgs
+  Mutation,
+  MutationCreateRecipeArgs
 >(
   gql`
-    mutation createRecipe($input: createRecipeInput) {
-      createRecipe(input: $input) {
-        recipe {
+    mutation createRecipe($data: RecipeInput!) {
+      createRecipe(data: $data) {
+        data {
           id
-          slug
+          attributes {
+            slug
+          }
         }
       }
     }
@@ -69,30 +67,34 @@ const { executeMutation: save } = useMutation<
 
 watch(
   () => input.title,
-  (val) => {
-    input.slug = kebabCase(deburr(val));
+  (title) => {
+    input.slug = title ? kebabCase(deburr(title)) : '';
   }
 );
 
 function prepareToSave() {
-  let data: GQLRecipeInput = omitBy(input, isNil) as GQLRecipeInput;
+  let data: RecipeInput = omitBy(input, isNil);
+
   data = omitBy(
     data,
     (val) => typeof val === 'string' && val.trim() === ''
-  ) as GQLRecipeInput;
+  ) as RecipeInput;
+
   data.ingredients = data.ingredients?.filter((i) => i?.title?.trim());
 
-  save({ input: { data } }).then((response) => {
+  data.publishedAt = new Date().toISOString();
+
+  save({ data }).then((response) => {
     if (response.error) return;
 
-    const recipe = response.data?.createRecipe?.recipe;
+    const recipe = response.data?.createRecipe?.data;
 
     if (recipe) {
       router.push({
         name: 'recipe',
         params: {
           id: recipe.id,
-          slug: recipe.slug,
+          slug: recipe.attributes?.slug,
         },
       });
     }

@@ -24,16 +24,16 @@
 import { PropType } from 'vue';
 
 import { crop, hdpiSources, imageUrl } from '@/helpers/images';
-import { GQLUploadFile } from '@/types/graphqlTypes';
+import { UploadFileEntityResponse } from '@/gql/graphql';
 
 const props = defineProps({
   image: {
-    type: Object as PropType<Pick<GQLUploadFile, 'hash' | 'ext'> | null>,
+    type: Object as PropType<UploadFileEntityResponse | null>,
     default: null,
   },
 });
 
-const url = imageUrl(props.image);
+const url = imageUrl(props.image?.data?.attributes);
 
 const cropOptions = {
   w: 48,

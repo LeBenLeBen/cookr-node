@@ -44,10 +44,14 @@
       <template v-if="recipes.length">
         <SwiperSlide
           v-for="recipe in recipes"
-          :key="recipe.id"
+          :key="recipe.id!"
           class="slide p-1"
         >
-          <RecipeCard v-bind="recipe" :username="recipe.author?.username" />
+          <RecipeCard
+            :id="recipe.id"
+            v-bind="recipe.attributes"
+            :username="recipe.attributes?.author?.data?.attributes?.username"
+          />
         </SwiperSlide>
       </template>
       <template v-if="loading">
@@ -89,7 +93,7 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperClass } from 'swiper';
 import 'swiper/scss';
 
-import { GQLRecipe } from '@/types/graphqlTypes';
+import { RecipeEntity } from '@/gql/graphql';
 
 SwiperCore.use([Mousewheel]);
 
@@ -101,7 +105,7 @@ export default defineComponent({
 
   props: {
     recipes: {
-      type: Array as PropType<GQLRecipe[]>,
+      type: Array as PropType<RecipeEntity[]>,
       default: () => [],
     },
     loading: {

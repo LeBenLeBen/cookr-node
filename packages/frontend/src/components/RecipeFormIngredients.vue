@@ -7,26 +7,20 @@
         class="grid grid-cols-3 gap-4"
       >
         <CFormGroup>
-          <Field v-slot="{ field }" :name="`ingredients[${i}].amount`">
-            <CTextField
-              :model-value="ingredient.amount"
-              v-bind="field"
-              aria-labelledby="ingredients-quantity"
-              data-field="ingredient-amount"
-              @update:model-value="(val: string) => updateField(i, 'amount', val)"
-            />
-          </Field>
+          <CTextField
+            :model-value="ingredient.amount"
+            aria-labelledby="ingredients-quantity"
+            data-field="ingredient-amount"
+            @update:model-value="(val: string) => updateField(i, 'amount', val)"
+          />
         </CFormGroup>
 
         <CFormGroup class="col-span-2">
-          <Field v-slot="{ field }" :name="`ingredients[${i}].title`">
-            <CTextField
-              :model-value="ingredient.title"
-              v-bind="field"
-              aria-labelledby="ingredients-label"
-              @update:model-value="(val: string) => updateField(i, 'title', val)"
-            />
-          </Field>
+          <CTextField
+            :model-value="ingredient.title"
+            aria-labelledby="ingredients-label"
+            @update:model-value="(val: string) => updateField(i, 'title', val)"
+          />
         </CFormGroup>
       </li>
     </ul>
@@ -41,11 +35,11 @@
 <script lang="ts" setup>
 import { ref, nextTick, PropType } from 'vue';
 
-import { GQLComponentRecipesIngredients } from '@/types/graphqlTypes';
+import { ComponentRecipesIngredients } from '@/gql/graphql';
 
 const props = defineProps({
   modelValue: {
-    type: Array as PropType<Partial<GQLComponentRecipesIngredients>[]>,
+    type: Array as PropType<Partial<ComponentRecipesIngredients>[]>,
     required: true,
   },
 });
@@ -56,7 +50,7 @@ const ingredientsList = ref<HTMLUListElement | null>(null);
 
 function updateField(
   index: number,
-  field: keyof GQLComponentRecipesIngredients,
+  field: keyof ComponentRecipesIngredients,
   value: string
 ) {
   const ingredients = [...props.modelValue];
@@ -65,7 +59,7 @@ function updateField(
 }
 
 function addItem() {
-  const ingredients: Partial<GQLComponentRecipesIngredients>[] = [
+  const ingredients: Partial<ComponentRecipesIngredients>[] = [
     ...props.modelValue,
     { title: undefined, amount: undefined },
   ];

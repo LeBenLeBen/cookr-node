@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
+import { computed, reactive } from 'vue';
 import gql from 'graphql-tag';
 import { useQuery } from '@urql/vue';
 
@@ -22,50 +22,57 @@ import i18n from '@/i18n';
 import store from '@/store';
 import useResult from '@/composables/useResult';
 import usePageTitle from '@/composables/usePageTitle';
-import { GQLQuery } from '@/types/graphqlTypes';
+import { Query, QueryUsersFavoriteRecipesArgs } from '@/gql/graphql';
 
 usePageTitle(i18n.global.t('favorites.title'));
 
-const limit = 20;
-const start = ref(0);
+const pagination = reactive({
+  limit: 20,
+  start: 0,
+});
 
-const result = useQuery<
-  Pick<GQLQuery, 'usersFavoriteRecipes' | 'usersFavoriteRecipesConnection'>
->({
+const result = useQuery<Query, QueryUsersFavoriteRecipesArgs>({
   query: gql`
     query favoriteRecipes(
-      $limit: Int!
-      $start: Int!
-      $sort: String!
-      $where: JSON
+      $pagination: PaginationArg
+      $sort: [String]
+      $filters: UserFavoriteRecipeFiltersInput
     ) {
       usersFavoriteRecipes(
-        limit: $limit
-        start: $start
+        pagination: $pagination
         sort: $sort
-        where: $where
+        filters: $filters
       ) {
-        id
-        recipe {
-          ...RecipeCard
+        data {
+          id
+          attributes {
+            recipe {
+              data {
+                id
+                attributes {
+                  ...RecipeCard
+                }
+              }
+            }
+          }
         }
-      }
-      usersFavoriteRecipesConnection(sort: $sort, where: $where) {
-        aggregate {
-          count
-          totalCount
+        meta {
+          pagination {
+            total
+          }
         }
       }
     }
     ${recipeCardFragment}
   `,
   variables: {
-    start,
-    limit,
-    sort: 'created_at:desc',
-    where: {
+    pagination,
+    sort: ['createdAt:desc'],
+    filters: {
       user: {
-        id: store.state.currentUser!.id,
+        id: {
+          eq: store.state.currentUser!.id,
+        },
       },
     },
   },
@@ -77,13 +84,11 @@ const result = useQuery<
 const total = useResult(
   result.data,
   0,
-  (data) =>
-    data.usersFavoriteRecipesConnection.aggregate.count ||
-    data.usersFavoriteRecipesConnection.aggregate.totalCount
+  (data) => data.usersFavoriteRecipes.meta.pagination.total
 );
 
 const recipes = useResult(result.data, [], (data) =>
-  data.usersFavoriteRecipes.map((ufr) => ufr.recipe)
+  data.usersFavoriteRecipes.data.map((ufr) => ufr.attributes.recipe.data)
 );
 
 const hasMore = computed(() => recipes.value.length < total.value);
@@ -91,6 +96,6 @@ const hasMore = computed(() => recipes.value.length < total.value);
 const loading = result.fetching;
 
 function loadMore() {
-  start.value += limit;
+  pagination.start += pagination.limit;
 }
 </script>

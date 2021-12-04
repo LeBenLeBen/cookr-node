@@ -32,7 +32,10 @@ services:
 
   backend:
     container_name: backend
-    image: strapi/strapi
+    build: packages/backend
+    command: npm run dev
+    restart: unless-stopped
+    env_file: packages/backend/.env
     volumes:
       - ./packages/backend:/srv/app
       - /srv/app/node_modules
@@ -51,6 +54,8 @@ services:
       - /srv/app/node_modules
     ports:
       - 3000:3000
+    depends_on:
+      - backend
 
 volumes:
   pgdata:

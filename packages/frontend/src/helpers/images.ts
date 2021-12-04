@@ -1,4 +1,4 @@
-import { GQLUploadFile } from '@/types/graphqlTypes';
+import { UploadFile } from '@/gql/graphql';
 import { objectToUrlParams } from './url';
 
 type ImgixOptions = Record<string, string | number>;
@@ -7,7 +7,7 @@ type ImgixOptions = Record<string, string | number>;
  * Return an image URL based on its hashed named and file extension
  */
 export function imageUrl(
-  image: Pick<GQLUploadFile, 'hash' | 'ext'> | null = null
+  image: Pick<UploadFile, 'hash' | 'ext'> | null = null
 ) {
   if (image) {
     const { hash, ext } = image;

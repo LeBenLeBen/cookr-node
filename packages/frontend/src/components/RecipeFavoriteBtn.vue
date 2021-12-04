@@ -24,15 +24,13 @@ import { useQuery, useMutation } from '@urql/vue';
 import gql from 'graphql-tag';
 
 import store from '@/store';
-import { recipeCardFragment } from '@/services/fragments';
 import {
-  GQLMutation,
-  GQLQuery,
-  GQLUsersFavoriteRecipes,
-  MutationToCreateUsersFavoriteRecipeArgs,
-  MutationToDeleteUsersFavoriteRecipeArgs,
-  QueryToUsersFavoriteRecipesArgs,
-} from '@/types/graphqlTypes';
+  Mutation,
+  MutationCreateUserFavoriteRecipeArgs,
+  MutationDeleteUserFavoriteRecipeArgs,
+  Query,
+  UserFavoriteRecipeEntity,
+} from '@/gql/graphql';
 
 const props = defineProps({
   recipeId: {
@@ -41,26 +39,28 @@ const props = defineProps({
   },
 });
 
-const favoriteRecipe = ref<GQLUsersFavoriteRecipes | null>(null);
+const favoriteRecipe = ref<UserFavoriteRecipeEntity | null>(null);
 
-const result = await useQuery<
-  Pick<GQLQuery, 'usersFavoriteRecipes'>,
-  QueryToUsersFavoriteRecipesArgs
->({
+const result = await useQuery<Query>({
   query: gql`
-    query favoriteRecipe($where: JSON!) {
-      usersFavoriteRecipes(start: 0, limit: 1, where: $where) {
-        id
+    query favoriteRecipe($filters: UserFavoriteRecipeFiltersInput!) {
+      usersFavoriteRecipes(
+        pagination: { start: 0, limit: 1 }
+        filters: $filters
+      ) {
+        data {
+          id
+        }
       }
     }
   `,
   variables: {
-    where: {
+    filters: {
       user: {
-        id: store.state.currentUser!.id,
+        id: { eq: store.state.currentUser!.id },
       },
       recipe: {
-        id: props.recipeId,
+        id: { eq: props.recipeId },
       },
     },
   },
@@ -69,18 +69,18 @@ const result = await useQuery<
   },
 });
 
-if (result.data.value?.usersFavoriteRecipes?.length) {
-  favoriteRecipe.value = result.data.value.usersFavoriteRecipes[0];
+if (result.data.value?.usersFavoriteRecipes?.data.length) {
+  favoriteRecipe.value = result.data.value.usersFavoriteRecipes.data[0];
 }
 
 const { executeMutation: deleteFavoriteRecipe } = useMutation<
-  Pick<GQLMutation, 'deleteUsersFavoriteRecipe'>,
-  MutationToDeleteUsersFavoriteRecipeArgs
+  Mutation,
+  MutationDeleteUserFavoriteRecipeArgs
 >(
   gql`
-    mutation deleteFavoriteRecipe($input: deleteUsersFavoriteRecipeInput!) {
-      deleteUsersFavoriteRecipe(input: $input) {
-        usersFavoriteRecipe {
+    mutation deleteFavoriteRecipe($id: ID!) {
+      deleteUserFavoriteRecipe(id: $id) {
+        data {
           id
         }
       }
@@ -89,50 +89,37 @@ const { executeMutation: deleteFavoriteRecipe } = useMutation<
 );
 
 const { executeMutation: createFavoriteRecipe } = useMutation<
-  Pick<GQLMutation, 'createUsersFavoriteRecipe'>,
-  MutationToCreateUsersFavoriteRecipeArgs
+  Mutation,
+  MutationCreateUserFavoriteRecipeArgs
 >(
   gql`
-    mutation createFavoriteRecipe($input: createUsersFavoriteRecipeInput!) {
-      createUsersFavoriteRecipe(input: $input) {
-        usersFavoriteRecipe {
+    mutation createUserFavoriteRecipe($data: UserFavoriteRecipeInput!) {
+      createUserFavoriteRecipe(data: $data) {
+        data {
           id
-          recipe {
-            ...RecipeCard
-          }
         }
       }
     }
-    ${recipeCardFragment}
   `
 );
 
 function toggle() {
-  if (favoriteRecipe.value) {
-    deleteFavoriteRecipe({
-      input: {
-        where: {
-          id: favoriteRecipe.value.id,
-        },
-      },
-    }).then((response) => {
+  if (favoriteRecipe.value?.id) {
+    deleteFavoriteRecipe({ id: favoriteRecipe.value.id }).then((response) => {
       if (response.error) return;
 
       favoriteRecipe.value = null;
     });
   } else {
     createFavoriteRecipe({
-      input: {
-        data: {
-          user: store.state.currentUser!.id,
-          recipe: props.recipeId,
-        },
+      data: {
+        user: store.state.currentUser!.id,
+        recipe: props.recipeId,
       },
     }).then((response) => {
       if (response.error) return;
 
-      const usersFavoriteRecipe =
-        response.data?.createUsersFavoriteRecipe?.usersFavoriteRecipe;
+      const usersFavoriteRecipe = response.data?.createUserFavoriteRecipe?.data;
 
       if (usersFavoriteRecipe) {
         favoriteRecipe.value = usersFavoriteRecipe;

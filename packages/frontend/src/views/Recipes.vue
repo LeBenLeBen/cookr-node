@@ -17,7 +17,7 @@
       >
         <CFormGroup>
           <Label>{{ $t('recipe.tags') }}</Label>
-          <TagsSelect v-model="params.where.tags_in" />
+          <TagsSelect v-model="params.tags" />
         </CFormGroup>
 
         <CFormGroup>
@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, reactive } from 'vue';
+import { ref, watch, reactive, computed } from 'vue';
 
 import i18n from '@/i18n';
 
@@ -62,25 +62,21 @@ import { useRoute } from 'vue-router';
 usePageTitle(i18n.global.t('explore.title'));
 
 enum Sort {
-  CreatedAtDesc = 'created_at:desc',
-  CreatedAtAsc = 'created_at:asc',
+  CreatedAtDesc = 'createdAt:desc',
+  CreatedAtAsc = 'createdAt:asc',
   TimeAsc = 'time:asc',
 }
 
 type FilterParams = {
   sort: Sort;
-  where: {
-    tags_in: string[];
-  };
+  tags: string[];
 };
 
 const route = useRoute();
 const filtersOpen = ref(!!route.query.sort);
 const params = reactive<FilterParams>({
   sort: Sort.CreatedAtDesc,
-  where: {
-    tags_in: [],
-  },
+  tags: [],
 });
 
 /**
@@ -112,7 +108,7 @@ watch(
     }
 
     params.sort = sort;
-    params.where.tags_in = tags;
+    params.tags = tags;
   },
   { deep: true, immediate: true }
 );
@@ -125,10 +121,10 @@ watch(
   () => {
     let query = {};
 
-    if (params.sort !== Sort.CreatedAtDesc || params.where.tags_in?.length) {
+    if (params.sort !== Sort.CreatedAtDesc || params.tags.length) {
       query = {
         sort: params.sort,
-        tags: params.where.tags_in,
+        tags: params.tags,
       };
     }
 
@@ -140,5 +136,12 @@ watch(
   { deep: true }
 );
 
-const collection = useRecipesList(params);
+const listParams = computed(() => ({
+  sort: [params.sort],
+  filters: {
+    or: params.tags.map((tag) => ({ tags: { id: { eq: tag } } })),
+  },
+}));
+
+const collection = useRecipesList(listParams);
 </script>

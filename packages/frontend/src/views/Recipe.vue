@@ -2,16 +2,24 @@
   <div v-if="recipe">
     <header class="flex space-x-2 mb-6 md:mb-8">
       <div class="flex-grow">
-        <h1 class="h1 mb-1 sm:mb-2 md:mb-3">{{ recipe.title }}</h1>
+        <h1 class="h1 mb-1 sm:mb-2 md:mb-3">{{ recipe.attributes.title }}</h1>
         <ul class="flex flex-wrap items-center text-alt-600">
           <li class="w-full mb-2 sm:w-auto sm:mb-0 mr-6">
-            <RecipeAuthor :username="recipe.author.username" />
+            <RecipeAuthor
+              :username="recipe.attributes.author.data.attributes.username"
+            />
           </li>
-          <li v-if="recipe.time" class="inline-flex items-center mr-6">
-            <RecipeTime :time="recipe.time" />
+          <li
+            v-if="recipe.attributes.time"
+            class="inline-flex items-center mr-6"
+          >
+            <RecipeTime :time="recipe.attributes.time" />
           </li>
-          <li v-if="recipe.quantity" class="inline-flex items-center mr-6">
-            <RecipeQuantity :quantity="recipe.quantity" />
+          <li
+            v-if="recipe.attributes.quantity"
+            class="inline-flex items-center mr-6"
+          >
+            <RecipeQuantity :quantity="recipe.attributes.quantity" />
           </li>
         </ul>
       </div>
@@ -41,7 +49,7 @@
 
     <div class="relative -mx-4 sm:-mx-6 lg:-ml-8 mb-6 md:mb-10">
       <RecipeImage
-        :image="recipe.image"
+        :image="recipe.attributes.image"
         width="792"
         height="528"
         class="md:rounded-xl bg-alt-200"
@@ -100,7 +108,7 @@
         </div>
       </div>
 
-      <div v-if="recipe.ingredients.length" class="row-span-2">
+      <div v-if="recipe.attributes.ingredients.length" class="row-span-2">
         <h2 class="mb-3 text-alt-600 font-bold text-sm uppercase">
           {{ $t('recipe.ingredients') }}
         </h2>
@@ -108,7 +116,7 @@
           <table class="w-full">
             <tbody class="divide-y divide-alt-200">
               <tr
-                v-for="(ingredient, i) in recipe.ingredients"
+                v-for="(ingredient, i) in recipe.attributes.ingredients"
                 :key="i"
                 class="align-top"
               >
@@ -125,20 +133,20 @@
       </div>
 
       <div class="grid gap-10 lg:col-span-2">
-        <div v-if="recipe.notes">
+        <div v-if="recipe.attributes.notes">
           <h2 class="mb-3 text-alt-600 font-bold text-sm uppercase">
             {{ $t('recipe.notes') }}
           </h2>
           <div class="text-sm break-words">
-            {{ recipe.notes }}
+            {{ recipe.attributes.notes }}
           </div>
         </div>
 
-        <div v-if="recipe.tags.length">
+        <div v-if="recipe.attributes.tags.data.length">
           <h2 class="mb-3 text-alt-600 font-bold text-sm uppercase">
             {{ $t('recipe.tags') }}
           </h2>
-          <TagsList :tags="recipe.tags" />
+          <TagsList :tags="recipe.attributes.tags.data" />
         </div>
       </div>
     </div>
@@ -155,11 +163,7 @@ import store from '@/store';
 import { recipeFragment } from '@/services/fragments';
 import useResult from '@/composables/useResult';
 import usePageTitle from '@/composables/usePageTitle';
-import {
-  GQLMutation,
-  GQLQuery,
-  MutationToDeleteRecipeArgs,
-} from '@/types/graphqlTypes';
+import { Mutation, MutationDeleteRecipeArgs, Query } from '@/gql/graphql';
 
 const props = defineProps({
   id: {
@@ -173,13 +177,13 @@ const props = defineProps({
 });
 
 const { executeMutation: deleteRecipe } = useMutation<
-  Pick<GQLMutation, 'deleteRecipe'>,
-  MutationToDeleteRecipeArgs
+  Mutation,
+  MutationDeleteRecipeArgs
 >(
   gql`
-    mutation deleteRecipe($input: deleteRecipeInput!) {
-      deleteRecipe(input: $input) {
-        recipe {
+    mutation deleteRecipe($id: ID!) {
+      deleteRecipe(id: $id) {
+        data {
           id
         }
       }
@@ -187,11 +191,16 @@ const { executeMutation: deleteRecipe } = useMutation<
   `
 );
 
-const result = await useQuery<Pick<GQLQuery, 'recipe'>>({
+const result = await useQuery<Query>({
   query: gql`
     query getRecipe($id: ID!) {
       recipe(id: $id) {
-        ...RecipeFragment
+        data {
+          id
+          attributes {
+            ...RecipeFragment
+          }
+        }
       }
     }
     ${recipeFragment}
@@ -201,22 +210,22 @@ const result = await useQuery<Pick<GQLQuery, 'recipe'>>({
 
 watchEffect(() => {
   if (result.data.value?.recipe) {
-    usePageTitle(result.data.value.recipe.title);
+    usePageTitle(result.data.value.recipe.data?.attributes?.title);
   } else {
     router.replace({ name: 'not-found' });
   }
 });
 
-const recipe = useResult(result.data, null, (data) => data.recipe);
+const recipe = useResult(result.data, null, (data) => data.recipe.data);
 
-const steps = useResult(result.data, [], (data) => {
-  return data.recipe.steps.length
-    ? data.recipe.steps.split(/\r?\n/).filter((s) => !!s.trim())
+const steps = useResult(recipe, [], (recipe) => {
+  return recipe.attributes.steps.length
+    ? recipe.attributes.steps.split(/\r?\n/).filter((s) => !!s.trim())
     : [];
 });
 
-const isOwner = useResult(result.data, false, (data) => {
-  return data.recipe.author.id === store.state.currentUser!.id;
+const isOwner = useResult(recipe, false, (recipe) => {
+  return recipe.attributes.author.data.id === store.state.currentUser!.id;
 });
 
 function confirmToDelete() {
@@ -226,11 +235,13 @@ function confirmToDelete() {
       'Êtes-vous sûr·e de vouloir supprimer cette recette? Cette action est irréversible.'
     )
   ) {
-    deleteRecipe({ input: { where: { id: recipe.value.id } } }).then(() => {
+    deleteRecipe({ id: recipe.value.id }).then(() => {
       if (store.state.currentUser) {
         router.replace({
           name: 'user',
-          params: { username: store.state.currentUser.username },
+          params: {
+            username: store.state.currentUser?.user?.data?.attributes?.username,
+          },
         });
       }
     });

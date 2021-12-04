@@ -1,13 +1,13 @@
 <template>
   <div v-if="tag">
-    <h1 class="h1 mb-6">{{ tag.title }}</h1>
+    <h1 class="h1 mb-6">{{ tag.attributes.title }}</h1>
 
     <RecipesList v-bind="collection.state" @load-more="collection.loadMore" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { watchEffect } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { useQuery } from '@urql/vue';
 
 import gql from 'graphql-tag';
@@ -17,6 +17,8 @@ import useRecipesList from '@/composables/useRecipesList';
 import useResult from '@/composables/useResult';
 import usePageTitle from '@/composables/usePageTitle';
 
+import { Query, QueryTagsArgs } from '@/gql/graphql';
+
 const props = defineProps({
   slug: {
     type: String,
@@ -24,29 +26,48 @@ const props = defineProps({
   },
 });
 
-const result = await useQuery({
+const result = await useQuery<Query, QueryTagsArgs>({
   query: gql`
-    query getTag($slug: String!) {
-      tags(where: { slug: $slug }) {
-        id
-        title
+    query getTag($filters: TagFiltersInput!) {
+      tags(filters: $filters) {
+        data {
+          id
+          attributes {
+            title
+          }
+        }
       }
     }
   `,
-  variables: { slug: props.slug },
+  variables: {
+    filters: {
+      slug: {
+        eq: props.slug,
+      },
+    },
+  },
 });
 
+const tag = useResult(result.data, null, (data) => data?.tags?.data?.[0]);
+
 watchEffect(() => {
-  if (result.data.value.tags?.[0]) {
-    usePageTitle(result.data.value.tags[0].title);
+  if (tag.value) {
+    usePageTitle(tag.value.attributes?.title);
   } else {
     router.replace({ name: 'not-found' });
   }
 });
 
-const tag = useResult(result.data, null, (data) => data?.tags?.[0]);
-
-const collection = useRecipesList({
-  where: { tags_in: [tag.value?.id] },
+const params = ref({
+  sort: ['createdAt:desc'],
+  filters: {
+    tags: {
+      id: {
+        eq: tag.value?.id,
+      },
+    },
+  },
 });
+
+const collection = useRecipesList(params);
 </script>

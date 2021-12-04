@@ -8,13 +8,17 @@
     <CFormGroup v-slot="{ ids }" variant="grid" required>
       <Label class="sm:mt-3">{{ $t('recipe.title') }}</Label>
       <div class="sm:col-span-3">
-        <Field v-slot="{ field }" name="title">
+        <Field
+          v-slot="{ field }"
+          :model-value="title"
+          name="title"
+          @update:model-value="(val: string) => $emit('update:title', val)"
+        >
           <CTextField
             ref="titleNode"
             :model-value="title"
             v-bind="field"
             :aria-describedby="ids.errors"
-            @update:model-value="(val: string) => $emit('update:title', val)"
           />
         </Field>
         <Errors name="title" />
@@ -58,9 +62,13 @@
       <Label class="sm:mt-3">{{ $t('recipe.form.time') }}</Label>
       <div class="sm:col-span-3">
         <div class="flex space-x-4 items-center">
-          <Field v-slot="{ field }" name="time">
+          <Field
+            v-slot="{ field }"
+            :model-value="time"
+            name="time"
+            @update:model-value="(val: string) => $emit('update:time', val, 'number')"
+          >
             <CTextField
-              :model-value="time"
               v-bind="field"
               min="0"
               step="5"
@@ -68,7 +76,6 @@
               inputmode="numeric"
               class="w-18"
               :aria-describedby="ids.errors"
-              @update:model-value="(val: string) => $emit('update:time', val, 'number')"
             />
           </Field>
           <span>{{ $t('recipe.time', 2) }}</span>
@@ -81,16 +88,19 @@
       <Label class="sm:mt-3">{{ $t('recipe.form.quantity') }}</Label>
       <div class="sm:col-span-3">
         <div class="flex space-x-4 items-center">
-          <Field v-slot="{ field }" name="quantity">
+          <Field
+            v-slot="{ field }"
+            :model-value="quantity"
+            name="quantity"
+            @update:model-value="(val: string) => $emit('update:quantity', val, 'number')"
+          >
             <CTextField
-              :model-value="quantity"
               v-bind="field"
               min="1"
               type="text"
               inputmode="numeric"
               class="w-18"
               :aria-describedby="ids.errors"
-              @update:model-value="(val: string) => $emit('update:quantity', val, 'number')"
             />
           </Field>
           <span>{{ $t('recipe.quantity', 2) }}</span>

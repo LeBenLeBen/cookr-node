@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "users_favorite_recipes",
+  "info": {
+    "singularName": "user-favorite-recipe",
+    "pluralName": "users-favorite-recipes",
+    "displayName": "Users Favorite Recipes"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "recipe": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::recipe.recipe"
+    }
+  }
+}

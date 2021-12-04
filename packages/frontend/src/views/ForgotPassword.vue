@@ -35,10 +35,7 @@ import { notify } from '@/composables/useNotifications';
 import usePageTitle from '@/composables/usePageTitle';
 import { getErrorMessages, NormalizedApiErrors } from '@/helpers/api';
 
-import {
-  GQLUserPermissionsPasswordPayload,
-  MutationToForgotPasswordArgs,
-} from '@/types/graphqlTypes';
+import { Mutation, MutationForgotPasswordArgs } from '@/gql/graphql';
 
 usePageTitle(i18n.global.t('forgotPassword.title'));
 
@@ -47,8 +44,8 @@ const errors = ref<NormalizedApiErrors | null>(null);
 const email = ref(null);
 
 const { executeMutation: forgotPassword } = useMutation<
-  GQLUserPermissionsPasswordPayload,
-  MutationToForgotPasswordArgs
+  Mutation,
+  MutationForgotPasswordArgs
 >(
   gql`
     mutation forgotPassword($email: String!) {

@@ -65,6 +65,12 @@ import { useMutation, useQuery } from '@urql/vue';
 import { FormGroupSymbol } from 'chusho';
 
 import useResult from '@/composables/useResult';
+import {
+  Mutation,
+  MutationUploadArgs,
+  Query,
+  QueryUploadFileArgs,
+} from '@/gql/graphql';
 
 const props = defineProps({
   modelValue: {
@@ -82,13 +88,17 @@ const id = computed(
 
 const emit = defineEmits(['update:model-value']);
 
-const result = useQuery({
+const result = useQuery<Query, QueryUploadFileArgs>({
   query: gql`
     query imageUploaderImage($id: ID!) {
-      files(where: { id: $id }) {
-        id
-        hash
-        ext
+      uploadFile(id: $id) {
+        data {
+          id
+          attributes {
+            hash
+            ext
+          }
+        }
       }
     }
   `,
@@ -99,16 +109,20 @@ const result = useQuery({
 });
 
 const image = useResult(result.data, null, (data) => {
-  return props.modelValue ? data?.files?.[0] : null;
+  return props.modelValue ? data?.uploadFile : null;
 });
 
-const { executeMutation: upload } = useMutation(
+const { executeMutation: upload } = useMutation<Mutation, MutationUploadArgs>(
   gql`
     mutation editUploadImage($file: Upload!) {
       upload(file: $file) {
-        id
-        hash
-        ext
+        data {
+          id
+          attributes {
+            hash
+            ext
+          }
+        }
       }
     }
   `
@@ -119,7 +133,7 @@ function handleImageChange(e: Event) {
 
   if (file) {
     upload({ file }).then((response) => {
-      emit('update:model-value', response.data.upload.id);
+      emit('update:model-value', response.data?.upload.data?.id);
     });
   }
 }

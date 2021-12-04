@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "users_viewed_recipes",
+  "info": {
+    "singularName": "user-viewed-recipe",
+    "pluralName": "users-viewed-recipes",
+    "displayName": "Users Viewed Recipes"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "recipe": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::recipe.recipe"
+    }
+  }
+}

@@ -3,7 +3,7 @@
     <RawMultiselect v-bind="$attrs" />
     <CIcon
       id="chevron-down"
-      class="absolute top-1/2 right-3 -mt-3 text-alt-500"
+      class="absolute top-1/2 right-3 -mt-3 text-alt-500 pointer-events-none"
     />
   </div>
 </template>

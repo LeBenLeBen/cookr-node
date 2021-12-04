@@ -15,13 +15,13 @@
 import { computed, PropType } from 'vue';
 
 import { crop, hdpiSources, imageUrl } from '@/helpers/images';
-import { GQLUploadFile } from '@/types/graphqlTypes';
 
 import recipePlaceholder from '../assets/images/recipe-placeholder.svg';
+import { UploadFileEntityResponse } from '@/gql/graphql';
 
 const props = defineProps({
   image: {
-    type: Object as PropType<Pick<GQLUploadFile, 'hash' | 'ext'>>,
+    type: Object as PropType<UploadFileEntityResponse | null>,
     default: null,
   },
   width: {
@@ -35,7 +35,7 @@ const props = defineProps({
 });
 
 const picture = computed(() => {
-  const url = imageUrl(props.image);
+  const url = imageUrl(props.image?.data?.attributes);
   const cropOptions = {
     w: props.width,
     h: props.height,

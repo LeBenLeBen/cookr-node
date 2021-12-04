@@ -2,31 +2,41 @@ import gql from 'graphql-tag';
 
 export const recipeCardFragment = gql`
   fragment RecipeCard on Recipe {
-    id
     title
     slug
     time
     quantity
     image {
-      id
-      hash
-      ext
+      data {
+        id
+        attributes {
+          hash
+          ext
+        }
+      }
     }
     author {
-      id
-      username
+      data {
+        id
+        attributes {
+          username
+        }
+      }
     }
   }
 `;
 
 export const recipeFragment = gql`
   fragment RecipeFragment on Recipe {
-    id
     title
     slug
     author {
-      id
-      username
+      data {
+        id
+        attributes {
+          username
+        }
+      }
     }
     time
     quantity
@@ -38,14 +48,22 @@ export const recipeFragment = gql`
       title
     }
     tags {
-      id
-      title
-      slug
+      data {
+        id
+        attributes {
+          title
+          slug
+        }
+      }
     }
     image {
-      id
-      hash
-      ext
+      data {
+        id
+        attributes {
+          hash
+          ext
+        }
+      }
     }
   }
 `;
@@ -53,14 +71,22 @@ export const recipeFragment = gql`
 export const currentUserFragment = gql`
   fragment CurrentUser on UsersPermissionsMe {
     id
-    email
-    username
     user {
-      id
-      avatar {
+      data {
         id
-        hash
-        ext
+        attributes {
+          email
+          username
+          avatar {
+            data {
+              id
+              attributes {
+                hash
+                ext
+              }
+            }
+          }
+        }
       }
     }
   }

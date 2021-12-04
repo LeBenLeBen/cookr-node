@@ -79,33 +79,35 @@ import i18n from '@/i18n';
 
 import { notify } from '@/composables/useNotifications';
 import {
-  GQLeditUserInput,
-  GQLMutation,
-  MutationToUpdateUserArgs,
-} from '@/types/graphqlTypes';
+  Mutation,
+  MutationUpdateUsersPermissionsUserArgs,
+  UsersPermissionsUserInput,
+} from '@/gql/graphql';
 
 const schema = {
   username: 'required',
   email: 'required',
 };
 
-const data = reactive<GQLeditUserInput>({
-  username: store.state.currentUser!.username,
-  email: store.state.currentUser!.email,
+const data = reactive<UsersPermissionsUserInput>({
+  username: store.state.currentUser?.user?.data?.attributes?.username,
+  email: store.state.currentUser?.user?.data?.attributes?.email,
   password: undefined,
 });
 
 const { executeMutation: save } = useMutation<
-  Pick<GQLMutation, 'updateUser'>,
-  MutationToUpdateUserArgs
+  Mutation,
+  MutationUpdateUsersPermissionsUserArgs
 >(
   gql`
-    mutation updateProfile($input: updateUserInput!) {
-      updateUser(input: $input) {
-        user {
+    mutation updateProfile($id: ID!, $data: UsersPermissionsUserInput!) {
+      updateUsersPermissionsUser(id: $id, data: $data) {
+        data {
           id
-          username
-          email
+          attributes {
+            username
+            email
+          }
         }
       }
     }
@@ -120,17 +122,17 @@ function prepareToSave() {
   }
 
   save({
-    input: {
-      where: { id: store.state.currentUser!.id },
-      data: payload,
-    },
+    id: store.state.currentUser!.id,
+    data: payload,
   }).then((response) => {
     if (response.error) return;
 
-    const user = response?.data?.updateUser?.user;
+    data.password = undefined;
+
+    const user = response?.data?.updateUsersPermissionsUser;
 
     if (user) {
-      store.updateCurrentUser(user);
+      store.updateCurrentUserProfile(user);
     }
 
     notify({

@@ -1,6 +1,6 @@
 <template>
   <div v-if="user">
-    <PageHeader :title="user.username">
+    <PageHeader :title="user.attributes.username">
       <CBtn
         v-if="isCurrentUser"
         variant="primary small"
@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import { watchEffect, computed } from 'vue';
+import { watchEffect, computed, ref } from 'vue';
 import { useQuery } from '@urql/vue';
 import gql from 'graphql-tag';
 
@@ -27,6 +27,7 @@ import router from '@/router';
 import useRecipesList from '@/composables/useRecipesList';
 import useResult from '@/composables/useResult';
 import usePageTitle from '@/composables/usePageTitle';
+import { Query } from '@/gql/graphql';
 
 const props = defineProps({
   username: {
@@ -35,12 +36,16 @@ const props = defineProps({
   },
 });
 
-const result = await useQuery({
+const result = await useQuery<Query>({
   query: gql`
     query userProfile($username: String!) {
-      users(where: { username: $username }) {
-        id
-        username
+      usersPermissionsUsers(filters: { username: { eq: $username } }) {
+        data {
+          id
+          attributes {
+            username
+          }
+        }
       }
     }
   `,
@@ -48,25 +53,35 @@ const result = await useQuery({
 });
 
 watchEffect(() => {
-  if (result.data.value.users?.[0]) {
-    usePageTitle(result.data.value.users[0].username);
+  const user = result.data.value?.usersPermissionsUsers?.data?.[0];
+
+  if (user) {
+    usePageTitle(user.attributes?.username);
   } else {
     router.replace({ name: 'not-found' });
   }
 });
 
-const user = useResult(result.data, null, (data) => data.users?.[0]);
+const user = useResult(
+  result.data,
+  null,
+  (data) => data.usersPermissionsUsers?.data?.[0]
+);
 
 const isCurrentUser = computed(
   () => props.username === store.state.currentUser!.username
 );
 
-const collection = useRecipesList({
-  sort: 'title:asc',
-  where: {
+const params = ref({
+  sort: ['title:asc'],
+  filters: {
     author: {
-      username: computed(() => props.username),
+      username: {
+        eq: props.username,
+      },
     },
   },
 });
+
+const collection = useRecipesList(params);
 </script>

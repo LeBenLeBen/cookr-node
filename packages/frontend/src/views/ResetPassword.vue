@@ -52,6 +52,7 @@ import { currentUserFragment } from '@/services/fragments';
 import { notify } from '@/composables/useNotifications';
 import usePageTitle from '@/composables/usePageTitle';
 import { getErrorMessages, NormalizedApiErrors } from '@/helpers/api';
+import { Mutation, MutationResetPasswordArgs } from '@/gql/graphql';
 
 usePageTitle(i18n.global.t('resetPassword.title'));
 
@@ -59,7 +60,10 @@ const loading = ref(false);
 const errors = ref<NormalizedApiErrors | null>(null);
 const input = reactive({ password: '', passwordConfirmation: '' });
 
-const { executeMutation: resetPassword } = useMutation(
+const { executeMutation: resetPassword } = useMutation<
+  Mutation,
+  MutationResetPasswordArgs
+>(
   gql`
     mutation resetPassword(
       $password: String!
@@ -71,6 +75,7 @@ const { executeMutation: resetPassword } = useMutation(
         passwordConfirmation: $passwordConfirmation
         code: $code
       ) {
+        jwt
         user {
           ...CurrentUser
         }
@@ -87,7 +92,7 @@ function submit() {
   resetPassword({
     password: input.password,
     passwordConfirmation: input.passwordConfirmation,
-    code: router.currentRoute.value.query.code,
+    code: router.currentRoute.value.query.code as string,
   })
     .then((response) => {
       if (response.error) {
@@ -95,12 +100,20 @@ function submit() {
         return;
       }
 
-      store.setCurrentUser(response.data.resetPassword.user);
-      router.push({ name: 'home' });
-      notify({
-        type: 'success',
-        message: i18n.global.t('resetPassword.success'),
-      });
+      const token = response.data?.resetPassword?.jwt;
+      if (token) {
+        store.setToken(token);
+      }
+
+      const user = response.data?.resetPassword?.user;
+      if (user) {
+        store.setCurrentUser(user);
+        router.push({ name: 'home' });
+        notify({
+          type: 'success',
+          message: i18n.global.t('resetPassword.success'),
+        });
+      }
     })
     .finally(() => {
       loading.value = false;

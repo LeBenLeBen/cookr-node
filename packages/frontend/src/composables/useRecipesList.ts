@@ -1,52 +1,59 @@
-import { ref, reactive, computed } from 'vue';
+import { reactive, computed, Ref } from 'vue';
 import gql from 'graphql-tag';
 import { useQuery } from '@urql/vue';
 import useResult from './useResult';
 
 import { recipeCardFragment } from '@/services/fragments';
-import { QueryToRecipesArgs } from '@/types/graphqlTypes';
+import { Query, QueryRecipesArgs } from '@/gql/graphql';
 
 export default function useRecipesList(
-  params: Pick<QueryToRecipesArgs, 'sort' | 'where'>
+  params: Ref<Pick<QueryRecipesArgs, 'sort' | 'filters'>>
 ) {
-  const limit = 20;
-  const start = ref(0);
+  const pagination = reactive({
+    limit: 20,
+    start: 0,
+  });
 
-  const result = useQuery({
+  const result = useQuery<Query, QueryRecipesArgs>({
     query: gql`
-      query explore($limit: Int!, $start: Int!, $sort: String, $where: JSON) {
-        recipes(limit: $limit, start: $start, sort: $sort, where: $where) {
-          ...RecipeCard
-        }
-        recipesConnection(sort: $sort, where: $where) {
-          aggregate {
-            count
-            totalCount
+      query explore(
+        $pagination: PaginationArg
+        $sort: [String]
+        $filters: RecipeFiltersInput
+      ) {
+        recipes(pagination: $pagination, sort: $sort, filters: $filters) {
+          data {
+            id
+            attributes {
+              ...RecipeCard
+            }
+          }
+          meta {
+            pagination {
+              total
+            }
           }
         }
       }
       ${recipeCardFragment}
     `,
     variables: {
-      start,
-      limit,
-      sort: computed(() => params.sort),
-      where: params.where,
+      pagination,
+      sort: computed(() => params.value.sort),
+      filters: computed(() => params.value.filters),
     },
   });
 
   const total = useResult(
     result.data,
     0,
-    (data) =>
-      data.recipesConnection.aggregate.count ||
-      data.recipesConnection.aggregate.totalCount
+    (data) => data.recipes.meta.pagination.total
   );
-  const recipes = useResult(result.data, [], (data) => data.recipes);
+  const recipes = useResult(result.data, [], (data) => data.recipes.data);
   const hasMore = computed(() => recipes.value?.length < total.value);
 
   function loadMore() {
-    start.value += limit;
+    pagination.start += pagination.limit;
   }
 
   return reactive({

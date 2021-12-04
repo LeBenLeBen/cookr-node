@@ -34,39 +34,47 @@ import useResult from '@/composables/useResult';
 import usePageTitle from '@/composables/usePageTitle';
 
 import { recipeCardFragment } from '@/services/fragments';
-import {
-  GQLRecipe,
-  GQLTags,
-  GQLUsersViewedRecipes,
-} from '@/types/graphqlTypes';
+import { Query } from '@/gql/graphql';
 
 usePageTitle(i18n.global.t('home.title'));
 
-interface HomeResponse {
-  recipes: GQLRecipe[];
-  usersViewedRecipes: Pick<GQLUsersViewedRecipes, 'id' | 'recipe'>[];
-  tags: Pick<GQLTags, 'id' | 'title' | 'slug'>[];
-}
-
-const result = useQuery<HomeResponse>({
+const result = useQuery<Query>({
   query: gql`
-    query getHome($currentUserId: String!) {
-      recipes(start: 0, limit: 5, sort: "created_at:desc") {
-        ...RecipeCard
+    query getHome($currentUserId: ID!) {
+      recipes(pagination: { start: 0, limit: 5 }, sort: "createdAt:desc") {
+        data {
+          id
+          attributes {
+            ...RecipeCard
+          }
+        }
       }
       usersViewedRecipes(
-        where: { user: $currentUserId }
-        sort: "updated_at:desc"
+        filters: { user: { id: { eq: $currentUserId } } }
+        sort: "updatedAt:desc"
       ) {
-        id
-        recipe {
-          ...RecipeCard
+        data {
+          id
+          attributes {
+            recipe {
+              data {
+                id
+                attributes {
+                  ...RecipeCard
+                }
+              }
+            }
+          }
         }
       }
       tags(sort: "title") {
-        id
-        title
-        slug
+        data {
+          id
+          attributes {
+            title
+            slug
+          }
+        }
       }
     }
     ${recipeCardFragment}
@@ -79,10 +87,10 @@ const result = useQuery<HomeResponse>({
   },
 });
 
-const recipes = useResult(result.data, [], (data) => data.recipes);
+const recipes = useResult(result.data, [], (data) => data.recipes.data);
 const lastViewedRecipes = useResult(result.data, [], (data) =>
-  data.usersViewedRecipes.filter((r) => !!r.recipe).map((r) => r.recipe)
+  data.usersViewedRecipes.data.map((uvr) => uvr.attributes.recipe.data)
 );
-const tags = useResult(result.data, [], (data) => data.tags);
+const tags = useResult(result.data, [], (data) => data.tags.data);
 const loading = result.fetching;
 </script>

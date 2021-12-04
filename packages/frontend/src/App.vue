@@ -32,6 +32,8 @@ import client from './services/apiClient';
 import AppLayout from '@/components/layouts/AppLayout.vue';
 import AuthLayout from '@/components/layouts/AuthLayout.vue';
 
+import { Query } from '@/gql/graphql';
+
 export default defineComponent({
   components: {
     AppLayout,
@@ -41,8 +43,8 @@ export default defineComponent({
   setup() {
     provideClient(client);
 
-    if (store.state.currentUser) {
-      useQuery({
+    if (store.state.token) {
+      useQuery<Query>({
         query: gql`
           query currentUser {
             me {

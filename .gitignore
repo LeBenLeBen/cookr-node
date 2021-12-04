@@ -10,7 +10,6 @@ node_modules
 !/packages/backend/public/uploads/.gitkeep
 /packages/backend/.env
 /packages/backend/license.txt
-/packages/backend/exports
 /packages/backend/.cache
 /packages/backend/*.cache
 /packages/backend/build

@@ -11,8 +11,8 @@
     "
     :title="$t('auth.logout')"
   >
-    <Avatar :image="currentUser.user?.avatar" class="mr-3" />
-    {{ currentUser.username }}
+    <Avatar :image="currentUser.user?.data?.attributes?.avatar" class="mr-3" />
+    {{ currentUser.user?.data?.attributes?.username }}
   </CBtn>
 </template>
 

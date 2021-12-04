@@ -1,9 +1,12 @@
 import { useStorage } from '@vueuse/core';
-import { GQLUsersPermissionsMe } from './types/graphqlTypes';
+import {
+  UsersPermissionsMe,
+  UsersPermissionsUserEntityResponse,
+} from '@/gql/graphql';
 
 interface State {
   token: string | null;
-  currentUser: GQLUsersPermissionsMe | null;
+  currentUser: UsersPermissionsMe | null;
 }
 
 const state = useStorage<State>('cookr', {
@@ -18,11 +21,17 @@ export default {
     state.value.token = token;
   },
 
-  setCurrentUser(user: GQLUsersPermissionsMe | null) {
+  setCurrentUser(user: UsersPermissionsMe | null) {
     state.value.currentUser = user;
   },
 
-  updateCurrentUser(user: GQLUsersPermissionsMe) {
-    state.value.currentUser = Object.assign({}, state.value.currentUser, user);
+  updateCurrentUserProfile(user: UsersPermissionsUserEntityResponse) {
+    if (!state.value.currentUser?.user) return;
+
+    state.value.currentUser.user = Object.assign(
+      {},
+      state.value.currentUser?.user,
+      user
+    );
   },
 };

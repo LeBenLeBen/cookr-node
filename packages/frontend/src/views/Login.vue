@@ -50,6 +50,7 @@ import { currentUserFragment } from '@/services/fragments';
 import usePageTitle from '@/composables/usePageTitle';
 import { getErrorMessages, NormalizedApiErrors } from '@/helpers/api';
 import { useRoute } from 'vue-router';
+import { Mutation, MutationLoginArgs } from '@/gql/graphql';
 
 usePageTitle(i18n.global.t('auth.login'));
 
@@ -59,7 +60,10 @@ const loading = ref(false);
 const errors = ref<NormalizedApiErrors | null>(null);
 const input = reactive({ identifier: '', password: '' });
 
-const { executeMutation: authenticate } = useMutation(
+const { executeMutation: authenticate } = useMutation<
+  Mutation,
+  MutationLoginArgs
+>(
   gql`
     mutation login($input: UsersPermissionsLoginInput!) {
       login(input: $input) {
@@ -85,8 +89,8 @@ function login() {
         return;
       }
 
-      store.setToken(response.data.login.jwt);
-      store.setCurrentUser(response.data.login.user);
+      store.setToken(response.data?.login.jwt || null);
+      store.setCurrentUser(response.data?.login?.user || null);
       router.push(
         (route.query?.redirectTo as string | undefined) ?? { name: 'home' }
       );
