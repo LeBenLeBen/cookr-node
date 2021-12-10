@@ -21,7 +21,7 @@ export default {
       quantity: 'Quantité',
       image: {
         label: 'Image',
-        help: 'Priviligiez un format paysage.',
+        help: 'Privilégiez un format paysage.',
       },
     },
     new: {
