@@ -21,7 +21,7 @@ Dependencies: Docker
 
 1. Copy `packages/backend/.env.example` to `packages/backend/.env` and fill-in the values
 2. Copy `packages/frontend/.env.local.example` to `packages/frontend/.env.local` and fill-in the values
-3. Run `docker-compose up`
+3. Run `docker compose up`
 4. Visit [localhost:1337/admin](http://localhost:1337/admin) for Strapi admin
 5. Visit [localhost:3000](http://localhost:3000) for the app
 
@@ -32,7 +32,7 @@ Dependencies: Docker
 For example if you want to add a new dependency to the `backend` app:
 
 ```
-docker-compose exec backend npm install my-new-package
+docker compose exec backend npm install my-new-package
 ```
 
 Where `backend` is the target container, see `docker-compose.yml` for all container names.
@@ -46,7 +46,25 @@ By default, in development, the backend is configured to send emails to [Mailhog
 To reindex all the recipes in Algolia, you can do so using the Strapi console:
 
 ```sh
-docker-compose exec backend /bin/bash
+docker compose exec backend /bin/bash
 PORT=1338 strapi console
 strapi.controllers.recipe.indexAll();
 ```
+
+## Pulling a remote Heroku database
+
+You need to drop your local database first:
+
+```sh
+docker compose exec db dropdb -U cookr cookr
+```
+
+Password is `cookr`.
+
+You can now pull the database using the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli):
+
+```sh
+PGUSER=cookr PGHOST=127.0.0.1 heroku pg:pull {heroku-postgres-db-id} cookr --app {heroku-app-id}
+```
+
+Same password.
