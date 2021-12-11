@@ -27,10 +27,13 @@
 import { useQuery } from '@urql/vue';
 import gql from 'graphql-tag';
 
-import { recipeCardFragment } from '@/services/fragments';
 import i18n from '@/i18n';
+import store from '@/store';
+
 import useResult from '@/composables/useResult';
 import usePageTitle from '@/composables/usePageTitle';
+
+import { recipeCardFragment } from '@/services/fragments';
 import {
   GQLRecipe,
   GQLTags,
@@ -47,11 +50,14 @@ interface HomeResponse {
 
 const result = useQuery<HomeResponse>({
   query: gql`
-    query getHome {
+    query getHome($currentUserId: String!) {
       recipes(start: 0, limit: 5, sort: "created_at:desc") {
         ...RecipeCard
       }
-      usersViewedRecipes(sort: "updated_at:desc") {
+      usersViewedRecipes(
+        where: { user: $currentUserId }
+        sort: "updated_at:desc"
+      ) {
         id
         recipe {
           ...RecipeCard
@@ -65,6 +71,9 @@ const result = useQuery<HomeResponse>({
     }
     ${recipeCardFragment}
   `,
+  variables: {
+    currentUserId: store.state.currentUser?.id,
+  },
   context: {
     requestPolicy: 'cache-and-network',
   },
