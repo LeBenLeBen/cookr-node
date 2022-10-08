@@ -3,32 +3,30 @@
     <ErrorsList :errors="errors" />
 
     <form class="space-y-6" @submit.prevent="login">
-      <FormGroup required>
-        <Label for="identifier" class="mb-2">{{ $t('auth.email') }}</Label>
-        <Input
-          id="identifier"
+      <CFormGroup required>
+        <Label>{{ $t('auth.email') }}</Label>
+        <CTextField
           v-model="input.identifier"
           type="email"
           name="identifier"
           autocomplete="email"
           autofocus
         />
-      </FormGroup>
-      <FormGroup required>
-        <Label for="password" class="mb-2">{{ $t('auth.password') }}</Label>
-        <Input
-          id="password"
+      </CFormGroup>
+      <CFormGroup required>
+        <Label>{{ $t('auth.password') }}</Label>
+        <CTextField
           v-model="input.password"
           type="password"
           name="password"
           autocomplete="current-password"
         />
         <div class="mt-2 text-sm">
-          <router-link :to="{ name: 'forgot-password' }">
+          <RouterLink :to="{ name: 'forgot-password' }">
             {{ $t('auth.forgotPassword') }}
-          </router-link>
+          </RouterLink>
         </div>
-      </FormGroup>
+      </CFormGroup>
       <div>
         <CBtn type="submit" variant="primary block" :disabled="loading">
           {{ $t('auth.login') }}

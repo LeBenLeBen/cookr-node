@@ -3,17 +3,16 @@
     <ErrorsList :errors="errors" />
 
     <form class="space-y-6" @submit.prevent="submit">
-      <FormGroup required>
-        <Label for="email" class="mb-2">{{ $t('auth.email') }}</Label>
-        <Input
-          id="email"
+      <CFormGroup required>
+        <Label>{{ $t('auth.email') }}</Label>
+        <CTextField
           v-model="email"
           type="email"
           name="email"
           autocomplete="email"
           autofocus
         />
-      </FormGroup>
+      </CFormGroup>
 
       <div>
         <CBtn type="submit" variant="primary block" :disabled="loading">

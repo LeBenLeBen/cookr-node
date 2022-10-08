@@ -9,14 +9,15 @@
 
     <div class="flex flex-col justify-between items-start">
       <input
-        id="image-uploader-input"
+        :id="id"
         type="file"
         accept="image/jpeg,image/png"
         class="sr-only"
+        v-bind="$attrs"
         @change="handleImageChange"
       />
       <label
-        for="image-uploader-input"
+        :for="id"
         class="
           inline-flex
           items-center
@@ -51,10 +52,17 @@
   </div>
 </template>
 
+<script lang="ts">
+export default {
+  inheritAttrs: false,
+};
+</script>
+
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed, inject, useAttrs } from 'vue';
 import gql from 'graphql-tag';
 import { useMutation, useQuery } from '@urql/vue';
+import { FormGroupSymbol } from 'chusho';
 
 import useResult from '@/composables/useResult';
 
@@ -64,6 +72,13 @@ const props = defineProps({
     default: null,
   },
 });
+
+const attrs = useAttrs();
+
+const formGroup = inject(FormGroupSymbol);
+const id = computed(
+  () => formGroup?.ids.field ?? attrs.id?.toString() ?? 'image-uploader-input'
+);
 
 const emit = defineEmits(['update:model-value']);
 

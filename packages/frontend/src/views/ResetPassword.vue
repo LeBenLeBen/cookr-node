@@ -3,30 +3,32 @@
     <ErrorsList :errors="errors" />
 
     <form class="space-y-6" @submit.prevent="submit">
-      <FormGroup required>
-        <Label for="password" class="mb-2">
+      <CFormGroup required>
+        <Label for="password">
           {{ $t('resetPassword.password') }}
         </Label>
-        <Input
+        <CTextField
           id="password"
           v-model="input.password"
           type="password"
           name="password"
           autocomplete="new-password"
         />
-      </FormGroup>
-      <FormGroup required>
-        <Label for="passwordConfirmation" class="mb-2">
+      </CFormGroup>
+
+      <CFormGroup required>
+        <Label for="passwordConfirmation">
           {{ $t('resetPassword.passwordConfirmation') }}
         </Label>
-        <Input
+        <CTextField
           id="passwordConfirmation"
           v-model="input.passwordConfirmation"
           type="password"
           name="passwordConfirmation"
           autocomplete="new-password"
         />
-      </FormGroup>
+      </CFormGroup>
+
       <div>
         <CBtn type="submit" variant="primary block" :disabled="loading">
           {{ $t('resetPassword.submit') }}

@@ -10,9 +10,9 @@
       </div>
     </div>
 
-    <teleport to="head">
+    <Teleport to="head">
       <meta name="robots" content="noindex" />
-    </teleport>
+    </Teleport>
   </div>
 </template>
 

@@ -32,11 +32,15 @@ export default {
           entries: [
             'CAlert',
             'CBtn',
+            'CFormGroup',
             'CIcon',
+            'CLabel',
             'CCollapse',
             'CCollapseBtn',
             'CCollapseContent',
             'CPicture',
+            'CTextField',
+            'CTextarea',
           ],
         },
         {

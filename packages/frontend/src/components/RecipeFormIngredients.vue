@@ -6,30 +6,28 @@
         :key="i"
         class="grid grid-cols-3 gap-4"
       >
-        <Field
-          v-slot="{ field }"
-          :model-value="ingredient.amount"
-          :name="`ingredients[${i}].amount`"
-          @update:model-value="(val: string) => updateField(i, 'amount', val)"
-        >
-          <Input
-            v-bind="field"
-            aria-labelledby="ingredients-quantity"
-            data-field="ingredient-amount"
-          />
-        </Field>
-        <Field
-          v-slot="{ field }"
-          :model-value="ingredient.title"
-          :name="`ingredients[${i}].title`"
-          @update:model-value="(val: string) => updateField(i, 'title', val)"
-        >
-          <Input
-            v-bind="field"
-            class="col-span-2"
-            aria-labelledby="ingredients-label"
-          />
-        </Field>
+        <CFormGroup>
+          <Field v-slot="{ field }" :name="`ingredients[${i}].amount`">
+            <CTextField
+              :model-value="ingredient.amount"
+              v-bind="field"
+              aria-labelledby="ingredients-quantity"
+              data-field="ingredient-amount"
+              @update:model-value="(val: string) => updateField(i, 'amount', val)"
+            />
+          </Field>
+        </CFormGroup>
+
+        <CFormGroup class="col-span-2">
+          <Field v-slot="{ field }" :name="`ingredients[${i}].title`">
+            <CTextField
+              :model-value="ingredient.title"
+              v-bind="field"
+              aria-labelledby="ingredients-label"
+              @update:model-value="(val: string) => updateField(i, 'title', val)"
+            />
+          </Field>
+        </CFormGroup>
       </li>
     </ul>
 

@@ -46,8 +46,9 @@ export type SelectOption = {
 </script>
 
 <script lang="ts" setup>
-import { inject, PropType } from 'vue';
-import { FormGroupProps } from './FormGroup.vue';
+import { inject, mergeProps, PropType, useAttrs } from 'vue';
+
+import { FormGroupSymbol } from 'chusho';
 
 const props = defineProps({
   variant: {
@@ -70,9 +71,10 @@ const props = defineProps({
 
 defineEmits(['update:model-value']);
 
-const formGroup = inject<FormGroupProps | null>('formGroup', null);
+const formGroup = inject(FormGroupSymbol);
 
-const attrs = {
-  required: props.required ?? formGroup?.required,
-};
+const attrs = mergeProps(useAttrs(), {
+  id: formGroup?.ids.field,
+  required: props.required ?? formGroup?.required.value,
+});
 </script>

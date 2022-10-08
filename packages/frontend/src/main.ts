@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import urql from '@urql/vue';
-import Chusho, { $chusho } from 'chusho';
+import Chusho, { $chusho, mergeDeep } from 'chusho';
 import 'windi.css';
 
 import '@/assets/css/main.css';
@@ -24,6 +24,6 @@ createApp(App)
 
 if (import.meta.hot) {
   import.meta.hot.accept('../chusho.config.ts', (newConfig) => {
-    $chusho.options = Object.assign({}, $chusho.options, newConfig.default);
+    mergeDeep($chusho.options, newConfig.default);
   });
 }

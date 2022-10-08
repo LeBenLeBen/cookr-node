@@ -2,7 +2,7 @@
   <div>
     <CCollapse v-model="filtersOpen">
       <PageHeader :title="$t('explore.title')">
-        <CCollapseBtn variant="default small" bare>
+        <CCollapseBtn variant="default small">
           <CIcon id="controls" class="-m-1 mr-2 text-alt-600" />
           {{ $t('recipes.filters.label') }}
           <CIcon
@@ -15,16 +15,16 @@
       <CCollapseContent
         class="grid sm:grid-cols-2 gap-6 mb-6 pb-8 border-b border-alt-200"
       >
-        <FormGroup>
-          <Label for="tags" class="mb-2">{{ $t('recipe.tags') }}</Label>
-          <TagsSelect id="tags" v-model="params.where.tags_in" />
-        </FormGroup>
-        <FormGroup>
-          <Label for="sort" class="mb-2">
+        <CFormGroup>
+          <Label>{{ $t('recipe.tags') }}</Label>
+          <TagsSelect v-model="params.where.tags_in" />
+        </CFormGroup>
+
+        <CFormGroup>
+          <Label>
             {{ $t('recipes.filters.sort.label') }}
           </Label>
           <Select
-            id="sort"
             v-model="params.sort"
             :options="[
               {
@@ -41,7 +41,7 @@
               },
             ]"
           />
-        </FormGroup>
+        </CFormGroup>
       </CCollapseContent>
     </CCollapse>
 

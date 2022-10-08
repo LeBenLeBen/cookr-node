@@ -1,30 +1,19 @@
 <template>
-  <label class="block font-medium">
+  <CLabel>
     <slot />
     <abbr
-      v-if="attrs.required"
+      v-if="formGroup?.required.value"
       :title="$t('forms.rules.required')"
       class="text-red-700 ml-1"
       >*</abbr
     >
-  </label>
+  </CLabel>
 </template>
 
 <script lang="ts" setup>
 import { inject } from 'vue';
 
-import { FormGroupProps } from './FormGroup.vue';
+import { FormGroupSymbol } from 'chusho';
 
-const props = defineProps({
-  required: {
-    type: Boolean,
-    default: false,
-  },
-});
-
-const formGroup = inject<FormGroupProps | null>('formGroup', null);
-
-const attrs = {
-  required: props.required || formGroup?.required,
-};
+const formGroup = inject(FormGroupSymbol);
 </script>

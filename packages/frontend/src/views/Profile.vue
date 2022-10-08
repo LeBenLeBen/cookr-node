@@ -9,45 +9,61 @@
     <Form
       class="divide-y divide-alt-200 space-y-6"
       :validation-schema="schema"
+      :initial-values="data"
       @submit="prepareToSave"
     >
-      <FormGroup required class="grid sm:grid-cols-4 gap-4 sm:gap-4">
-        <Label for="title" class="sm:mt-3">{{ $t('auth.username') }}</Label>
+      <CFormGroup v-slot="{ ids }" variant="grid" required>
+        <Label class="sm:mt-3">{{ $t('auth.username') }}</Label>
         <div class="sm:col-span-3">
-          <Field v-slot="{ field }" v-model="data.username" name="username">
-            <Input id="username" v-bind="field" />
+          <Field v-slot="{ field }" name="username">
+            <CTextField
+              v-model="data.username"
+              :aria-describedby="ids.errors"
+              v-bind="field"
+            />
           </Field>
           <Errors name="username" />
         </div>
-      </FormGroup>
+      </CFormGroup>
 
-      <FormGroup required class="pt-6 grid sm:grid-cols-4 gap-4 sm:gap-4">
-        <Label for="title" class="sm:mt-3">{{ $t('auth.email') }}</Label>
+      <CFormGroup v-slot="{ ids }" variant="grid" required class="pt-6">
+        <Label class="sm:mt-3">{{ $t('auth.email') }}</Label>
         <div class="sm:col-span-3">
-          <Field v-slot="{ field }" v-model="data.email" name="email">
-            <Input id="email" type="email" v-bind="field" disabled />
+          <Field v-slot="{ field }" name="email">
+            <CTextField
+              v-model="data.email"
+              :aria-describedby="ids.errors"
+              type="email"
+              v-bind="field"
+              disabled
+            />
           </Field>
           <Errors name="email" />
         </div>
-      </FormGroup>
+      </CFormGroup>
 
-      <FormGroup class="pt-6 grid sm:grid-cols-4 gap-4 sm:gap-4">
-        <Label for="title" class="sm:mt-3">{{ $t('auth.password') }}</Label>
+      <CFormGroup v-slot="{ ids }" variant="grid" class="pt-6">
+        <Label class="sm:mt-3">{{ $t('auth.password') }}</Label>
         <div class="sm:col-span-3">
-          <Field v-slot="{ field }" v-model="data.password" name="password">
-            <Input id="password" type="password" v-bind="field" />
+          <Field v-slot="{ field }" name="password">
+            <CTextField
+              v-model="data.password"
+              :aria-describedby="ids.errors"
+              type="password"
+              v-bind="field"
+            />
           </Field>
           <Errors name="password" />
         </div>
-      </FormGroup>
+      </CFormGroup>
 
-      <div class="pt-6 grid sm:grid-cols-4 gap-4 sm:gap-4">
+      <CFormGroup variant="grid" class="pt-6">
         <div class="sm:col-start-2 sm:col-span-3">
           <CBtn type="submit" variant="primary" class="w-full sm:w-auto">
             {{ $t('common.save') }}
           </CBtn>
         </div>
-      </div>
+      </CFormGroup>
     </Form>
   </div>
 </template>

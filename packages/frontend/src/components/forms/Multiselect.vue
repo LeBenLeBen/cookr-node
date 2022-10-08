@@ -18,6 +18,8 @@ export default defineComponent({
   components: {
     RawMultiselect,
   },
+
+  inheritAttrs: false,
 });
 </script>
 
