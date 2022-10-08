@@ -33,7 +33,7 @@ import router from '@/router';
 
 import { notify } from '@/composables/useNotifications';
 import usePageTitle from '@/composables/usePageTitle';
-import { getErrorMessages, StrapiErrors } from '@/helpers/api';
+import { getErrorMessages, NormalizedApiErrors } from '@/helpers/api';
 
 import {
   GQLUserPermissionsPasswordPayload,
@@ -43,7 +43,7 @@ import {
 usePageTitle(i18n.global.t('forgotPassword.title'));
 
 const loading = ref(false);
-const errors = ref<StrapiErrors | null>(null);
+const errors = ref<NormalizedApiErrors | null>(null);
 const email = ref(null);
 
 const { executeMutation: forgotPassword } = useMutation<

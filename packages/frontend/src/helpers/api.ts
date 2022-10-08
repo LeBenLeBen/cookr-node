@@ -1,21 +1,36 @@
 import { GraphQLError } from 'graphql';
 
-export type StrapiErrorMessage = {
+export type ApiError = {
   id: string;
   message: string;
 };
 
-export type StrapiErrors = Array<StrapiErrorMessage | string>;
+export type NormalizedApiErrors = Array<ApiError | string>;
+
+export type StrapiGraphQLException = {
+  data?: {
+    message?: Array<{ messages: string[] }>;
+  };
+  message: string;
+  code: number;
+};
+
+export type StrapiGraphQLErrorExtensions = {
+  exception?: StrapiGraphQLException;
+};
 
 export function getErrorMessages(
   graphQLErrors: GraphQLError[]
-): StrapiErrors | null {
+): NormalizedApiErrors | null {
   return graphQLErrors?.length
     ? graphQLErrors.flatMap((gqlError) => {
+        const exception = gqlError.extensions
+          ?.exception as StrapiGraphQLException;
+
         return (
-          gqlError?.extensions?.exception.data?.message?.flatMap(
-            (m: Record<string, string>) => m.messages
-          ) ?? [gqlError?.extensions?.exception.message]
+          exception?.data?.message?.flatMap((m) => m.messages) ?? [
+            exception.message,
+          ]
         );
       })
     : null;

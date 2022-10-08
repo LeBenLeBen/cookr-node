@@ -24,6 +24,6 @@ createApp(App)
 
 if (import.meta.hot) {
   import.meta.hot.accept('../chusho.config.ts', (newConfig) => {
-    mergeDeep($chusho.options, newConfig.default);
+    mergeDeep($chusho.options, newConfig?.default);
   });
 }

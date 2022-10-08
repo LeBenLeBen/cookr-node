@@ -15,11 +15,11 @@
 <script lang="ts" setup>
 import { PropType } from 'vue';
 
-import { StrapiErrors } from '@/helpers/api';
+import { NormalizedApiErrors } from '@/helpers/api';
 
 defineProps({
   errors: {
-    type: Array as PropType<StrapiErrors | null>,
+    type: Array as PropType<NormalizedApiErrors | null>,
     default: null,
   },
 });

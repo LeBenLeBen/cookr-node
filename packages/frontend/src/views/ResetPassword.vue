@@ -51,12 +51,12 @@ import { currentUserFragment } from '@/services/fragments';
 
 import { notify } from '@/composables/useNotifications';
 import usePageTitle from '@/composables/usePageTitle';
-import { getErrorMessages, StrapiErrors } from '@/helpers/api';
+import { getErrorMessages, NormalizedApiErrors } from '@/helpers/api';
 
 usePageTitle(i18n.global.t('resetPassword.title'));
 
 const loading = ref(false);
-const errors = ref<StrapiErrors | null>(null);
+const errors = ref<NormalizedApiErrors | null>(null);
 const input = reactive({ password: '', passwordConfirmation: '' });
 
 const { executeMutation: resetPassword } = useMutation(

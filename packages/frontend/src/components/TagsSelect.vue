@@ -4,7 +4,7 @@
     :options="tags"
     mode="tags"
     searchable
-    @change="(val: any[]) => $emit('update:model-value', val)"
+    @change="(val) => $emit('update:model-value', val)"
   />
 </template>
 

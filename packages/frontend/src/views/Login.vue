@@ -48,7 +48,7 @@ import i18n from '@/i18n';
 import { currentUserFragment } from '@/services/fragments';
 
 import usePageTitle from '@/composables/usePageTitle';
-import { getErrorMessages, StrapiErrors } from '@/helpers/api';
+import { getErrorMessages, NormalizedApiErrors } from '@/helpers/api';
 import { useRoute } from 'vue-router';
 
 usePageTitle(i18n.global.t('auth.login'));
@@ -56,7 +56,7 @@ usePageTitle(i18n.global.t('auth.login'));
 const route = useRoute();
 
 const loading = ref(false);
-const errors = ref<StrapiErrors | null>(null);
+const errors = ref<NormalizedApiErrors | null>(null);
 const input = reactive({ identifier: '', password: '' });
 
 const { executeMutation: authenticate } = useMutation(

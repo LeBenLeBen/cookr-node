@@ -55,6 +55,6 @@ const style = computed(() => {
       top: `${Math.max(16, headerHeight.value - y.value + 20)}px`,
     };
   }
-  return null;
+  return undefined;
 });
 </script>

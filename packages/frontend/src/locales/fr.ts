@@ -1,6 +1,6 @@
-import { LocaleMessageDictionary, VueMessageType } from 'vue-i18n';
+import { DefineLocaleMessage } from 'vue-i18n';
 
-export default {
+const fr: DefineLocaleMessage = {
   recipe: {
     title: 'Titre',
     author: 'par',
@@ -152,4 +152,6 @@ export default {
       disabled: 'Ce service est désactivé.',
     },
   },
-} as LocaleMessageDictionary<VueMessageType>;
+};
+
+export default fr;

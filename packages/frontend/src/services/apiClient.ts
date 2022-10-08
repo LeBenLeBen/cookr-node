@@ -11,6 +11,7 @@ import {
   MutationToDeleteRecipeArgs,
   MutationToDeleteUsersFavoriteRecipeArgs,
 } from '@/types/graphqlTypes';
+import { StrapiGraphQLException } from '@/helpers/api';
 
 export default createClient({
   url: '/api/graphql',
@@ -76,7 +77,9 @@ export default createClient({
             }
 
             // Bad requests should be handled in the context
-            if (extensions?.exception?.code !== 400) {
+            if (
+              (extensions?.exception as StrapiGraphQLException)?.code !== 400
+            ) {
               notify({
                 type: 'error',
                 id: message,
