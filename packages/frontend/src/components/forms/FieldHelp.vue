@@ -5,9 +5,8 @@
 </template>
 
 <script lang="ts" setup>
-import { inject } from 'vue';
-
 import { FormGroupSymbol } from 'chusho';
+import { inject } from 'vue';
 
 const formGroup = inject(FormGroupSymbol);
 </script>

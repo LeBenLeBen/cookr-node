@@ -32,12 +32,13 @@ services:
 
   backend:
     container_name: backend
-    image: strapi/strapi
-    volumes:
-      - ./packages/backend:/srv/app
-      - /srv/app/node_modules
+    build: packages/backend
+    command: npm start
     ports:
-      - 1337:1337
+      - 8055:8055
+    volumes:
+      - ./packages/backend:/directus
+      - /directus/node_modules
     depends_on:
       - db
       - mailhog
@@ -49,6 +50,8 @@ services:
     volumes:
       - ./packages/frontend:/srv/app
       - /srv/app/node_modules
+    depends_on:
+      - backend
     ports:
       - 3000:3000
 

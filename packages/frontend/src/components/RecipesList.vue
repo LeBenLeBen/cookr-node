@@ -12,7 +12,10 @@
 
     <ul class="space-y-4">
       <li v-for="recipe in recipes" :key="recipe.id">
-        <RecipeListItem v-bind="recipe" :username="recipe.author?.username" />
+        <RecipeListItem
+          :recipe="recipe"
+          :username="recipe.author?.username ?? null"
+        />
       </li>
 
       <template v-if="!recipes.length && loading">
@@ -39,28 +42,14 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType } from 'vue';
+import { Recipes } from '@/gql/graphql';
 
-import { GQLRecipe } from '@/types/graphqlTypes';
-
-defineProps({
-  loading: {
-    type: Boolean,
-    required: true,
-  },
-  recipes: {
-    type: Array as PropType<GQLRecipe[]>,
-    required: true,
-  },
-  total: {
-    type: Number,
-    required: true,
-  },
-  hasMore: {
-    type: Boolean,
-    required: true,
-  },
-});
+defineProps<{
+  loading: boolean;
+  recipes: Readonly<Recipes[]>;
+  total: number;
+  hasMore: boolean;
+}>();
 
 defineEmits(['load-more']);
 </script>

@@ -7,10 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-defineProps({
-  time: {
-    type: Number,
-    required: true,
-  },
-});
+defineProps<{
+  time: number;
+}>();
 </script>

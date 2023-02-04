@@ -1,31 +1,26 @@
 <template>
   <Multiselect
-    :model-value="modelValue"
+    v-model="normalizedValue"
     :options="tags"
     mode="tags"
     searchable
-    @change="(val) => $emit('update:model-value', val)"
   />
 </template>
 
 <script lang="ts" setup>
-import gql from 'graphql-tag';
 import { useQuery } from '@urql/vue';
+import gql from 'graphql-tag';
+import { computed } from 'vue';
 
-import { GQLQuery } from '@/types/graphqlTypes';
+import { Query, Update_Recipes_Tags_Input } from '@/gql/graphql';
 
 import useResult from '@/composables/useResult';
 
-defineProps({
-  modelValue: {
-    type: Array,
-    default: () => [],
-  },
-});
+const props = defineProps<{ modelValue: Update_Recipes_Tags_Input[] }>();
 
-defineEmits(['update:model-value']);
+const emit = defineEmits(['update:model-value']);
 
-const result = useQuery<Pick<GQLQuery, 'tags'>>({
+const result = useQuery<Query>({
   query: gql`
     query allTags {
       tags {
@@ -42,4 +37,32 @@ const tags = useResult(result.data, [], (data) =>
     label: tag.title,
   }))
 );
+
+const normalizedValue = computed({
+  get() {
+    return props.modelValue.map((tag) => tag.tags_id!.id);
+  },
+  set(newValue) {
+    const tags = [];
+
+    while (newValue.length > 0) {
+      const tag = newValue.shift();
+      const existingTag = props.modelValue.find((t) => {
+        return t.tags_id!.id === tag;
+      });
+
+      if (existingTag) {
+        tags.push(existingTag);
+      } else {
+        tags.push({
+          tags_id: {
+            id: tag,
+          },
+        });
+      }
+    }
+
+    emit('update:model-value', tags);
+  },
+});
 </script>

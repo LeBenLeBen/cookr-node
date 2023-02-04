@@ -1,5 +1,6 @@
 module.exports = {
   root: true,
+  ignorePatterns: ['packages/frontend/src/gql/**/*'],
   env: {
     es6: true,
     node: true,

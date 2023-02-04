@@ -13,59 +13,61 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
-import gql from 'graphql-tag';
 import { useQuery } from '@urql/vue';
+import gql from 'graphql-tag';
+import { computed, ref } from 'vue';
 
 import { recipeCardFragment } from '@/services/fragments';
+
+import { Query } from '@/gql/graphql';
+
+import usePageTitle from '@/composables/usePageTitle';
+import useResult from '@/composables/useResult';
+
 import i18n from '@/i18n';
 import store from '@/store';
-import useResult from '@/composables/useResult';
-import usePageTitle from '@/composables/usePageTitle';
-import { GQLQuery } from '@/types/graphqlTypes';
 
 usePageTitle(i18n.global.t('favorites.title'));
 
 const limit = 20;
-const start = ref(0);
+const offset = ref(0);
 
-const result = useQuery<
-  Pick<GQLQuery, 'usersFavoriteRecipes' | 'usersFavoriteRecipesConnection'>
->({
+const result = useQuery<Query>({
   query: gql`
     query favoriteRecipes(
+      $offset: Int!
       $limit: Int!
-      $start: Int!
-      $sort: String!
-      $where: JSON
+      $sort: [String]!
+      $filter: users_favorite_recipes_filter
     ) {
-      usersFavoriteRecipes(
+      users_favorite_recipes(
+        offset: $offset
         limit: $limit
-        start: $start
         sort: $sort
-        where: $where
+        filter: $filter
       ) {
         id
         recipe {
           ...RecipeCard
         }
       }
-      usersFavoriteRecipesConnection(sort: $sort, where: $where) {
-        aggregate {
-          count
-          totalCount
+      users_favorite_recipes_aggregated(sort: $sort, filter: $filter) {
+        count {
+          id
         }
       }
     }
     ${recipeCardFragment}
   `,
   variables: {
-    start,
+    offset,
     limit,
-    sort: 'created_at:desc',
-    where: {
+    sort: '-date_created',
+    filter: {
       user: {
-        id: store.state.currentUser!.id,
+        id: {
+          _eq: store.state.value.currentUser!.id,
+        },
       },
     },
   },
@@ -77,13 +79,11 @@ const result = useQuery<
 const total = useResult(
   result.data,
   0,
-  (data) =>
-    data.usersFavoriteRecipesConnection.aggregate.count ||
-    data.usersFavoriteRecipesConnection.aggregate.totalCount
+  (data) => data.users_favorite_recipes_aggregated[0].count.id
 );
 
 const recipes = useResult(result.data, [], (data) =>
-  data.usersFavoriteRecipes.map((ufr) => ufr.recipe)
+  data.users_favorite_recipes.map((ufr) => ufr.recipe)
 );
 
 const hasMore = computed(() => recipes.value.length < total.value);
@@ -91,6 +91,6 @@ const hasMore = computed(() => recipes.value.length < total.value);
 const loading = result.fetching;
 
 function loadMore() {
-  start.value += limit;
+  offset.value += limit;
 }
 </script>

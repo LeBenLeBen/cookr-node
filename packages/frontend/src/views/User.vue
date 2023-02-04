@@ -17,38 +17,42 @@
 </template>
 
 <script lang="ts" setup>
-import { watchEffect, computed } from 'vue';
 import { useQuery } from '@urql/vue';
 import gql from 'graphql-tag';
+import { computed, watchEffect } from 'vue';
 
-import store from '@/store';
-import router from '@/router';
+import { GRAPHQL_SYSTEM_URL } from '@/services/apiClient';
 
+import { Query } from '@/gql/graphql';
+
+import usePageTitle from '@/composables/usePageTitle';
 import useRecipesList from '@/composables/useRecipesList';
 import useResult from '@/composables/useResult';
-import usePageTitle from '@/composables/usePageTitle';
 
-const props = defineProps({
-  username: {
-    type: String,
-    required: true,
-  },
-});
+import router from '@/router';
+import store from '@/store';
 
-const result = await useQuery({
+const props = defineProps<{
+  username: string;
+}>();
+
+const result = await useQuery<Query>({
   query: gql`
     query userProfile($username: String!) {
-      users(where: { username: $username }) {
+      users(filter: { username: { _eq: $username } }) {
         id
         username
       }
     }
   `,
   variables: { username: computed(() => props.username) },
+  context: {
+    url: GRAPHQL_SYSTEM_URL,
+  },
 });
 
 watchEffect(() => {
-  if (result.data.value.users?.[0]) {
+  if (result.data.value?.users?.[0]) {
     usePageTitle(result.data.value.users[0].username);
   } else {
     router.replace({ name: 'not-found' });
@@ -58,15 +62,19 @@ watchEffect(() => {
 const user = useResult(result.data, null, (data) => data.users?.[0]);
 
 const isCurrentUser = computed(
-  () => props.username === store.state.currentUser!.username
+  () => props.username === store.state.value.currentUser!.username
 );
 
-const collection = useRecipesList({
-  sort: 'title:asc',
-  where: {
-    author: {
-      username: computed(() => props.username),
+const collection = useRecipesList(
+  computed(() => ({
+    sort: ['title'],
+    filter: {
+      author: {
+        username: {
+          _eq: props.username,
+        },
+      },
     },
-  },
-});
+  }))
+);
 </script>

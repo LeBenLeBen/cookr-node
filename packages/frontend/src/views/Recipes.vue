@@ -17,7 +17,7 @@
       >
         <CFormGroup>
           <Label>{{ $t('recipe.tags') }}</Label>
-          <TagsSelect v-model="params.where.tags_in" />
+          <TagsSelect v-model="params.tags" />
         </CFormGroup>
 
         <CFormGroup>
@@ -50,37 +50,35 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, reactive } from 'vue';
+import { computed, reactive, ref, watch } from 'vue';
+import { useRoute } from 'vue-router';
+
+import { QueryRecipesArgs, Update_Recipes_Tags_Input } from '@/gql/graphql';
+
+import usePageTitle from '@/composables/usePageTitle';
+import useRecipesList from '@/composables/useRecipesList';
 
 import i18n from '@/i18n';
-
-import useRecipesList from '@/composables/useRecipesList';
-import usePageTitle from '@/composables/usePageTitle';
 import router from '@/router';
-import { useRoute } from 'vue-router';
 
 usePageTitle(i18n.global.t('explore.title'));
 
 enum Sort {
-  CreatedAtDesc = 'created_at:desc',
-  CreatedAtAsc = 'created_at:asc',
-  TimeAsc = 'time:asc',
+  CreatedAtDesc = '-date_created',
+  CreatedAtAsc = 'date_created',
+  TimeAsc = 'time',
 }
 
 type FilterParams = {
   sort: Sort;
-  where: {
-    tags_in: string[];
-  };
+  tags: Update_Recipes_Tags_Input[];
 };
 
 const route = useRoute();
 const filtersOpen = ref(!!route.query.sort);
 const params = reactive<FilterParams>({
   sort: Sort.CreatedAtDesc,
-  where: {
-    tags_in: [],
-  },
+  tags: [],
 });
 
 /**
@@ -92,7 +90,7 @@ watch(
     if (route.name !== 'recipes') return;
 
     let sort = Sort.CreatedAtDesc;
-    let tags: string[] = [];
+    let tags: Update_Recipes_Tags_Input[] = [];
 
     if (route.query.sort && typeof route.query.sort === 'string') {
       sort = route.query.sort as Sort;
@@ -102,17 +100,19 @@ watch(
     if (route.query.tags) {
       // When there’s a single tag selected, it’s a string
       if (typeof route.query.tags === 'string') {
-        tags.push(route.query.tags);
+        tags.push({ tags_id: { id: route.query.tags } });
       }
       // Otherwise it’s an array
       else if (Array.isArray(route.query.tags)) {
-        tags = route.query.tags as string[];
+        tags = route.query.tags.map((tag) => ({
+          tags_id: { id: tag as string },
+        }));
       }
       filtersOpen.value = true;
     }
 
     params.sort = sort;
-    params.where.tags_in = tags;
+    params.tags = tags;
   },
   { deep: true, immediate: true }
 );
@@ -125,10 +125,10 @@ watch(
   () => {
     let query = {};
 
-    if (params.sort !== Sort.CreatedAtDesc || params.where.tags_in?.length) {
+    if (params.sort !== Sort.CreatedAtDesc || params.tags?.length) {
       query = {
         sort: params.sort,
-        tags: params.where.tags_in,
+        tags: params.tags.map((tag) => tag.tags_id?.id),
       };
     }
 
@@ -140,5 +140,25 @@ watch(
   { deep: true }
 );
 
-const collection = useRecipesList(params);
+const collection = useRecipesList(
+  computed(() => {
+    const query: QueryRecipesArgs = {
+      sort: [params.sort],
+    };
+
+    if (params.tags?.length) {
+      query.filter = {
+        tags: {
+          tags_id: {
+            id: {
+              _in: params.tags.map((tag) => tag.tags_id?.id),
+            },
+          },
+        },
+      };
+    }
+
+    return query;
+  })
+);
 </script>

@@ -1,6 +1,6 @@
 <template>
   <CBtn
-    :to="slug ? { name: 'tag', params: { slug } } : null"
+    :to="tag.slug ? { name: 'tag', params: { slug: tag.slug } } : undefined"
     class="
       py-2
       px-4
@@ -14,21 +14,16 @@
       hover:bg-opacity-100
       rounded-full
     "
-    :class="{ 'hover:text-alt-900': slug }"
+    :class="{ 'hover:text-alt-900': tag.slug }"
   >
-    {{ title }}
+    {{ tag.title }}
   </CBtn>
 </template>
 
 <script lang="ts" setup>
-defineProps({
-  title: {
-    type: String,
-    required: true,
-  },
-  slug: {
-    type: String,
-    default: null,
-  },
-});
+import { Tags } from '../gql/graphql';
+
+defineProps<{
+  tag: Tags;
+}>();
 </script>

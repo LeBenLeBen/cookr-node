@@ -8,13 +8,17 @@
     <CFormGroup v-slot="{ ids }" variant="grid" required>
       <Label class="sm:mt-3">{{ $t('recipe.title') }}</Label>
       <div class="sm:col-span-3">
-        <Field v-slot="{ field }" name="title">
+        <Field
+          v-slot="{ field }"
+          :model-value="title"
+          name="title"
+          @update:model-value="(val: string) => $emit('update:title', val)"
+        >
           <CTextField
             ref="titleNode"
             :model-value="title"
             v-bind="field"
             :aria-describedby="ids.errors"
-            @update:model-value="(val: string) => $emit('update:title', val)"
           />
         </Field>
         <Errors name="title" />
@@ -58,7 +62,12 @@
       <Label class="sm:mt-3">{{ $t('recipe.form.time') }}</Label>
       <div class="sm:col-span-3">
         <div class="flex space-x-4 items-center">
-          <Field v-slot="{ field }" name="time">
+          <Field
+            v-slot="{ field }"
+            :model-value="time"
+            name="time"
+            @update:model-value="(val: string) => $emit('update:time', val, 'number')"
+          >
             <CTextField
               :model-value="time"
               v-bind="field"
@@ -68,7 +77,6 @@
               inputmode="numeric"
               class="w-18"
               :aria-describedby="ids.errors"
-              @update:model-value="(val: string) => $emit('update:time', val, 'number')"
             />
           </Field>
           <span>{{ $t('recipe.time', 2) }}</span>
@@ -81,7 +89,12 @@
       <Label class="sm:mt-3">{{ $t('recipe.form.quantity') }}</Label>
       <div class="sm:col-span-3">
         <div class="flex space-x-4 items-center">
-          <Field v-slot="{ field }" name="quantity">
+          <Field
+            v-slot="{ field }"
+            :model-value="quantity"
+            name="quantity"
+            @update:model-value="(val: string) => $emit('update:quantity', val, 'number')"
+          >
             <CTextField
               :model-value="quantity"
               v-bind="field"
@@ -90,7 +103,6 @@
               inputmode="numeric"
               class="w-18"
               :aria-describedby="ids.errors"
-              @update:model-value="(val: string) => $emit('update:quantity', val, 'number')"
             />
           </Field>
           <span>{{ $t('recipe.quantity', 2) }}</span>
@@ -119,7 +131,7 @@
       <div class="sm:col-span-3">
         <TagsSelect
           :model-value="tags"
-          @update:model-value="(val: string[]) => $emit('update:tags', val)"
+          @update:model-value="(val: Update_Recipes_Tags_Input[]) => $emit('update:tags', val)"
         />
       </div>
     </CFormGroup>
@@ -144,44 +156,32 @@
   </Form>
 </template>
 
+<script lang="ts">
+import { RecipeIngredient } from '@/services/types';
+
+import {
+  Update_Directus_Files_Input,
+  Update_Recipes_Tags_Input,
+} from '@/gql/graphql';
+
+export type RecipeFormInput = {
+  title?: string;
+  slug?: string;
+  ingredients: RecipeIngredient[];
+  steps?: string;
+  time?: number;
+  quantity?: number;
+  notes?: string;
+  tags: Update_Recipes_Tags_Input[];
+  image?: Update_Directus_Files_Input;
+};
+</script>
+
 <script lang="ts" setup>
 import { Field } from 'vee-validate';
-import { ref, PropType, onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 
-defineProps({
-  title: {
-    type: String,
-    default: null,
-  },
-  ingredients: {
-    type: Array,
-    default: null,
-  },
-  steps: {
-    type: String,
-    default: null,
-  },
-  time: {
-    type: [Number, String],
-    default: null,
-  },
-  quantity: {
-    type: [Number, String],
-    default: null,
-  },
-  notes: {
-    type: String,
-    default: null,
-  },
-  tags: {
-    type: Array as PropType<string[]>,
-    default: null,
-  },
-  image: {
-    type: String,
-    default: null,
-  },
-});
+defineProps<RecipeFormInput>();
 
 defineEmits([
   'update:title',

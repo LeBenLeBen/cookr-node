@@ -5,21 +5,28 @@
   "description": "A cooking recipes management app",
   "license": "MIT",
   "author": "Benoît Burgener",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "postinstall": "lerna bootstrap",
     "validate": "eslint . --ext .js,.ts,.vue --ignore-path .gitignore",
     "format": "npm run validate -- --fix",
-    "test": "npm run validate && lerna run --parallel test",
-    "heroku-postbuild": "npm run build --prefix packages/backend"
+    "test": "npm run validate && npm run test --workspaces --if-present",
+    "heroku-postbuild": "npm run build --prefix packages/backend",
+    "gen:graphql:types": "graphql-codegen"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^2.16.2",
+    "@graphql-codegen/client-preset": "^1.2.4",
+    "@trivago/prettier-plugin-sort-imports": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
+    "@vue/compiler-sfc": "^3.2.45",
     "eslint": "^8.1.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.0.3",
-    "lerna": "^4.0.0",
+    "graphql": "^16.6.0",
     "prettier": "^2.4.1",
     "typescript": "^4.4.4"
   }

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+
 import store from './store';
 
 const router = createRouter({
@@ -133,9 +134,9 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (!to.meta.guest && !store.state.token) {
+  if (!to.meta.guest && !store.state.value.auth) {
     next({ name: 'login', query: { redirectTo: to.fullPath } });
-  } else if (to.meta.guest && store.state.token) {
+  } else if (to.meta.guest && store.state.value.auth) {
     next({ name: 'home' });
   } else {
     next();

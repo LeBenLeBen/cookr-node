@@ -121,32 +121,23 @@ const fr: DefineLocaleMessage = {
     home: 'Aller à l’accueil',
   },
   api: {
-    auth: {
-      form: {
-        error: {
-          invalid: 'Identifiant ou mot de passe invalide.',
-          email: {
-            provide: 'Un e-mail est requis.',
-            format: 'Veuillez entrer une adresse e-mail valide.',
-          },
-          password: {
-            provide: 'Un mot de passe est requis.',
-            local:
-              'Cet utilisateur n’a pas configuré de mot de passe, veuillez vous connecter avec le service utilisé lors de la création du compte.',
-            matching: 'Les mots de passe ne correspondent pas.',
-          },
-          confirmed: 'L’e-mail lié à votre compte n’est pas confirmé.',
-          blocked: 'Votre compte a été bloqué par un administrateur.',
-          code: {
-            provide:
-              'Le code de réinitialisation que vous essayez d’utiliser a expiré.',
-          },
-          user: {
-            'not-exist':
-              'Aucun utilisateur enregistré avec cette adresse e-mail n’a été trouvé.',
-          },
-        },
-      },
+    error: {
+      INTERNAL_SERVER_ERROR: 'Une erreur interne au serveur s’est produite.',
+      FAILED_VALIDATION: 'Certains champs sont invalides.',
+      FORBIDDEN: 'Vous n’avez pas les droits pour effectuer cette action.',
+      INVALID_TOKEN: 'Jeton de connexion invalide, veuillez vous reconnecter.',
+      TOKEN_EXPIRED: 'Votre session a expiré, veuillez vous reconnecter.',
+      INVALID_CREDENTIALS: 'Identifiant ou mot de passe invalide.',
+      INVALID_IP: 'Votre adresse IP n’est pas autorisée.',
+      INVALID_OTP: 'Code pour l’authentification à deux facteurs invalide.',
+      INVALID_PAYLOAD: 'Le contenu de la requête est invalide.',
+      INVALID_QUERY: 'Les paramètres de la requêtes sont invalides.',
+      UNSUPPORTED_MEDIA_TYPE:
+        'Le type de média utilisé pour la requête est invalide.',
+      REQUESTS_EXCEEDED: 'Vous avez dépassé le nombre de requêtes autorisées.',
+      ROUTE_NOT_FOUND: 'La page demandée est introuvable.',
+      SERVICE_UNAIVAILABLE: 'Le service est temporairement indisponible.',
+      UNPROCESSABLE_ENTITY: 'La requête est invalide.',
     },
     provider: {
       disabled: 'Ce service est désactivé.',

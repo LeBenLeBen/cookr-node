@@ -1,6 +1,6 @@
 <template>
   <router-link
-    :to="{ name: 'recipe', params: { id: id, slug: slug } }"
+    :to="{ name: 'recipe', params: { id: recipe.id, slug: recipe.slug } }"
     class="
       overflow-hidden
       flex flex-col
@@ -14,7 +14,7 @@
     "
   >
     <RecipeImage
-      :image="image"
+      :image="recipe.image"
       width="288"
       height="192"
       class="w-full sm:w-auto flex-shrink-0 bg-alt-200 bg-opacity-75"
@@ -31,7 +31,7 @@
           whitespace-nowrap
         "
       >
-        {{ title }}
+        {{ recipe.title }}
       </h2>
 
       <RecipeAuthor
@@ -44,26 +44,10 @@
 </template>
 
 <script lang="ts" setup>
-defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-  title: {
-    type: String,
-    required: true,
-  },
-  slug: {
-    type: String,
-    required: true,
-  },
-  image: {
-    type: Object,
-    default: null,
-  },
-  username: {
-    type: String,
-    default: null,
-  },
-});
+import { Recipes } from '../gql/graphql';
+
+defineProps<{
+  recipe: Recipes;
+  username?: string | null;
+}>();
 </script>

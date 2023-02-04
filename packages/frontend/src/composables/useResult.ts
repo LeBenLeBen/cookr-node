@@ -1,9 +1,8 @@
 /**
  * Courtesy of https://github.com/vuejs/vue-apollo
  */
-
-import { Ref, computed } from 'vue';
 import type { DeepNonNullable, DeepRequired } from 'ts-essentials';
+import { Ref, computed } from 'vue';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type IsUnion<T, U = T> = U extends any

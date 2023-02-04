@@ -1,26 +1,33 @@
 import gql from 'graphql-tag';
 
+export const imageFragment = gql`
+  fragment Image on directus_files {
+    id
+    filename_disk
+    storage
+  }
+`;
+
 export const recipeCardFragment = gql`
-  fragment RecipeCard on Recipe {
+  fragment RecipeCard on recipes {
     id
     title
     slug
     time
     quantity
     image {
-      id
-      hash
-      ext
+      ...Image
     }
     author {
       id
       username
     }
   }
+  ${imageFragment}
 `;
 
 export const recipeFragment = gql`
-  fragment RecipeFragment on Recipe {
+  fragment RecipeFragment on recipes {
     id
     title
     slug
@@ -32,36 +39,30 @@ export const recipeFragment = gql`
     quantity
     steps
     notes
-    ingredients {
-      id
-      amount
-      title
-    }
+    ingredients
     tags {
       id
-      title
-      slug
+      tags_id {
+        id
+        title
+        slug
+      }
     }
     image {
-      id
-      hash
-      ext
+      ...Image
     }
   }
+  ${imageFragment}
 `;
 
 export const currentUserFragment = gql`
-  fragment CurrentUser on UsersPermissionsMe {
+  fragment CurrentUser on directus_users {
     id
     email
     username
-    user {
-      id
-      avatar {
-        id
-        hash
-        ext
-      }
+    avatar {
+      ...Image
     }
   }
+  ${imageFragment}
 `;

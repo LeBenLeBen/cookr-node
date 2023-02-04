@@ -134,11 +134,11 @@
           </div>
         </div>
 
-        <div v-if="recipe.tags.length">
+        <div v-if="tags?.length">
           <h2 class="mb-3 text-alt-600 font-bold text-sm uppercase">
             {{ $t('recipe.tags') }}
           </h2>
-          <TagsList :tags="recipe.tags" />
+          <TagsList :tags="tags" />
         </div>
       </div>
     </div>
@@ -146,51 +146,46 @@
 </template>
 
 <script lang="ts" setup>
-import { watchEffect, computed } from 'vue';
-import { useQuery, useMutation } from '@urql/vue';
+import { useMutation, useQuery } from '@urql/vue';
 import gql from 'graphql-tag';
+import { computed, watchEffect } from 'vue';
+
+import { recipeFragment } from '@/services/fragments';
+
+import {
+  Mutation,
+  MutationDelete_Recipes_ItemArgs,
+  Query,
+} from '@/gql/graphql';
+
+import usePageTitle from '@/composables/usePageTitle';
+import useResult from '@/composables/useResult';
 
 import router from '@/router';
 import store from '@/store';
-import { recipeFragment } from '@/services/fragments';
-import useResult from '@/composables/useResult';
-import usePageTitle from '@/composables/usePageTitle';
-import {
-  GQLMutation,
-  GQLQuery,
-  MutationToDeleteRecipeArgs,
-} from '@/types/graphqlTypes';
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-  slug: {
-    type: String,
-    required: true,
-  },
-});
+const props = defineProps<{
+  id: string;
+  slug: string;
+}>();
 
 const { executeMutation: deleteRecipe } = useMutation<
-  Pick<GQLMutation, 'deleteRecipe'>,
-  MutationToDeleteRecipeArgs
+  Mutation,
+  MutationDelete_Recipes_ItemArgs
 >(
   gql`
-    mutation deleteRecipe($input: deleteRecipeInput!) {
-      deleteRecipe(input: $input) {
-        recipe {
-          id
-        }
+    mutation deleteRecipe($id: ID!) {
+      delete_recipes_item(id: $id) {
+        id
       }
     }
   `
 );
 
-const result = await useQuery<Pick<GQLQuery, 'recipe'>>({
+const result = await useQuery<Query>({
   query: gql`
     query getRecipe($id: ID!) {
-      recipe(id: $id) {
+      recipes_by_id(id: $id) {
         ...RecipeFragment
       }
     }
@@ -200,23 +195,27 @@ const result = await useQuery<Pick<GQLQuery, 'recipe'>>({
 });
 
 watchEffect(() => {
-  if (result.data.value?.recipe) {
-    usePageTitle(result.data.value.recipe.title);
+  if (result.data.value?.recipes_by_id) {
+    usePageTitle(result.data.value.recipes_by_id.title);
   } else {
     router.replace({ name: 'not-found' });
   }
 });
 
-const recipe = useResult(result.data, null, (data) => data.recipe);
+const recipe = useResult(result.data, null, (data) => data.recipes_by_id);
 
 const steps = useResult(result.data, [], (data) => {
-  return data.recipe.steps.length
-    ? data.recipe.steps.split(/\r?\n/).filter((s) => !!s.trim())
+  return data.recipes_by_id.steps.length
+    ? data.recipes_by_id.steps.split(/\r?\n/).filter((s) => !!s.trim())
     : [];
 });
 
+const tags = useResult(result.data, [], (data) => {
+  return data.recipes_by_id.tags.map((t) => t.tags_id);
+});
+
 const isOwner = useResult(result.data, false, (data) => {
-  return data.recipe.author.id === store.state.currentUser!.id;
+  return data.recipes_by_id.author.id === store.state.value.currentUser!.id;
 });
 
 function confirmToDelete() {
@@ -226,14 +225,15 @@ function confirmToDelete() {
       'Êtes-vous sûr·e de vouloir supprimer cette recette? Cette action est irréversible.'
     )
   ) {
-    deleteRecipe({ input: { where: { id: recipe.value.id } } }).then(() => {
-      if (store.state.currentUser) {
-        router.replace({
-          name: 'user',
-          params: { username: store.state.currentUser.username },
-        });
-      }
-    });
+    if (store.state.value.currentUser) {
+      router.push({
+        name: 'user',
+        params: { username: store.state.value.currentUser.username },
+      });
+    }
+
+    // Delete after redirecting, to prevent a 404 triggered by the view watching the recipe data
+    deleteRecipe({ id: recipe.value.id });
   }
 }
 </script>

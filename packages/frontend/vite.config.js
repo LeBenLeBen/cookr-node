@@ -1,8 +1,8 @@
-const path = require('path');
-
 import vue from '@vitejs/plugin-vue';
-import ViteComponents from 'vite-plugin-components';
+import Components from 'unplugin-vue-components/vite';
 import WindiCSS from 'vite-plugin-windicss';
+
+const path = require('path');
 
 /**
  * @type {import('vite').UserConfig}
@@ -18,35 +18,33 @@ export default {
     host: true,
     proxy: {
       '/api': {
-        target: 'http://backend:1337',
+        target: 'http://backend:8055',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+      '/assets': {
+        target: 'http://backend:8055',
+        changeOrigin: true,
+      },
+      '/files': {
+        target: 'http://backend:8055',
+        changeOrigin: true,
       },
     },
   },
   plugins: [
     vue(),
-    ViteComponents({
-      libraries: [
-        {
-          name: 'chusho',
-          entries: [
-            'CAlert',
-            'CBtn',
-            'CFormGroup',
-            'CIcon',
-            'CLabel',
-            'CCollapse',
-            'CCollapseBtn',
-            'CCollapseContent',
-            'CPicture',
-            'CTextField',
-            'CTextarea',
-          ],
+    Components({
+      resolvers: [
+        (componentName) => {
+          if (componentName.match(/^C[A-Z]/)) {
+            return { name: componentName, from: 'chusho' };
+          }
         },
-        {
-          name: 'vee-validate',
-          entries: ['Form', 'Field'],
+        (componentName) => {
+          if (['Form', 'Field'].includes(componentName)) {
+            return { name: componentName, from: 'vee-validate' };
+          }
         },
       ],
     }),

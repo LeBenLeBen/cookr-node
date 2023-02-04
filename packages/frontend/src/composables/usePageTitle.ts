@@ -1,5 +1,5 @@
-import { Ref, computed, ref } from 'vue';
 import { useTitle } from '@vueuse/core';
+import { Ref, computed, ref } from 'vue';
 
 const _pageTitle = ref<string | null | undefined>(null);
 

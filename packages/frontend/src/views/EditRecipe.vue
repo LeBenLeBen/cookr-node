@@ -4,12 +4,12 @@
 
     <RecipeForm
       v-if="input"
-      v-model:title.trim="input.title"
+      v-model:title="input.title"
       v-model:ingredients="input.ingredients"
-      v-model:steps.trim="input.steps"
+      v-model:steps="input.steps"
       v-model:time.number="input.time"
       v-model:quantity.number="input.quantity"
-      v-model:notes.trim="input.notes"
+      v-model:notes="input.notes"
       v-model:tags="input.tags"
       v-model:image="input.image"
       @submit="prepareToSave"
@@ -18,55 +18,47 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, watch } from 'vue';
 import { useMutation, useQuery } from '@urql/vue';
 import gql from 'graphql-tag';
+import cloneDeep from 'lodash/cloneDeep';
 import deburr from 'lodash/deburr';
 import kebabCase from 'lodash/kebabCase';
-import cloneDeep from 'lodash/cloneDeep';
-
-import router from '@/router';
-import i18n from '@/i18n';
+import { reactive, watch } from 'vue';
 
 import { recipeFragment } from '@/services/fragments';
-import useResult from '@/composables/useResult';
-import usePageTitle from '@/composables/usePageTitle';
-import {
-  GQLMutation,
-  GQLQuery,
-  GQLRecipeInput,
-  MutationToUpdateRecipeArgs,
-} from '@/types/graphqlTypes';
+import { RecipeIngredient } from '@/services/types';
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-});
+import { Mutation, Query, Update_Recipes_Input } from '@/gql/graphql';
+
+import usePageTitle from '@/composables/usePageTitle';
+import useResult from '@/composables/useResult';
+
+import { RecipeFormInput } from '../components/RecipeForm.vue';
+
+import i18n from '@/i18n';
+import router from '@/router';
+
+const props = defineProps<{
+  id: string;
+}>();
 
 usePageTitle(i18n.global.t('recipe.edit.title'));
 
-const { executeMutation: updateRecipe } = useMutation<
-  Pick<GQLMutation, 'updateRecipe'>,
-  MutationToUpdateRecipeArgs
->(
+const { executeMutation: updateRecipe } = useMutation<Mutation>(
   gql`
-    mutation updateRecipe($input: updateRecipeInput!) {
-      updateRecipe(input: $input) {
-        recipe {
-          ...RecipeFragment
-        }
+    mutation updateRecipe($id: ID!, $data: update_recipes_input!) {
+      update_recipes_item(id: $id, data: $data) {
+        ...RecipeFragment
       }
     }
     ${recipeFragment}
   `
 );
 
-const result = await useQuery<Pick<GQLQuery, 'recipe'>>({
+const result = await useQuery<Query>({
   query: gql`
     query getRecipeToEdit($id: ID!) {
-      recipe(id: $id) {
+      recipes_by_id(id: $id) {
         ...RecipeFragment
       }
     }
@@ -78,13 +70,13 @@ const result = await useQuery<Pick<GQLQuery, 'recipe'>>({
   },
 });
 
-const recipe = useResult(result.data, null, (data) => data.recipe);
+const recipe = useResult(result.data, null, (data) => data.recipes_by_id);
 
-const input = reactive<GQLRecipeInput>({
+const input = reactive<RecipeFormInput>({
   title: recipe.value?.title || '',
   slug: recipe.value?.slug || '',
   ingredients: recipe.value?.ingredients?.length
-    ? recipe.value?.ingredients.map(({ amount, title }) => ({
+    ? recipe.value?.ingredients.map(({ amount, title }: RecipeIngredient) => ({
         amount,
         title,
       }))
@@ -93,15 +85,23 @@ const input = reactive<GQLRecipeInput>({
   time: recipe.value?.time,
   quantity: recipe.value?.quantity,
   notes: recipe.value?.notes,
-  tags: recipe.value?.tags.map((t) => t.id),
-  image: recipe.value?.image?.id,
+  tags:
+    recipe.value?.tags.map((tag) => {
+      return {
+        id: tag.id,
+        tags_id: {
+          id: tag.tags_id.id,
+        },
+      };
+    }) ?? [],
+  image: recipe.value?.image?.id ? { id: recipe.value?.image?.id } : undefined,
 });
 
-function save(params: MutationToUpdateRecipeArgs) {
+function save(params: { id: string; data: Update_Recipes_Input }) {
   updateRecipe(params).then((response) => {
     if (response.error) return;
 
-    const recipe = response.data?.updateRecipe?.recipe;
+    const recipe = response.data?.update_recipes_item;
 
     if (recipe) {
       router.push({
@@ -118,14 +118,15 @@ function save(params: MutationToUpdateRecipeArgs) {
 watch(
   () => input.title,
   (val) => {
-    input.slug = kebabCase(deburr(val));
+    input.slug = val ? kebabCase(deburr(val)) : undefined;
   }
 );
 
 function prepareToSave() {
   let data = cloneDeep(input);
-  data.ingredients = data.ingredients?.filter((i) => i?.title?.trim()) || [];
+  data.ingredients =
+    data.ingredients?.filter((i: RecipeIngredient) => i?.title?.trim()) || [];
 
-  save({ input: { where: { id: props.id }, data } });
+  save({ id: props.id, data });
 }
 </script>

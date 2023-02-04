@@ -14,7 +14,7 @@
       "
       :class="{
         'py-3 pl-5 pr-10 rounded-lg': !variant,
-        'py-2 pl-2 pr-6 text-sm rounded': variant.includes('small'),
+        'py-2 pl-2 pr-6 text-sm rounded': variant?.includes('small'),
       }"
       v-bind="attrs"
       @input="(e) => $emit('update:model-value', (e.target as HTMLSelectElement).value)"
@@ -32,7 +32,7 @@
       class="absolute top-1/2 -mt-3 text-alt-500"
       :class="{
         'right-3': !variant,
-        'right-2': variant.includes('small'),
+        'right-2': variant?.includes('small'),
       }"
     />
   </div>
@@ -46,28 +46,16 @@ export type SelectOption = {
 </script>
 
 <script lang="ts" setup>
-import { inject, mergeProps, PropType, useAttrs } from 'vue';
+import { inject, mergeProps, useAttrs } from 'vue';
 
 import { FormGroupSymbol } from 'chusho';
 
-const props = defineProps({
-  variant: {
-    type: String,
-    default: '',
-  },
-  modelValue: {
-    type: [String, Number],
-    default: '',
-  },
-  options: {
-    type: Array as PropType<SelectOption[]>,
-    default: () => [],
-  },
-  required: {
-    type: Boolean,
-    default: null,
-  },
-});
+const props = defineProps<{
+  variant?: string;
+  modelValue?: string | number;
+  options?: SelectOption[];
+  required?: boolean;
+}>();
 
 defineEmits(['update:model-value']);
 

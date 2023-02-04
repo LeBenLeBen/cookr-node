@@ -20,13 +20,9 @@
 </template>
 
 <script lang="ts">
+import { provideClient } from '@urql/vue';
 import { defineComponent } from 'vue';
-import gql from 'graphql-tag';
-import { useQuery, provideClient } from '@urql/vue';
 
-import store from './store';
-
-import { currentUserFragment } from './services/fragments';
 import client from './services/apiClient';
 
 import AppLayout from '@/components/layouts/AppLayout.vue';
@@ -40,26 +36,6 @@ export default defineComponent({
 
   setup() {
     provideClient(client);
-
-    if (store.state.currentUser) {
-      useQuery({
-        query: gql`
-          query currentUser {
-            me {
-              ...CurrentUser
-            }
-          }
-          ${currentUserFragment}
-        `,
-        context: {
-          requestPolicy: 'network-only',
-        },
-      }).then((response) => {
-        if (response.data?.value?.me) {
-          store.setCurrentUser(response.data.value.me);
-        }
-      });
-    }
   },
 });
 </script>

@@ -1,7 +1,5 @@
 <template>
   <div>
-    <ErrorsList :errors="errors" />
-
     <form class="space-y-6" @submit.prevent="submit">
       <CFormGroup required>
         <Label for="password">
@@ -9,22 +7,9 @@
         </Label>
         <CTextField
           id="password"
-          v-model="input.password"
+          v-model="password"
           type="password"
           name="password"
-          autocomplete="new-password"
-        />
-      </CFormGroup>
-
-      <CFormGroup required>
-        <Label for="passwordConfirmation">
-          {{ $t('resetPassword.passwordConfirmation') }}
-        </Label>
-        <CTextField
-          id="passwordConfirmation"
-          v-model="input.passwordConfirmation"
-          type="password"
-          name="passwordConfirmation"
           autocomplete="new-password"
         />
       </CFormGroup>
@@ -39,68 +24,57 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue';
 import { useMutation } from '@urql/vue';
 import gql from 'graphql-tag';
+import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-import router from '@/router';
-import store from '@/store';
-import i18n from '@/i18n';
+import { GRAPHQL_SYSTEM_URL } from '@/services/apiClient';
 
-import { currentUserFragment } from '@/services/fragments';
+import { Mutation, MutationAuth_Password_ResetArgs } from '@/gql/graphql';
 
 import { notify } from '@/composables/useNotifications';
 import usePageTitle from '@/composables/usePageTitle';
-import { getErrorMessages, NormalizedApiErrors } from '@/helpers/api';
+
+import i18n from '@/i18n';
 
 usePageTitle(i18n.global.t('resetPassword.title'));
 
-const loading = ref(false);
-const errors = ref<NormalizedApiErrors | null>(null);
-const input = reactive({ password: '', passwordConfirmation: '' });
+const router = useRouter();
+const route = useRoute();
 
-const { executeMutation: resetPassword } = useMutation(
+const loading = ref(false);
+const password = ref('');
+
+const { executeMutation: resetPassword } = useMutation<
+  Mutation,
+  MutationAuth_Password_ResetArgs
+>(
   gql`
-    mutation resetPassword(
-      $password: String!
-      $passwordConfirmation: String!
-      $code: String!
-    ) {
-      resetPassword(
-        password: $password
-        passwordConfirmation: $passwordConfirmation
-        code: $code
-      ) {
-        user {
-          ...CurrentUser
-        }
-      }
+    mutation resetPassword($password: String!, $token: String!) {
+      auth_password_reset(password: $password, token: $token)
     }
-    ${currentUserFragment}
   `
 );
 
 function submit() {
   loading.value = true;
-  errors.value = null;
 
-  resetPassword({
-    password: input.password,
-    passwordConfirmation: input.passwordConfirmation,
-    code: router.currentRoute.value.query.code,
-  })
+  resetPassword(
+    {
+      password: password.value,
+      token: route.query.token as string,
+    },
+    { url: GRAPHQL_SYSTEM_URL }
+  )
     .then((response) => {
-      if (response.error) {
-        errors.value = getErrorMessages(response.error.graphQLErrors);
-        return;
+      if (response.data?.auth_password_reset) {
+        router.push({ name: 'login' });
+        notify({
+          type: 'success',
+          message: i18n.global.t('resetPassword.success'),
+        });
       }
-
-      store.setCurrentUser(response.data.resetPassword.user);
-      router.push({ name: 'home' });
-      notify({
-        type: 'success',
-        message: i18n.global.t('resetPassword.success'),
-      });
     })
     .finally(() => {
       loading.value = false;
