@@ -12,33 +12,25 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, PropType } from 'vue';
+import { computed } from 'vue';
+
+import { Image } from '@/services/types';
 
 import { crop, hdpiSources, imageUrl } from '@/helpers/images';
-import { GQLUploadFile } from '@/types/graphqlTypes';
 
 import recipePlaceholder from '../assets/images/recipe-placeholder.svg';
 
-const props = defineProps({
-  image: {
-    type: Object as PropType<Pick<GQLUploadFile, 'hash' | 'ext'>>,
-    default: null,
-  },
-  width: {
-    type: [Number, String],
-    required: true,
-  },
-  height: {
-    type: [Number, String],
-    required: true,
-  },
-});
+const props = defineProps<{
+  image?: Image | null;
+  width: number | string;
+  height: number | string;
+}>();
 
 const picture = computed(() => {
   const url = imageUrl(props.image);
   const cropOptions = {
-    w: props.width,
-    h: props.height,
+    width: props.width,
+    height: props.height,
   };
   return url
     ? {

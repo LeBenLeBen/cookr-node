@@ -35,10 +35,10 @@
 </template>
 
 <script lang="ts" setup>
+import { useMediaQuery, useWindowScroll } from '@vueuse/core';
 import { computed, onMounted, ref } from 'vue';
-import { useWindowScroll, useMediaQuery } from '@vueuse/core';
 
-import { notifications, hide } from '@/composables/useNotifications';
+import { hide, notifications } from '@/composables/useNotifications';
 
 const { y } = useWindowScroll();
 const isHeaderNotSticky = useMediaQuery('(min-width: 768px)');

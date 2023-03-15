@@ -11,7 +11,7 @@
     "
     :title="$t('auth.logout')"
   >
-    <Avatar :image="currentUser.user?.avatar" class="mr-3" />
+    <Avatar :image="currentUser.avatar" class="mr-3" />
     {{ currentUser.username }}
   </CBtn>
 </template>
@@ -21,5 +21,5 @@ import { computed } from 'vue';
 
 import store from '@/store';
 
-const currentUser = computed(() => store.state.currentUser);
+const currentUser = computed(() => store.state.value.currentUser);
 </script>

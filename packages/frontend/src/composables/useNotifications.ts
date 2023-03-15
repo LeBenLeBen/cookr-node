@@ -1,4 +1,4 @@
-import { ref, computed, nextTick } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 
 const _notifications = ref<Set<Notification>>(new Set());
 
@@ -33,6 +33,10 @@ export function notify(notification: Notification) {
 
 export function hide(notification: Notification) {
   _notifications.value.delete(notification);
+}
+
+export function clear() {
+  _notifications.value.clear();
 }
 
 export const notifications = computed(() => _notifications.value);

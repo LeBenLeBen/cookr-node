@@ -61,17 +61,18 @@ export default {
 <script lang="ts" setup>
 import { computed, inject, useAttrs } from 'vue';
 import gql from 'graphql-tag';
-import { useMutation, useQuery } from '@urql/vue';
+import { useQuery } from '@urql/vue';
 import { FormGroupSymbol } from 'chusho';
 
 import useResult from '@/composables/useResult';
+import { Query, Update_Directus_Files_Input } from '@/gql/graphql';
+import { GRAPHQL_SYSTEM_URL } from '@/services/apiClient';
+import { imageFragment } from '@/services/fragments';
+import { upload } from '@/services/helpers';
 
-const props = defineProps({
-  modelValue: {
-    type: String,
-    default: null,
-  },
-});
+const props = defineProps<{
+  modelValue?: Update_Directus_Files_Input | null;
+}>();
 
 const attrs = useAttrs();
 
@@ -82,44 +83,34 @@ const id = computed(
 
 const emit = defineEmits(['update:model-value']);
 
-const result = useQuery({
+const result = useQuery<Query>({
   query: gql`
     query imageUploaderImage($id: ID!) {
-      files(where: { id: $id }) {
-        id
-        hash
-        ext
+      files_by_id(id: $id) {
+        ...Image
       }
     }
+    ${imageFragment}
   `,
   variables: {
-    id: computed(() => props.modelValue),
+    id: computed(() => props.modelValue?.id),
   },
-  pause: computed(() => !props.modelValue),
+  pause: computed(() => !props.modelValue?.id),
+  context: {
+    url: GRAPHQL_SYSTEM_URL,
+  },
 });
 
 const image = useResult(result.data, null, (data) => {
-  return props.modelValue ? data?.files?.[0] : null;
+  return props.modelValue ? data.files_by_id : null;
 });
-
-const { executeMutation: upload } = useMutation(
-  gql`
-    mutation editUploadImage($file: Upload!) {
-      upload(file: $file) {
-        id
-        hash
-        ext
-      }
-    }
-  `
-);
 
 function handleImageChange(e: Event) {
   const file = (e.target as HTMLInputElement)?.files?.[0];
 
   if (file) {
-    upload({ file }).then((response) => {
-      emit('update:model-value', response.data.upload.id);
+    upload(file).then((response) => {
+      emit('update:model-value', response);
     });
   }
 }

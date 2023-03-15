@@ -7,27 +7,26 @@
 </template>
 
 <script lang="ts" setup>
-import { watchEffect } from 'vue';
 import { useQuery } from '@urql/vue';
-
 import gql from 'graphql-tag';
-import router from '@/router';
+import { computed, watchEffect } from 'vue';
 
+import { QueryRecipesArgs } from '@/gql/graphql';
+
+import usePageTitle from '@/composables/usePageTitle';
 import useRecipesList from '@/composables/useRecipesList';
 import useResult from '@/composables/useResult';
-import usePageTitle from '@/composables/usePageTitle';
 
-const props = defineProps({
-  slug: {
-    type: String,
-    required: true,
-  },
-});
+import router from '@/router';
+
+const props = defineProps<{
+  slug: string;
+}>();
 
 const result = await useQuery({
   query: gql`
     query getTag($slug: String!) {
-      tags(where: { slug: $slug }) {
+      tags(filter: { slug: { _eq: $slug } }) {
         id
         title
       }
@@ -46,7 +45,20 @@ watchEffect(() => {
 
 const tag = useResult(result.data, null, (data) => data?.tags?.[0]);
 
-const collection = useRecipesList({
-  where: { tags_in: [tag.value?.id] },
-});
+const collection = useRecipesList(
+  computed<QueryRecipesArgs>(() => {
+    return {
+      sort: ['-date_created'],
+      filter: {
+        tags: {
+          tags_id: {
+            id: {
+              _eq: tag.value?.id,
+            },
+          },
+        },
+      },
+    };
+  })
+);
 </script>

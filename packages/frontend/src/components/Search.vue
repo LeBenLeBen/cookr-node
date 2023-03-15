@@ -158,7 +158,7 @@
               {{ result.title }}
             </div>
             <RecipeAuthor
-              :username="result.author"
+              :username="result['author.username']"
               class="text-sm text-alt-600"
             />
           </router-link>
@@ -175,8 +175,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import { clickOutside } from 'chusho';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   directives: { clickOutside },
@@ -194,16 +194,13 @@ type Hit = {
   id: number;
   title: string;
   slug: string;
-  author: string;
+  'author.username': string;
   objectID: string;
 };
 
-defineProps({
-  isOpen: {
-    type: Boolean,
-    required: true,
-  },
-});
+defineProps<{
+  isOpen: boolean;
+}>();
 
 const emit = defineEmits(['update:is-open']);
 

@@ -186,16 +186,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, PropType } from 'vue';
+import { ref } from 'vue';
 
 import { MenuGroup } from '@/components/layouts/AppLayout.vue';
 
-defineProps({
-  menu: {
-    type: Array as PropType<MenuGroup[]>,
-    required: true,
-  },
-});
+defineProps<{
+  menu: MenuGroup[];
+}>();
 
 const searchIsOpen = ref(false);
 const menuIsOpen = ref(false);

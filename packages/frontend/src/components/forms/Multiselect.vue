@@ -3,14 +3,14 @@
     <RawMultiselect v-bind="$attrs" />
     <CIcon
       id="chevron-down"
-      class="absolute top-1/2 right-3 -mt-3 text-alt-500"
+      class="absolute top-1/2 right-3 -mt-3 text-alt-500 pointer-events-none"
     />
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
 import RawMultiselect from '@vueform/multiselect';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'Multiselect',
@@ -23,7 +23,7 @@ export default defineComponent({
 });
 </script>
 
-<style lang="postcss">
+<style>
 .multiselect {
   position: relative;
 }

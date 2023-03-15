@@ -2,38 +2,15 @@
   "name": "@cookr/backend",
   "private": true,
   "version": "0.0.0",
-  "description": "Cookr backend based on Strapi",
+  "description": "Cookr backend based on Directus",
   "license": "MIT",
   "author": "Benoît Burgener",
   "scripts": {
-    "dev": "strapi develop",
-    "start": "strapi start",
-    "build": "strapi build",
-    "strapi": "strapi"
+    "start": "directus bootstrap && directus start"
   },
   "dependencies": {
-    "knex": "^0.95.11",
-    "pg": "^8.7.1",
-    "pg-connection-string": "^2.5.0",
-    "strapi": "3.6.8",
-    "strapi-admin": "3.6.8",
-    "strapi-connector-bookshelf": "3.6.8",
-    "strapi-hook-algolia": "^3.6.0",
-    "strapi-plugin-content-manager": "3.6.8",
-    "strapi-plugin-content-type-builder": "3.6.8",
-    "strapi-plugin-email": "3.6.8",
-    "strapi-plugin-graphql": "^3.6.8",
-    "strapi-plugin-upload": "3.6.8",
-    "strapi-plugin-users-permissions": "3.6.8",
-    "strapi-provider-email-nodemailer": "^3.6.8",
-    "strapi-provider-upload-aws-s3": "^3.6.8",
-    "strapi-utils": "3.6.8"
-  },
-  "strapi": {
-    "uuid": "bcfb958e-6860-498f-910a-74aa1d8dbd1d"
-  },
-  "engines": {
-    "node": ">=10.16.0 <=14.x.x",
-    "npm": ">=6.0.0"
+    "directus": "^9.23.1",
+    "directus-extension-searchsync": "github:dimitrov-adrian/directus-extension-searchsync#8cc5943",
+    "pg": "^8.10.0"
   }
 }

@@ -19,48 +19,47 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import { useQuery, useMutation } from '@urql/vue';
+import { useMutation, useQuery } from '@urql/vue';
 import gql from 'graphql-tag';
+import { ref } from 'vue';
+
+import { recipeCardFragment } from '@/services/fragments';
+
+import {
+  Mutation,
+  MutationCreate_Users_Favorite_Recipes_ItemArgs,
+  MutationDelete_Users_Favorite_Recipes_ItemArgs,
+  Query,
+  Users_Favorite_Recipes,
+} from '@/gql/graphql';
 
 import store from '@/store';
-import { recipeCardFragment } from '@/services/fragments';
-import {
-  GQLMutation,
-  GQLQuery,
-  GQLUsersFavoriteRecipes,
-  MutationToCreateUsersFavoriteRecipeArgs,
-  MutationToDeleteUsersFavoriteRecipeArgs,
-  QueryToUsersFavoriteRecipesArgs,
-} from '@/types/graphqlTypes';
 
-const props = defineProps({
-  recipeId: {
-    type: String,
-    required: true,
-  },
-});
+const props = defineProps<{
+  recipeId: string;
+}>();
 
-const favoriteRecipe = ref<GQLUsersFavoriteRecipes | null>(null);
+const favoriteRecipe = ref<Users_Favorite_Recipes | null>(null);
 
-const result = await useQuery<
-  Pick<GQLQuery, 'usersFavoriteRecipes'>,
-  QueryToUsersFavoriteRecipesArgs
->({
+const result = await useQuery<Query>({
   query: gql`
-    query favoriteRecipe($where: JSON!) {
-      usersFavoriteRecipes(start: 0, limit: 1, where: $where) {
+    query favoriteRecipe($filter: users_favorite_recipes_filter!) {
+      users_favorite_recipes(offset: 0, limit: 1, filter: $filter) {
         id
       }
     }
   `,
   variables: {
-    where: {
+    filter: {
       user: {
-        id: store.state.currentUser!.id,
+        id: {
+          _eq: store.state.value.currentUser!.id,
+        },
       },
       recipe: {
-        id: props.recipeId,
+        id: {
+          _eq: props.recipeId,
+        },
       },
     },
   },
@@ -69,37 +68,33 @@ const result = await useQuery<
   },
 });
 
-if (result.data.value?.usersFavoriteRecipes?.length) {
-  favoriteRecipe.value = result.data.value.usersFavoriteRecipes[0];
+if (result.data.value?.users_favorite_recipes?.length) {
+  favoriteRecipe.value = result.data.value.users_favorite_recipes[0];
 }
 
 const { executeMutation: deleteFavoriteRecipe } = useMutation<
-  Pick<GQLMutation, 'deleteUsersFavoriteRecipe'>,
-  MutationToDeleteUsersFavoriteRecipeArgs
+  Mutation,
+  MutationDelete_Users_Favorite_Recipes_ItemArgs
 >(
   gql`
-    mutation deleteFavoriteRecipe($input: deleteUsersFavoriteRecipeInput!) {
-      deleteUsersFavoriteRecipe(input: $input) {
-        usersFavoriteRecipe {
-          id
-        }
+    mutation deleteFavoriteRecipe($id: ID!) {
+      delete_users_favorite_recipes_item(id: $id) {
+        id
       }
     }
   `
 );
 
 const { executeMutation: createFavoriteRecipe } = useMutation<
-  Pick<GQLMutation, 'createUsersFavoriteRecipe'>,
-  MutationToCreateUsersFavoriteRecipeArgs
+  Mutation,
+  MutationCreate_Users_Favorite_Recipes_ItemArgs
 >(
   gql`
-    mutation createFavoriteRecipe($input: createUsersFavoriteRecipeInput!) {
-      createUsersFavoriteRecipe(input: $input) {
-        usersFavoriteRecipe {
-          id
-          recipe {
-            ...RecipeCard
-          }
+    mutation createFavoriteRecipe($data: create_users_favorite_recipes_input!) {
+      create_users_favorite_recipes_item(data: $data) {
+        id
+        recipe {
+          ...RecipeCard
         }
       }
     }
@@ -110,11 +105,7 @@ const { executeMutation: createFavoriteRecipe } = useMutation<
 function toggle() {
   if (favoriteRecipe.value) {
     deleteFavoriteRecipe({
-      input: {
-        where: {
-          id: favoriteRecipe.value.id,
-        },
-      },
+      id: favoriteRecipe.value.id,
     }).then((response) => {
       if (response.error) return;
 
@@ -122,17 +113,19 @@ function toggle() {
     });
   } else {
     createFavoriteRecipe({
-      input: {
-        data: {
-          user: store.state.currentUser!.id,
-          recipe: props.recipeId,
+      data: {
+        recipe: {
+          id: props.recipeId,
+        },
+        user: {
+          id: store.state.value.currentUser!.id,
         },
       },
     }).then((response) => {
       if (response.error) return;
 
       const usersFavoriteRecipe =
-        response.data?.createUsersFavoriteRecipe?.usersFavoriteRecipe;
+        response.data?.create_users_favorite_recipes_item;
 
       if (usersFavoriteRecipe) {
         favoriteRecipe.value = usersFavoriteRecipe;

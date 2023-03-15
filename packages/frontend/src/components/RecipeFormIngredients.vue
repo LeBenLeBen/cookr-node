@@ -39,16 +39,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, nextTick, PropType } from 'vue';
+import { nextTick, ref } from 'vue';
 
-import { GQLComponentRecipesIngredients } from '@/types/graphqlTypes';
+import { RecipeIngredient } from '@/services/types';
 
-const props = defineProps({
-  modelValue: {
-    type: Array as PropType<Partial<GQLComponentRecipesIngredients>[]>,
-    required: true,
-  },
-});
+const props = defineProps<{
+  modelValue: RecipeIngredient[];
+}>();
 
 const emit = defineEmits(['update:model-value']);
 
@@ -56,7 +53,7 @@ const ingredientsList = ref<HTMLUListElement | null>(null);
 
 function updateField(
   index: number,
-  field: keyof GQLComponentRecipesIngredients,
+  field: keyof RecipeIngredient,
   value: string
 ) {
   const ingredients = [...props.modelValue];
@@ -65,7 +62,7 @@ function updateField(
 }
 
 function addItem() {
-  const ingredients: Partial<GQLComponentRecipesIngredients>[] = [
+  const ingredients: RecipeIngredient[] = [
     ...props.modelValue,
     { title: undefined, amount: undefined },
   ];

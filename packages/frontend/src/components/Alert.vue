@@ -1,6 +1,6 @@
 <script lang="ts">
-import { VNode, defineComponent, h, mergeProps } from 'vue';
 import { CAlert, CIcon } from 'chusho';
+import { VNode, defineComponent, h, mergeProps } from 'vue';
 
 export default defineComponent({
   setup(props, { attrs, slots }) {

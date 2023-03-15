@@ -11,10 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-defineProps({
-  username: {
-    type: String,
-    required: true,
-  },
-});
+defineProps<{
+  username: string;
+}>();
 </script>

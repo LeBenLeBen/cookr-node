@@ -1,28 +1,42 @@
 import { useStorage } from '@vueuse/core';
-import { GQLUsersPermissionsMe } from './types/graphqlTypes';
+
+import { Directus_Users } from '@/gql/graphql';
 
 interface State {
-  token: string | null;
-  currentUser: GQLUsersPermissionsMe | null;
+  auth: {
+    accessToken: string;
+    refreshToken: string;
+    expires: number;
+  } | null;
+  currentUser: Directus_Users | null;
 }
 
 const state = useStorage<State>('cookr', {
-  token: null,
+  auth: null,
   currentUser: null,
 });
 
 export default {
-  state: state.value,
+  state,
 
-  setToken(token: string | null) {
-    state.value.token = token;
+  setAuth(accessToken: string, refreshToken: string, expires: number) {
+    state.value.auth = {
+      accessToken,
+      refreshToken,
+      expires: Date.now() + expires,
+    };
   },
 
-  setCurrentUser(user: GQLUsersPermissionsMe | null) {
+  resetAuth() {
+    state.value.auth = null;
+    state.value.currentUser = null;
+  },
+
+  setCurrentUser(user: Directus_Users | null) {
     state.value.currentUser = user;
   },
 
-  updateCurrentUser(user: GQLUsersPermissionsMe) {
+  updateCurrentUser(user: Directus_Users) {
     state.value.currentUser = Object.assign({}, state.value.currentUser, user);
   },
 };

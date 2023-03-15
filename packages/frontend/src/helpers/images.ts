@@ -1,21 +1,19 @@
-import { GQLUploadFile } from '@/types/graphqlTypes';
+import { Image } from '@/services/types';
+
 import { objectToUrlParams } from './url';
 
-type ImgixOptions = Record<string, string | number>;
+type ImageTransformOptions = Record<string, string | number>;
 
 /**
  * Return an image URL based on its hashed named and file extension
  */
-export function imageUrl(
-  image: Pick<GQLUploadFile, 'hash' | 'ext'> | null = null
-) {
+export function imageUrl(image: Image | null = null) {
   if (image) {
-    const { hash, ext } = image;
+    const { filename_disk } = image;
+    const base = '/assets';
 
-    if (hash && ext) {
-      return `https://${
-        import.meta.env.VITE_IMGIX_SOURCE
-      }.imgix.net/${hash}${ext}`;
+    if (filename_disk) {
+      return `${base}/${filename_disk}`;
     }
   }
 
@@ -25,10 +23,10 @@ export function imageUrl(
 /**
  * Add cropping params to the given image URL
  */
-export function crop(imageUrl: string, options: ImgixOptions) {
+export function crop(imageUrl: string, options: ImageTransformOptions) {
   options = Object.assign(
     {
-      fit: 'crop',
+      fit: 'cover',
     },
     options
   );
@@ -36,20 +34,20 @@ export function crop(imageUrl: string, options: ImgixOptions) {
   return `${imageUrl}${objectToUrlParams(options)}`;
 }
 
-export function hdpiSources(imageUrl: string, options: ImgixOptions) {
+export function hdpiSources(imageUrl: string, options: ImageTransformOptions) {
   return [
-    {
-      srcset: `${crop(imageUrl, options)}, ${crop(imageUrl, {
-        ...options,
-        dpr: 2,
-      })} 2x`,
-      type: 'image/webp',
-    },
     {
       srcset: `${crop(imageUrl, {
         ...options,
         format: 'webp',
       })}, ${crop(imageUrl, { ...options, format: 'webp', dpr: 2 })} 2x`,
+      type: 'image/webp',
+    },
+    {
+      srcset: `${crop(imageUrl, options)}, ${crop(imageUrl, {
+        ...options,
+        dpr: 2,
+      })} 2x`,
       type: 'image/jpg',
     },
   ];

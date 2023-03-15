@@ -1,0 +1,1463 @@
+version: 1
+directus: 9.23.1
+vendor: postgres
+collections:
+  - collection: recipes
+    meta:
+      accountability: all
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: recipes
+      color: '#FFC23B'
+      display_template: '{{title}}'
+      group: null
+      hidden: false
+      icon: restaurant
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
+    schema:
+      name: recipes
+  - collection: recipes_tags
+    meta:
+      accountability: null
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: recipes_tags
+      color: null
+      display_template: "{{recipes_id.title}} -\_{{tags_id.title}}"
+      group: null
+      hidden: true
+      icon: import_export
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
+    schema:
+      name: recipes_tags
+  - collection: tags
+    meta:
+      accountability: null
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: tags
+      color: '#3399FF'
+      display_template: '{{title}}'
+      group: null
+      hidden: false
+      icon: tag
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
+    schema:
+      name: tags
+  - collection: users_favorite_recipes
+    meta:
+      accountability: null
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: users_favorite_recipes
+      color: '#E35169'
+      display_template: null
+      group: null
+      hidden: true
+      icon: favorite_border
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
+    schema:
+      name: users_favorite_recipes
+  - collection: users_viewed_recipes
+    meta:
+      accountability: null
+      archive_app_filter: true
+      archive_field: null
+      archive_value: null
+      collapse: open
+      collection: users_viewed_recipes
+      color: null
+      display_template: "{{user.username}} -\_{{recipe.title}}"
+      group: null
+      hidden: true
+      icon: remove_red_eye
+      item_duplication_fields: null
+      note: null
+      singleton: false
+      sort: null
+      sort_field: null
+      translations: null
+      unarchive_value: null
+    schema:
+      name: users_viewed_recipes
+fields:
+  - collection: directus_users
+    field: username
+    type: string
+    meta:
+      collection: directus_users
+      conditions: null
+      display: raw
+      display_options: null
+      field: username
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options:
+        trim: true
+      readonly: false
+      required: true
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: username
+      table: directus_users
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: true
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: recipes
+    field: author
+    type: uuid
+    meta:
+      collection: recipes
+      conditions: null
+      display: user
+      display_options: null
+      field: author
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        enableCreate: false
+        template: '{{username}}'
+      readonly: true
+      required: true
+      sort: 13
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: author
+      table: recipes
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: recipes
+    field: date_created
+    type: timestamp
+    meta:
+      collection: recipes
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: 2
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: recipes
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: recipes
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: recipes
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: 3
+      special:
+        - date-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_updated
+      table: recipes
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: recipes
+    field: id
+    type: integer
+    meta:
+      collection: recipes
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: 1
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: recipes
+      data_type: integer
+      default_value: nextval('recipes_id_seq'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: recipes
+    field: image
+    type: uuid
+    meta:
+      collection: recipes
+      conditions: null
+      display: image
+      display_options: {}
+      field: image
+      group: null
+      hidden: false
+      interface: file-image
+      note: null
+      options:
+        folder: null
+      readonly: false
+      required: false
+      sort: 6
+      special:
+        - file
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: image
+      table: recipes
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_files
+      foreign_key_column: id
+  - collection: recipes
+    field: ingredients
+    type: json
+    meta:
+      collection: recipes
+      conditions: null
+      display: null
+      display_options: null
+      field: ingredients
+      group: null
+      hidden: false
+      interface: list
+      note: null
+      options:
+        addLabel: Add ingredient
+        fields:
+          - field: amount
+            name: amount
+            type: string
+            meta:
+              field: amount
+              width: half
+              type: string
+              interface: input
+              options:
+                trim: true
+          - field: title
+            name: title
+            type: string
+            meta:
+              field: title
+              width: half
+              type: string
+              interface: input
+              options:
+                trim: true
+        template: '{{ amount }} {{ title }}'
+      readonly: false
+      required: false
+      sort: 7
+      special:
+        - cast-json
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: ingredients
+      table: recipes
+      data_type: json
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: recipes
+    field: notes
+    type: text
+    meta:
+      collection: recipes
+      conditions: null
+      display: raw
+      display_options: null
+      field: notes
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options:
+        trim: true
+      readonly: false
+      required: false
+      sort: 9
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: notes
+      table: recipes
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: recipes
+    field: quantity
+    type: integer
+    meta:
+      collection: recipes
+      conditions: null
+      display: null
+      display_options: null
+      field: quantity
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: 11
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: quantity
+      table: recipes
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: recipes
+    field: slug
+    type: string
+    meta:
+      collection: recipes
+      conditions: null
+      display: null
+      display_options: null
+      field: slug
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options:
+        slug: true
+        trim: true
+      readonly: false
+      required: true
+      sort: 5
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: slug
+      table: recipes
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: true
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: recipes
+    field: steps
+    type: text
+    meta:
+      collection: recipes
+      conditions: null
+      display: null
+      display_options: null
+      field: steps
+      group: null
+      hidden: false
+      interface: input-multiline
+      note: null
+      options:
+        trim: true
+      readonly: false
+      required: false
+      sort: 8
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: steps
+      table: recipes
+      data_type: text
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: recipes
+    field: tags
+    type: alias
+    meta:
+      collection: recipes
+      conditions: null
+      display: related-values
+      display_options: null
+      field: tags
+      group: null
+      hidden: false
+      interface: list-m2m
+      note: null
+      options:
+        enableCreate: false
+        template: '{{tags_id.title}}'
+      readonly: false
+      required: false
+      sort: 12
+      special:
+        - m2m
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: recipes
+    field: time
+    type: integer
+    meta:
+      collection: recipes
+      conditions: null
+      display: null
+      display_options: null
+      field: time
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options:
+        min: null
+      readonly: false
+      required: false
+      sort: 10
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: time
+      table: recipes
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: recipes
+    field: title
+    type: string
+    meta:
+      collection: recipes
+      conditions: null
+      display: raw
+      display_options: null
+      field: title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options:
+        trim: true
+      readonly: false
+      required: true
+      sort: 4
+      special: null
+      translations: null
+      validation: null
+      validation_message: Un titre est requis
+      width: half
+    schema:
+      name: title
+      table: recipes
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: recipes_tags
+    field: id
+    type: integer
+    meta:
+      collection: recipes_tags
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: recipes_tags
+      data_type: integer
+      default_value: nextval('recipes_tags_id_seq'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: recipes_tags
+    field: recipes_id
+    type: integer
+    meta:
+      collection: recipes_tags
+      conditions: null
+      display: null
+      display_options: null
+      field: recipes_id
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: recipes_id
+      table: recipes_tags
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: recipes
+      foreign_key_column: id
+  - collection: recipes_tags
+    field: tags_id
+    type: integer
+    meta:
+      collection: recipes_tags
+      conditions: null
+      display: null
+      display_options: null
+      field: tags_id
+      group: null
+      hidden: false
+      interface: null
+      note: null
+      options: null
+      readonly: false
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: tags_id
+      table: recipes_tags
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: tags
+      foreign_key_column: id
+  - collection: tags
+    field: id
+    type: integer
+    meta:
+      collection: tags
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: tags
+      data_type: integer
+      default_value: nextval('tags_id_seq'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: tags
+    field: recipes
+    type: alias
+    meta:
+      collection: tags
+      conditions: []
+      display: related-values
+      display_options:
+        template: '{{recipes_id.title}}'
+      field: recipes
+      group: null
+      hidden: false
+      interface: list-m2m
+      note: null
+      options:
+        template: '{{recipes_id.title}}'
+      readonly: false
+      required: false
+      sort: null
+      special:
+        - m2m
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+  - collection: tags
+    field: slug
+    type: string
+    meta:
+      collection: tags
+      conditions: []
+      display: raw
+      display_options: null
+      field: slug
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options:
+        slug: true
+        trim: true
+      readonly: false
+      required: true
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: slug
+      table: tags
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: true
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: tags
+    field: title
+    type: string
+    meta:
+      collection: tags
+      conditions: null
+      display: null
+      display_options: null
+      field: title
+      group: null
+      hidden: false
+      interface: input
+      note: null
+      options:
+        trim: true
+      readonly: false
+      required: true
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: title
+      table: tags
+      data_type: character varying
+      default_value: null
+      max_length: 255
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: users_favorite_recipes
+    field: date_created
+    type: timestamp
+    meta:
+      collection: users_favorite_recipes
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: users_favorite_recipes
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: users_favorite_recipes
+    field: id
+    type: integer
+    meta:
+      collection: users_favorite_recipes
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: users_favorite_recipes
+      data_type: integer
+      default_value: nextval('users_favorite_recipes_id_seq'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: users_favorite_recipes
+    field: recipe
+    type: integer
+    meta:
+      collection: users_favorite_recipes
+      conditions: null
+      display: related-values
+      display_options:
+        template: '{{title}}'
+      field: recipe
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        enableCreate: false
+        template: '{{title}}'
+      readonly: false
+      required: true
+      sort: null
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: recipe
+      table: users_favorite_recipes
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: recipes
+      foreign_key_column: id
+  - collection: users_favorite_recipes
+    field: user
+    type: uuid
+    meta:
+      collection: users_favorite_recipes
+      conditions: null
+      display: related-values
+      display_options:
+        template: '{{username}}'
+      field: user
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        enableCreate: false
+        template: '{{username}}'
+      readonly: false
+      required: true
+      sort: null
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: user
+      table: users_favorite_recipes
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+  - collection: users_viewed_recipes
+    field: date_created
+    type: timestamp
+    meta:
+      collection: users_viewed_recipes
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_created
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special:
+        - date-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_created
+      table: users_viewed_recipes
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: users_viewed_recipes
+    field: date_updated
+    type: timestamp
+    meta:
+      collection: users_viewed_recipes
+      conditions: null
+      display: datetime
+      display_options:
+        relative: true
+      field: date_updated
+      group: null
+      hidden: true
+      interface: datetime
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special:
+        - date-created
+        - date-updated
+      translations: null
+      validation: null
+      validation_message: null
+      width: half
+    schema:
+      name: date_updated
+      table: users_viewed_recipes
+      data_type: timestamp with time zone
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: true
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: users_viewed_recipes
+    field: id
+    type: integer
+    meta:
+      collection: users_viewed_recipes
+      conditions: null
+      display: null
+      display_options: null
+      field: id
+      group: null
+      hidden: true
+      interface: input
+      note: null
+      options: null
+      readonly: true
+      required: false
+      sort: null
+      special: null
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: id
+      table: users_viewed_recipes
+      data_type: integer
+      default_value: nextval('users_viewed_recipes_id_seq'::regclass)
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: true
+      is_primary_key: true
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: true
+      foreign_key_table: null
+      foreign_key_column: null
+  - collection: users_viewed_recipes
+    field: recipe
+    type: integer
+    meta:
+      collection: users_viewed_recipes
+      conditions: null
+      display: related-values
+      display_options:
+        template: '{{title}}'
+      field: recipe
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        enableCreate: false
+        template: '{{title}}'
+      readonly: false
+      required: true
+      sort: null
+      special:
+        - m2o
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: recipe
+      table: users_viewed_recipes
+      data_type: integer
+      default_value: null
+      max_length: null
+      numeric_precision: 32
+      numeric_scale: 0
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: recipes
+      foreign_key_column: id
+  - collection: users_viewed_recipes
+    field: user
+    type: uuid
+    meta:
+      collection: users_viewed_recipes
+      conditions: null
+      display: related-values
+      display_options:
+        template: '{{username}}'
+      field: user
+      group: null
+      hidden: false
+      interface: select-dropdown-m2o
+      note: null
+      options:
+        enableCreate: false
+        template: '{{username}}'
+      readonly: false
+      required: true
+      sort: null
+      special:
+        - m2o
+        - user-created
+      translations: null
+      validation: null
+      validation_message: null
+      width: full
+    schema:
+      name: user
+      table: users_viewed_recipes
+      data_type: uuid
+      default_value: null
+      max_length: null
+      numeric_precision: null
+      numeric_scale: null
+      is_nullable: false
+      is_unique: false
+      is_primary_key: false
+      is_generated: false
+      generation_expression: null
+      has_auto_increment: false
+      foreign_key_table: directus_users
+      foreign_key_column: id
+relations:
+  - collection: recipes
+    field: author
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: recipes
+      many_field: author
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: recipes
+      column: author
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: recipes_author_foreign
+      on_update: NO ACTION
+      on_delete: CASCADE
+  - collection: recipes
+    field: image
+    related_collection: directus_files
+    meta:
+      junction_field: null
+      many_collection: recipes
+      many_field: image
+      one_allowed_collections: null
+      one_collection: directus_files
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: recipes
+      column: image
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      constraint_name: recipes_image_foreign
+      on_update: NO ACTION
+      on_delete: SET NULL
+  - collection: recipes_tags
+    field: recipes_id
+    related_collection: recipes
+    meta:
+      junction_field: tags_id
+      many_collection: recipes_tags
+      many_field: recipes_id
+      one_allowed_collections: null
+      one_collection: recipes
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: tags
+      sort_field: null
+    schema:
+      table: recipes_tags
+      column: recipes_id
+      foreign_key_table: recipes
+      foreign_key_column: id
+      constraint_name: recipes_tags_recipes_id_foreign
+      on_update: NO ACTION
+      on_delete: CASCADE
+  - collection: recipes_tags
+    field: tags_id
+    related_collection: tags
+    meta:
+      junction_field: recipes_id
+      many_collection: recipes_tags
+      many_field: tags_id
+      one_allowed_collections: null
+      one_collection: tags
+      one_collection_field: null
+      one_deselect_action: delete
+      one_field: recipes
+      sort_field: null
+    schema:
+      table: recipes_tags
+      column: tags_id
+      foreign_key_table: tags
+      foreign_key_column: id
+      constraint_name: recipes_tags_tags_id_foreign
+      on_update: NO ACTION
+      on_delete: CASCADE
+  - collection: users_favorite_recipes
+    field: recipe
+    related_collection: recipes
+    meta:
+      junction_field: null
+      many_collection: users_favorite_recipes
+      many_field: recipe
+      one_allowed_collections: null
+      one_collection: recipes
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: users_favorite_recipes
+      column: recipe
+      foreign_key_table: recipes
+      foreign_key_column: id
+      constraint_name: users_favorite_recipes_recipe_foreign
+      on_update: NO ACTION
+      on_delete: CASCADE
+  - collection: users_favorite_recipes
+    field: user
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: users_favorite_recipes
+      many_field: user
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: users_favorite_recipes
+      column: user
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: users_favorite_recipes_user_foreign
+      on_update: NO ACTION
+      on_delete: CASCADE
+  - collection: users_viewed_recipes
+    field: recipe
+    related_collection: recipes
+    meta:
+      junction_field: null
+      many_collection: users_viewed_recipes
+      many_field: recipe
+      one_allowed_collections: null
+      one_collection: recipes
+      one_collection_field: null
+      one_deselect_action: nullify
+      one_field: null
+      sort_field: null
+    schema:
+      table: users_viewed_recipes
+      column: recipe
+      foreign_key_table: recipes
+      foreign_key_column: id
+      constraint_name: users_viewed_recipes_recipe_foreign
+      on_update: NO ACTION
+      on_delete: CASCADE
+  - collection: users_viewed_recipes
+    field: user
+    related_collection: directus_users
+    meta:
+      junction_field: null
+      many_collection: users_viewed_recipes
+      many_field: user
+      one_allowed_collections: null
+      one_collection: directus_users
+      one_collection_field: null
+      one_deselect_action: delete
+      one_field: null
+      sort_field: null
+    schema:
+      table: users_viewed_recipes
+      column: user
+      foreign_key_table: directus_users
+      foreign_key_column: id
+      constraint_name: users_viewed_recipes_user_foreign
+      on_update: NO ACTION
+      on_delete: CASCADE

@@ -1,17 +1,16 @@
-import { createApp } from 'vue';
 import urql from '@urql/vue';
 import Chusho, { $chusho, mergeDeep } from 'chusho';
+import { createApp } from 'vue';
 import 'windi.css';
-
-import '@/assets/css/main.css';
-
-import i18n from '@/i18n';
-import router from '@/router';
-import '@/rules';
 
 import apiClient from '@/services/apiClient';
 
+import '@/assets/css/main.css';
+
 import App from '@/App.vue';
+import i18n from '@/i18n';
+import router from '@/router';
+import '@/rules';
 
 import chushoConfig from '../chusho.config';
 

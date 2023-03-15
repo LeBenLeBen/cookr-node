@@ -35,7 +35,6 @@
               :aria-describedby="ids.errors"
               type="email"
               v-bind="field"
-              disabled
             />
           </Field>
           <Errors name="email" />
@@ -69,44 +68,50 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue';
 import { useMutation } from '@urql/vue';
 import gql from 'graphql-tag';
+import { DeepNonNullable } from 'ts-essentials';
+import { reactive } from 'vue';
 
-import router from '@/router';
-import store from '@/store';
-import i18n from '@/i18n';
+import { GRAPHQL_SYSTEM_URL } from '@/services/apiClient';
+
+import {
+  Mutation,
+  MutationUpdate_Users_ItemArgs,
+  Update_Directus_Users_Input,
+} from '@/gql/graphql';
 
 import { notify } from '@/composables/useNotifications';
-import {
-  GQLeditUserInput,
-  GQLMutation,
-  MutationToUpdateUserArgs,
-} from '@/types/graphqlTypes';
+
+import i18n from '@/i18n';
+import router from '@/router';
+import store from '@/store';
 
 const schema = {
   username: 'required',
   email: 'required',
 };
 
-const data = reactive<GQLeditUserInput>({
-  username: store.state.currentUser!.username,
-  email: store.state.currentUser!.email,
+const data = reactive<
+  DeepNonNullable<
+    Pick<Update_Directus_Users_Input, 'username' | 'email' | 'password'>
+  >
+>({
+  username: store.state.value.currentUser!.username || '',
+  email: store.state.value.currentUser!.email || '',
   password: undefined,
 });
 
 const { executeMutation: save } = useMutation<
-  Pick<GQLMutation, 'updateUser'>,
-  MutationToUpdateUserArgs
+  Mutation,
+  MutationUpdate_Users_ItemArgs
 >(
   gql`
-    mutation updateProfile($input: updateUserInput!) {
-      updateUser(input: $input) {
-        user {
-          id
-          username
-          email
-        }
+    mutation updateProfile($id: ID!, $data: update_directus_users_input!) {
+      update_users_item(id: $id, data: $data) {
+        id
+        username
+        email
       }
     }
   `
@@ -119,15 +124,16 @@ function prepareToSave() {
     delete payload.password;
   }
 
-  save({
-    input: {
-      where: { id: store.state.currentUser!.id },
+  save(
+    {
+      id: store.state.value.currentUser!.id,
       data: payload,
     },
-  }).then((response) => {
+    { url: GRAPHQL_SYSTEM_URL }
+  ).then((response) => {
     if (response.error) return;
 
-    const user = response?.data?.updateUser?.user;
+    const user = response?.data?.update_users_item;
 
     if (user) {
       store.updateCurrentUser(user);
@@ -148,8 +154,7 @@ function confirmLogout() {
 }
 
 function logout() {
-  store.setToken(null);
-  store.setCurrentUser(null);
+  store.resetAuth();
   router.push({ name: 'login' });
 }
 </script>

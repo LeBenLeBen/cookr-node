@@ -3,12 +3,12 @@
     <PageHeader :title="$t('recipe.new.title')" />
 
     <RecipeForm
-      v-model:title.trim="input.title"
+      v-model:title="input.title"
       v-model:ingredients="input.ingredients"
-      v-model:steps.trim="input.steps"
+      v-model:steps="input.steps"
       v-model:time.number="input.time"
       v-model:quantity.number="input.quantity"
-      v-model:notes.trim="input.notes"
+      v-model:notes="input.notes"
       v-model:tags="input.tags"
       v-model:image="input.image"
       @submit="prepareToSave"
@@ -17,31 +17,31 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, watch } from 'vue';
 import { useMutation } from '@urql/vue';
 import gql from 'graphql-tag';
 import deburr from 'lodash/deburr';
+import isNil from 'lodash/isNil';
 import kebabCase from 'lodash/kebabCase';
 import omitBy from 'lodash/omitBy';
-import isNil from 'lodash/isNil';
+import { reactive, watch } from 'vue';
 
-import router from '@/router';
-import store from '@/store';
-import i18n from '@/i18n';
+import { RecipeIngredient } from '@/services/types';
+
+import { Create_Recipes_Input, Mutation } from '@/gql/graphql';
 
 import usePageTitle from '@/composables/usePageTitle';
-import {
-  GQLMutation,
-  GQLRecipeInput,
-  MutationToCreateRecipeArgs,
-} from '@/types/graphqlTypes';
+
+import { RecipeFormInput } from '../components/RecipeForm.vue';
+
+import i18n from '@/i18n';
+import router from '@/router';
+
+import store from '../store';
 
 usePageTitle(i18n.global.t('recipe.new.title'));
 
-const input = reactive<GQLRecipeInput>({
-  author: store.state.currentUser!.id,
+const input = reactive<RecipeFormInput>({
   title: '',
-  slug: '',
   ingredients: [{ title: undefined, amount: undefined }],
   steps: undefined,
   time: undefined,
@@ -51,17 +51,12 @@ const input = reactive<GQLRecipeInput>({
   image: undefined,
 });
 
-const { executeMutation: save } = useMutation<
-  Pick<GQLMutation, 'createRecipe'>,
-  MutationToCreateRecipeArgs
->(
+const { executeMutation: save } = useMutation<Mutation>(
   gql`
-    mutation createRecipe($input: createRecipeInput) {
-      createRecipe(input: $input) {
-        recipe {
-          id
-          slug
-        }
+    mutation createRecipe($data: create_recipes_input!) {
+      create_recipes_item(data: $data) {
+        id
+        slug
       }
     }
   `
@@ -70,22 +65,29 @@ const { executeMutation: save } = useMutation<
 watch(
   () => input.title,
   (val) => {
-    input.slug = kebabCase(deburr(val));
+    input.slug = val ? kebabCase(deburr(val)) : '';
   }
 );
 
 function prepareToSave() {
-  let data: GQLRecipeInput = omitBy(input, isNil) as GQLRecipeInput;
+  let data: Create_Recipes_Input = {};
+
+  data = omitBy(input, isNil);
   data = omitBy(
     data,
     (val) => typeof val === 'string' && val.trim() === ''
-  ) as GQLRecipeInput;
-  data.ingredients = data.ingredients?.filter((i) => i?.title?.trim());
+  ) as Create_Recipes_Input;
 
-  save({ input: { data } }).then((response) => {
+  data.ingredients = data.ingredients?.filter((i: RecipeIngredient) =>
+    i?.title?.trim()
+  );
+
+  data.author = { id: store.state.value.currentUser!.id };
+
+  save({ data }).then((response) => {
     if (response.error) return;
 
-    const recipe = response.data?.createRecipe?.recipe;
+    const recipe = response.data?.create_recipes_item;
 
     if (recipe) {
       router.push({

@@ -16,7 +16,7 @@
               class="
                 flex
                 items-center
-                px-4
+                px-3
                 py-2
                 lg:-ml-4
                 font-bold
@@ -42,14 +42,9 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType } from 'vue';
-
 import { MenuGroup } from '@/components/layouts/AppLayout.vue';
 
-defineProps({
-  menu: {
-    type: Array as PropType<MenuGroup[]>,
-    required: true,
-  },
-});
+defineProps<{
+  menu: MenuGroup[];
+}>();
 </script>

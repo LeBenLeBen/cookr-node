@@ -21,23 +21,19 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType } from 'vue';
+import { Image } from '@/services/types';
 
 import { crop, hdpiSources, imageUrl } from '@/helpers/images';
-import { GQLUploadFile } from '@/types/graphqlTypes';
 
-const props = defineProps({
-  image: {
-    type: Object as PropType<Pick<GQLUploadFile, 'hash' | 'ext'> | null>,
-    default: null,
-  },
-});
+const props = defineProps<{
+  image?: Image | null;
+}>();
 
 const url = imageUrl(props.image);
 
 const cropOptions = {
-  w: 48,
-  h: 48,
+  width: 48,
+  height: 48,
 };
 
 const picture = url

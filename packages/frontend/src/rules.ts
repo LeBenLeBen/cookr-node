@@ -1,5 +1,6 @@
+import { integer, min_value, required } from '@vee-validate/rules';
 import { configure, defineRule } from 'vee-validate';
-import { required, integer, min_value } from '@vee-validate/rules';
+
 import i18n from './i18n';
 
 configure({

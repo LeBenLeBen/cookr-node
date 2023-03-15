@@ -1,4 +1,6 @@
 <script lang="ts">
+import { FormGroupSymbol } from 'chusho';
+import { ErrorMessage } from 'vee-validate';
 import {
   ComponentPublicInstance,
   defineComponent,
@@ -6,9 +8,6 @@ import {
   inject,
   mergeProps,
 } from 'vue';
-import { ErrorMessage } from 'vee-validate';
-
-import { FormGroupSymbol } from 'chusho';
 
 export default defineComponent({
   setup(props, { attrs, slots }) {

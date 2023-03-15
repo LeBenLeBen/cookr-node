@@ -1,6 +1,6 @@
 <template>
   <router-link
-    :to="{ name: 'recipe', params: { id: id, slug: slug } }"
+    :to="{ name: 'recipe', params: { id: recipe.id, slug: recipe.slug } }"
     class="
       overflow-hidden
       min-height-150px
@@ -16,7 +16,7 @@
     "
   >
     <RecipeImage
-      :image="image"
+      :image="recipe.image"
       width="200"
       height="150"
       class="w-full sm:w-auto flex-shrink-0 bg-alt-200 bg-opacity-75"
@@ -24,7 +24,7 @@
 
     <div class="flex flex-col p-4 sm:px-5 lg:py-5 lg:px-6 w-full">
       <h2 class="h2 mb-1">
-        {{ title }}
+        {{ recipe.title }}
       </h2>
 
       <RecipeAuthor
@@ -34,7 +34,7 @@
       />
 
       <ul
-        v-if="time || quantity"
+        v-if="recipe.time || recipe.quantity"
         class="
           flex
           items-end
@@ -45,11 +45,11 @@
           mt-auto
         "
       >
-        <li v-if="time" class="mr-4 sm:mr-6">
-          <RecipeTime :time="time" />
+        <li v-if="recipe.time" class="mr-4 sm:mr-6">
+          <RecipeTime :time="recipe.time" />
         </li>
-        <li v-if="quantity" class="mr-4 sm:mr-6">
-          <RecipeQuantity :quantity="quantity" />
+        <li v-if="recipe.quantity" class="mr-4 sm:mr-6">
+          <RecipeQuantity :quantity="recipe.quantity" />
         </li>
       </ul>
     </div>
@@ -59,38 +59,16 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 
+import { Recipes } from '../gql/graphql';
+
 export default defineComponent({
   inheritAttrs: false,
-
-  props: {
-    id: {
-      type: String,
-      required: true,
-    },
-    title: {
-      type: String,
-      required: true,
-    },
-    slug: {
-      type: String,
-      required: true,
-    },
-    username: {
-      type: String,
-      default: null,
-    },
-    time: {
-      type: Number,
-      default: null,
-    },
-    quantity: {
-      type: Number,
-      default: null,
-    },
-    image: {
-      type: Object,
-      default: null,
-    },
-  },
 });
+</script>
+
+<script lang="ts" setup>
+defineProps<{
+  recipe: Recipes;
+  username: string | null;
+}>();
 </script>
