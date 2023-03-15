@@ -12,7 +12,6 @@
     "validate": "eslint . --ext .js,.ts,.vue --ignore-path .gitignore",
     "format": "npm run validate -- --fix",
     "test": "npm run validate && npm run test --workspaces --if-present",
-    "heroku-postbuild": "npm run build --prefix packages/backend",
     "gen:graphql:types": "graphql-codegen"
   },
   "devDependencies": {
