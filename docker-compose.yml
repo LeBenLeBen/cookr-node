@@ -34,6 +34,8 @@ services:
     container_name: backend
     build: packages/backend
     command: npm start
+    environment:
+      CONFIG_PATH: directus.config.js
     ports:
       - 8055:8055
     volumes:
