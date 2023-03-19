@@ -10,6 +10,18 @@
   force = true
 
 [[redirects]]
+  from = "/assets/*"
+  to = "API_ORIGIN_PLACEHOLDER/assets/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/files/*"
+  to = "API_ORIGIN_PLACEHOLDER/files/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
