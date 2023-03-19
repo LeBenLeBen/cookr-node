@@ -10,7 +10,7 @@ type ImageTransformOptions = Record<string, string | number>;
 export function imageUrl(image: Image | null = null) {
   if (image) {
     const { filename_disk } = image;
-    const base = '/assets';
+    const base = '/uploads';
 
     if (filename_disk) {
       return `${base}/${filename_disk}`;

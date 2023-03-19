@@ -10,7 +10,7 @@
   force = true
 
 [[redirects]]
-  from = "/assets/*"
+  from = "/uploads/*"
   to = "API_ORIGIN_PLACEHOLDER/assets/:splat"
   status = 200
   force = true

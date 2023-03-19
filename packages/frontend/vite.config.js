@@ -22,9 +22,10 @@ export default {
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
-      '/assets': {
+      '/uploads': {
         target: 'http://backend:8055',
         changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/uploads/, '/assets'),
       },
       '/files': {
         target: 'http://backend:8055',
