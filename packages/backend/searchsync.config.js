@@ -6,7 +6,7 @@ module.exports = {
   },
   collections: {
     recipes: {
-      indexName: `${process.env.NODE_ENV || 'development'}_recipes`,
+      indexName: process.env.ALGOLIA_RECIPES_INDEX_NAME,
       fields: ['id', 'title', 'slug', 'author.username'],
     },
   },
