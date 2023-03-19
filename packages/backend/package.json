@@ -6,11 +6,14 @@
   "license": "MIT",
   "author": "Benoît Burgener",
   "scripts": {
-    "start": "directus bootstrap && directus start"
+    "start": "CONFIG_PATH=directus.config.js directus bootstrap && CONFIG_PATH=directus.config.js directus start"
   },
   "dependencies": {
     "directus": "^9.23.1",
     "directus-extension-searchsync": "github:dimitrov-adrian/directus-extension-searchsync#8cc5943",
     "pg": "^8.10.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3"
   }
 }
