@@ -55,41 +55,18 @@
     <div class="relative grid sm:grid-cols-2 lg:grid-cols-3 gap-10 items-start">
       <div v-if="steps.length" class="sm:col-span-2 space-y-10">
         <div
-          class="
-            bg-white
-            hover:text-alt-400
-            focus-within:text-alt-400
-            rounded-lg
-            shadow-lg
-            -mt-12
-            md:-mt-20
-          "
+          class="bg-white hover:text-alt-400 focus-within:text-alt-400 rounded-lg shadow-lg -mt-12 md:-mt-20"
         >
           <ol class="divide-y divide-alt-100">
             <li
               v-for="(step, i) in steps"
               :key="i"
-              class="
-                group
-                p-6
-                hover:text-alt-800
-                focus:text-alt-800 focus:ring-0
-                cursor-pointer
-                transition
-              "
+              class="group p-6 hover:text-alt-800 focus:text-alt-800 focus:ring-0 cursor-pointer transition"
               tabindex="0"
             >
               <div class="flex">
                 <div
-                  class="
-                    w-8
-                    mr-6
-                    text-5xl text-primary-300
-                    group-hover:text-primary-500
-                    group-focus:text-primary-500
-                    text-center
-                    transition
-                  "
+                  class="w-8 mr-6 text-5xl text-primary-300 group-hover:text-primary-500 group-focus:text-primary-500 text-center transition"
                 >
                   {{ i + 1 }}
                 </div>

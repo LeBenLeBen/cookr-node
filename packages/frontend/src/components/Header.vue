@@ -2,33 +2,12 @@
   <CCollapse
     id="app-header"
     v-model="menuIsOpen"
-    class="
-      sticky
-      md:relative
-      top-0
-      z-30
-      py-3
-      sm:py-4
-      mb-4
-      sm:mb-6
-      md:mb-8
-      bg-white
-      transition
-      duration-200
-      border-b border-alt-200
-    "
+    class="sticky md:relative top-0 z-30 py-3 sm:py-4 mb-4 sm:mb-6 md:mb-8 bg-white transition duration-200 border-b border-alt-200"
   >
     <header>
       <div class="container">
         <div
-          class="
-            flex
-            items-center
-            md:grid md:grid-cols-3
-            lg:grid-cols-4
-            md:gap-6
-            lg:gap-14
-          "
+          class="flex items-center md:grid md:grid-cols-3 lg:grid-cols-4 md:gap-6 lg:gap-14"
         >
           <div
             :class="{
@@ -39,26 +18,14 @@
           >
             <router-link
               :to="{ name: 'home' }"
-              class="
-                font-display
-                text-2xl
-                lg:text-3xl
-                text-primary-500
-                rounded-lg
-                ring-offset-white
-              "
+              class="font-display text-2xl lg:text-3xl text-primary-500 rounded-lg ring-offset-white"
             >
               Cookr
             </router-link>
           </div>
 
           <div
-            class="
-              flex-grow flex
-              items-center
-              md:col-start-2 md:col-span-2
-              lg:col-span-3
-            "
+            class="flex-grow flex items-center md:col-start-2 md:col-span-2 lg:col-span-3"
           >
             <Search
               :is-open="searchIsOpen"
@@ -77,16 +44,7 @@
             class="md:hidden flex-shrink-0"
           >
             <CCollapseBtn
-              class="
-                flex
-                items-center
-                justify-center
-                w-10
-                h-10
-                p-1
-                hover:bg-alt-200
-                rounded-md
-              "
+              class="flex items-center justify-center w-10 h-10 p-1 hover:bg-alt-200 rounded-md"
             >
               <CIcon id="hamburger" :scale="1.5" />
             </CCollapseBtn>
@@ -96,17 +54,7 @@
     </header>
 
     <CCollapseContent
-      class="
-        md:hidden
-        flex flex-col
-        items-center
-        justify-center
-        p-8
-        fixed
-        inset-0
-        z-50
-        bg-alt-800 bg-opacity-98
-      "
+      class="md:hidden flex flex-col items-center justify-center p-8 fixed inset-0 z-50 bg-alt-800 bg-opacity-98"
       :transition="{
         enterActiveClass: 'transition ease-out duration-100',
         enterFromClass: 'transform opacity-0 scale-95',
@@ -122,21 +70,7 @@
       />
 
       <CCollapseBtn
-        class="
-          absolute
-          top-3
-          right-4
-          flex
-          items-center
-          justify-center
-          w-10
-          h-10
-          p-1
-          text-alt-200
-          hover:text-white hover:bg-alt-900
-          rounded-md
-          ring-offset-alt-800
-        "
+        class="absolute top-3 right-4 flex items-center justify-center w-10 h-10 p-1 text-alt-200 hover:text-white hover:bg-alt-900 rounded-md ring-offset-alt-800"
       >
         <CIcon id="close" :scale="1.5" />
       </CCollapseBtn>
@@ -155,16 +89,7 @@
               >
                 <a
                   :href="href"
-                  class="
-                    flex
-                    items-center
-                    px-4
-                    py-2
-                    lg:-ml-4
-                    text-lg
-                    font-bold
-                    rounded-full
-                  "
+                  class="flex items-center px-4 py-2 lg:-ml-4 text-lg font-bold rounded-full"
                   :class="[
                     'text-alt-200 hover:text-white focus:text-white',
                     {

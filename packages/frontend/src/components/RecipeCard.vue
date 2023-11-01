@@ -1,17 +1,7 @@
 <template>
   <router-link
     :to="{ name: 'recipe', params: { id: recipe.id, slug: recipe.slug } }"
-    class="
-      overflow-hidden
-      flex flex-col
-      h-full
-      text-alt-800
-      hover:text-alt-800
-      bg-alt-50
-      hover:bg-white
-      rounded-xl
-      border-b border-alt-200
-    "
+    class="overflow-hidden flex flex-col h-full text-alt-800 hover:text-alt-800 bg-alt-50 hover:bg-white rounded-xl border-b border-alt-200"
   >
     <RecipeImage
       :image="recipe.image"
@@ -22,14 +12,7 @@
 
     <div class="py-3 px-4">
       <h2
-        class="
-          font-display
-          text-lg
-          font-medium
-          text-alt-700
-          overflow-hidden overflow-ellipsis
-          whitespace-nowrap
-        "
+        class="font-display text-lg font-medium text-alt-700 overflow-hidden overflow-ellipsis whitespace-nowrap"
       >
         {{ recipe.title }}
       </h2>

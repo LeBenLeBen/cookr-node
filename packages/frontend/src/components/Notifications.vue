@@ -3,20 +3,7 @@
     appear
     tag="ul"
     name="fade-in-left"
-    class="
-      fixed
-      z-40
-      right-2
-      sm:right-3
-      md:right-4
-      top-20
-      sm:top-23
-      md:top-24
-      left-2
-      sm:left-3
-      md:left-auto md:max-w-84
-      space-y-3
-    "
+    class="fixed z-40 right-2 sm:right-3 md:right-4 top-20 sm:top-23 md:top-24 left-2 sm:left-3 md:left-auto md:max-w-84 space-y-3"
     :style="style"
   >
     <li v-for="(notification, i) in notifications" :key="i">

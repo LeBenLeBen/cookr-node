@@ -13,15 +13,7 @@
           >
             <a
               :href="href"
-              class="
-                flex
-                items-center
-                px-3
-                py-2
-                lg:-ml-4
-                font-bold
-                rounded-full
-              "
+              class="flex items-center px-3 py-2 lg:-ml-4 font-bold rounded-full"
               :class="[
                 'hover:text-alt-800 focus:text-alt-800',
                 {

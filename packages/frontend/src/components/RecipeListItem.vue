@@ -1,19 +1,7 @@
 <template>
   <router-link
     :to="{ name: 'recipe', params: { id: recipe.id, slug: recipe.slug } }"
-    class="
-      overflow-hidden
-      min-height-150px
-      flex flex-col
-      sm:flex-row
-      text-alt-800
-      hover:text-alt-800
-      bg-alt-50
-      hover:bg-white
-      rounded-xl
-      border-b border-alt-200
-      ring-offset-2
-    "
+    class="overflow-hidden min-height-150px flex flex-col sm:flex-row text-alt-800 hover:text-alt-800 bg-alt-50 hover:bg-white rounded-xl border-b border-alt-200 ring-offset-2"
   >
     <RecipeImage
       :image="recipe.image"
@@ -35,15 +23,7 @@
 
       <ul
         v-if="recipe.time || recipe.quantity"
-        class="
-          flex
-          items-end
-          text-alt-600 text-sm
-          md:text-base
-          leading-none
-          pt-3
-          mt-auto
-        "
+        class="flex items-end text-alt-600 text-sm md:text-base leading-none pt-3 mt-auto"
       >
         <li v-if="recipe.time" class="mr-4 sm:mr-6">
           <RecipeTime :time="recipe.time" />

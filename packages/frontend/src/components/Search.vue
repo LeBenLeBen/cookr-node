@@ -13,16 +13,7 @@
       aria-haspopup="listbox"
     >
       <div
-        class="
-          absolute
-          inset-y-0
-          left-0
-          pl-2
-          md:pl-3
-          flex
-          items-center
-          pointer-events-none
-        "
+        class="absolute inset-y-0 left-0 pl-2 md:pl-3 flex items-center pointer-events-none"
       >
         <CIcon id="search" :scale="1.25" class="md:w-8 md:h-8" />
       </div>
@@ -31,23 +22,7 @@
         ref="searchInput"
         v-model.trim="query"
         name="search"
-        class="
-          appearance-none
-          block
-          w-full
-          pl-10
-          md:pl-12
-          pr-4
-          py-2
-          placeholder-alt-400
-          focus:text-alt-800
-          md:text-lg
-          rounded-full
-          bg-transparent
-          focus:bg-white
-          border-2 border-alt-200
-          focus:border-transparent
-        "
+        class="appearance-none block w-full pl-10 md:pl-12 pr-4 py-2 placeholder-alt-400 focus:text-alt-800 md:text-lg rounded-full bg-transparent focus:bg-white border-2 border-alt-200 focus:border-transparent"
         :placeholder="$t('search.label')"
         autocomplete="off"
         type="search"
@@ -62,21 +37,7 @@
       />
       <div
         v-show="!isOpen"
-        class="
-          hidden
-          lg:block
-          py-1
-          px-2
-          absolute
-          right-5
-          top-1/2
-          leading-tight
-          transform
-          -translate-y-1/2
-          rounded
-          border border-alt-200
-          pointer-events-none
-        "
+        class="hidden lg:block py-1 px-2 absolute right-5 top-1/2 leading-tight transform -translate-y-1/2 rounded border border-alt-200 pointer-events-none"
       >
         ⌘ K
       </div>
@@ -84,31 +45,11 @@
 
     <div
       id="search-results"
-      class="
-        search-results
-        absolute
-        top-full
-        mt-3
-        w-full
-        overflow-x-hidden overflow-y-auto
-        bg-white
-        rounded-lg
-        shadow-xl
-      "
+      class="search-results absolute top-full mt-3 w-full overflow-x-hidden overflow-y-auto bg-white rounded-lg shadow-xl"
       :class="{ hidden: !isOpen || !query }"
     >
       <header
-        class="
-          flex
-          items-center
-          justify-between
-          py-3
-          px-5
-          sticky
-          top-0
-          bg-white
-          border-b-2 border-alt-200
-        "
+        class="flex items-center justify-between py-3 px-5 sticky top-0 bg-white border-b-2 border-alt-200"
       >
         <div
           id="search-results-title"
@@ -144,14 +85,7 @@
               name: 'recipe',
               params: { id: result.id, slug: result.slug },
             }"
-            class="
-              block
-              py-3
-              pr-4
-              pl-5
-              text-alt-800
-              hover:text-alt-800 hover:bg-alt-100
-            "
+            class="block py-3 pr-4 pl-5 text-alt-800 hover:text-alt-800 hover:bg-alt-100"
             :class="{ 'bg-alt-100': index == indexHighlighted }"
           >
             <div class="mb-1 text-lg leading-tight font-bold">

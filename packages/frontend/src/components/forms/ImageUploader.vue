@@ -18,23 +18,7 @@
       />
       <label
         :for="id"
-        class="
-          inline-flex
-          items-center
-          justify-center
-          py-3
-          px-4
-          sm:px-5
-          ring-offset-2 ring-offset-alt-100
-          font-bold
-          leading-tight
-          bg-alt-200 bg-opacity-75
-          hover:bg-opacity-100
-          text-alt-700
-          hover:text-alt-900
-          rounded-lg
-          mb-4
-        "
+        class="inline-flex items-center justify-center py-3 px-4 sm:px-5 ring-offset-2 ring-offset-alt-100 font-bold leading-tight bg-alt-200 bg-opacity-75 hover:bg-opacity-100 text-alt-700 hover:text-alt-900 rounded-lg mb-4"
       >
         <CIcon id="folder" class="-my-1 mr-3 text-alt-500" />
         {{ $t('imageUploader.browse') }}
