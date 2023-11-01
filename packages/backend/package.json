@@ -9,11 +9,11 @@
     "start": "CONFIG_PATH=directus.config.js directus bootstrap && CONFIG_PATH=directus.config.js directus start"
   },
   "dependencies": {
-    "directus": "^9.23.1",
+    "directus": "^10.7.1",
     "directus-extension-searchsync": "github:dimitrov-adrian/directus-extension-searchsync#8cc5943",
-    "pg": "^8.10.0"
+    "pg": "^8.11.3"
   },
   "devDependencies": {
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.3.1"
   }
 }

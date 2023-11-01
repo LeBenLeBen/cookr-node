@@ -1,5 +1,5 @@
 version: 1
-directus: 9.23.1
+directus: 14.0.1
 vendor: postgres
 collections:
   - collection: recipes
@@ -17,11 +17,13 @@ collections:
       icon: restaurant
       item_duplication_fields: null
       note: null
+      preview_url: null
       singleton: false
       sort: null
       sort_field: null
       translations: null
       unarchive_value: null
+      versioning: false
     schema:
       name: recipes
   - collection: recipes_tags
@@ -39,11 +41,13 @@ collections:
       icon: import_export
       item_duplication_fields: null
       note: null
+      preview_url: null
       singleton: false
       sort: null
       sort_field: null
       translations: null
       unarchive_value: null
+      versioning: false
     schema:
       name: recipes_tags
   - collection: tags
@@ -61,11 +65,13 @@ collections:
       icon: tag
       item_duplication_fields: null
       note: null
+      preview_url: null
       singleton: false
       sort: null
       sort_field: null
       translations: null
       unarchive_value: null
+      versioning: false
     schema:
       name: tags
   - collection: users_favorite_recipes
@@ -83,11 +89,13 @@ collections:
       icon: favorite_border
       item_duplication_fields: null
       note: null
+      preview_url: null
       singleton: false
       sort: null
       sort_field: null
       translations: null
       unarchive_value: null
+      versioning: false
     schema:
       name: users_favorite_recipes
   - collection: users_viewed_recipes
@@ -105,11 +113,13 @@ collections:
       icon: remove_red_eye
       item_duplication_fields: null
       note: null
+      preview_url: null
       singleton: false
       sort: null
       sort_field: null
       translations: null
       unarchive_value: null
+      versioning: false
     schema:
       name: users_viewed_recipes
 fields:
@@ -1293,6 +1303,18 @@ fields:
       foreign_key_table: directus_users
       foreign_key_column: id
 relations:
+  - collection: directus_settings
+    field: public_favicon
+    related_collection: directus_files
+    meta: null
+    schema:
+      table: directus_settings
+      column: public_favicon
+      foreign_key_table: directus_files
+      foreign_key_column: id
+      constraint_name: directus_settings_public_favicon_foreign
+      on_update: NO ACTION
+      on_delete: NO ACTION
   - collection: recipes
     field: author
     related_collection: directus_users
