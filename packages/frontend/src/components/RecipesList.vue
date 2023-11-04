@@ -10,7 +10,7 @@
       }}
     </h2>
 
-    <ul class="space-y-4">
+    <ul class="space-y-3 sm:space-y-4">
       <li v-for="recipe in recipes" :key="recipe.id">
         <RecipeListItem
           :recipe="recipe"

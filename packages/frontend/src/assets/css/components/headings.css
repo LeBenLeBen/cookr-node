@@ -1,14 +1,7 @@
 .h1 {
-  @apply font-display text-3xl leading-tight;
-}
-
-@screen sm {
-  .h1 {
-    @apply text-4xl;
-    @apply leading-none;
-  }
+  @apply font-display text-2xl/tight sm:text-3xl/none md:text-4xl/none;
 }
 
 .h2 {
-  @apply font-display text-2xl text-alt-700 leading-tight;
+  @apply font-display text-lg/6 sm:text-xl/7 md:text-2xl/8 text-alt-700;
 }
