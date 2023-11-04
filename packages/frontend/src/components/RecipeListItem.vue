@@ -7,7 +7,7 @@
       :image="recipe.image"
       width="200"
       height="150"
-      class="flex-shrink-0 w-1/3 sm:w-auto bg-alt-200 bg-opacity-75"
+      class="flex flex-shrink-0 w-1/3 sm:w-auto bg-alt-200 bg-opacity-75"
     />
 
     <div class="flex flex-col py-3 px-4 sm:px-5 lg:py-5 lg:px-6 w-full">
