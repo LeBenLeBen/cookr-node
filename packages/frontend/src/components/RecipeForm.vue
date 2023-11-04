@@ -75,7 +75,7 @@
               step="5"
               type="text"
               inputmode="numeric"
-              class="w-18"
+              class="w-24"
               :aria-describedby="ids.errors"
             />
           </Field>
@@ -101,7 +101,7 @@
               min="1"
               type="text"
               inputmode="numeric"
-              class="w-18"
+              class="w-24"
               :aria-describedby="ids.errors"
             />
           </Field>

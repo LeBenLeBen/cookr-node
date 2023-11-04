@@ -1,7 +1,6 @@
 import urql from '@urql/vue';
 import Chusho, { $chusho, mergeDeep } from 'chusho';
 import { createApp } from 'vue';
-import 'windi.css';
 
 import apiClient from '@/services/apiClient';
 

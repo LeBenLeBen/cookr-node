@@ -1,5 +1,5 @@
-module.exports = {
-  darkMode: false, // or 'media' or 'class'
+export default {
+  content: ['./index.html', './chusho.config.ts', './src/**/*.{js,ts,vue}'],
   theme: {
     extend: {
       fontFamily: {
