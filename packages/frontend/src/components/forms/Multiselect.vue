@@ -79,6 +79,7 @@ export default defineComponent({
   position: absolute;
   left: 0;
   right: 0;
+  z-index: 1;
 
   max-height: 160px;
   overflow: scroll;
