@@ -3,7 +3,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        display: ['Fredoka One', 'sans-serif'],
+        display: ['Fredoka', 'sans-serif'],
       },
       colors: {
         primary: {

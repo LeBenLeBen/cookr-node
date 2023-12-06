@@ -2,6 +2,8 @@
 
 @import './preflight/defaults.css';
 
+@import './base/fonts.css';
+
 @import 'tailwindcss/components';
 
 @import './components/headings.css';
