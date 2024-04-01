@@ -5,8 +5,8 @@
   >
     <RecipeImage
       :image="recipe.image"
-      width="200"
-      height="150"
+      :width="200"
+      :height="150"
       class="flex flex-shrink-0 w-1/3 sm:w-auto bg-alt-200 bg-opacity-75"
     />
 

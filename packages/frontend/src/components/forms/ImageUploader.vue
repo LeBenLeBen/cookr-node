@@ -2,8 +2,8 @@
   <div class="flex space-x-6">
     <RecipeImage
       :image="image"
-      width="200"
-      height="134"
+      :width="200"
+      :height="134"
       class="rounded-lg bg-alt-200 bg-opacity-50"
     />
 

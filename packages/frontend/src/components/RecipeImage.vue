@@ -22,8 +22,8 @@ import recipePlaceholder from '../assets/images/recipe-placeholder.svg';
 
 const props = defineProps<{
   image?: Image | null;
-  width: number | string;
-  height: number | string;
+  width: number;
+  height: number;
 }>();
 
 const picture = computed(() => {

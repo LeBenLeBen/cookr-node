@@ -42,8 +42,8 @@
     <div class="relative -mx-4 sm:-mx-6 lg:-ml-8 mb-6 md:mb-10">
       <RecipeImage
         :image="recipe.image"
-        width="792"
-        height="528"
+        :width="792"
+        :height="528"
         class="md:rounded-xl bg-alt-200"
       />
 
