@@ -93,8 +93,13 @@ function handleImageChange(e: Event) {
   const file = (e.target as HTMLInputElement)?.files?.[0];
 
   if (file) {
-    upload(file).then((response) => {
-      emit('update:model-value', response);
+    upload(file).then(({ id, filename_download, storage }) => {
+      // Take only required values as relations causes issues saving the recipe
+      emit('update:model-value', {
+        id,
+        filename_download,
+        storage,
+      });
     });
   }
 }
