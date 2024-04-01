@@ -77,7 +77,7 @@
         </div>
       </div>
 
-      <div v-if="recipe.ingredients.length" class="row-span-2">
+      <div v-if="recipe.ingredients?.length" class="row-span-2">
         <h2 class="mb-3 text-alt-600 font-bold text-sm uppercase">
           {{ $t('recipe.ingredients') }}
         </h2>
