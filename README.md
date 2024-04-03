@@ -23,6 +23,7 @@ Dependencies: Docker
 4. Load the schema in the database `docker compose exec backend npx directus schema apply schema.yml`
 5. Visit [localhost:8055/admin](http://localhost:8055/admin) for Directus admin
 6. Visit [localhost:3000](http://localhost:3000) for the app
+7. Optionally copy `.env.example` to `.env` and fill-in the values to access GraphQL schema in your editor
 
 ### Running commands in containers
 
@@ -41,6 +42,8 @@ Where `backend` is the target container, see `docker-compose.yml` for all contai
 By default, in development, the backend is configured to send emails to [Mailhog](https://github.com/mailhog/MailHog). You can browse outgoing emails at [localhost:8025](http://localhost:8025).
 
 ### Updating GraphQL types
+
+Prerequisites: set `DIRECTUS_ADMIN_ACCESS_TOKEN` in `.env` file
 
 GraphQL types for TypeScript are automatically generated. To update them to match the Directus schema:
 

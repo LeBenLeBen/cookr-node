@@ -1,5 +1,6 @@
 node_modules
 /scripts
+/.env
 
 /packages/backend/.env
 /packages/backend/uploads/*
