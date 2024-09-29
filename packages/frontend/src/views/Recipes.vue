@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container container--md">
     <CCollapse v-model="filtersOpen">
       <PageHeader :title="$t('explore.title')">
         <CCollapseBtn variant="default small">

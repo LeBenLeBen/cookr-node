@@ -1,5 +1,5 @@
 <template>
-  <div v-if="tag">
+  <div v-if="tag" class="container container--md">
     <h1 class="h1 mb-6">{{ tag.title }}</h1>
 
     <RecipesList v-bind="collection.state" @load-more="collection.loadMore" />

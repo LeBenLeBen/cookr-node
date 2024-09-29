@@ -1,16 +1,22 @@
 .container {
   @apply w-full;
-  @apply max-w-5xl;
   @apply mx-auto;
-  @apply px-4;
-}
+  @apply px-4 sm:px-6 lg:px-8 xl:px-10;
 
-@screen sm {
   .container {
-    @apply px-6;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 
-.container-xs {
+.container--xs {
   @apply max-w-sm;
+}
+
+.container--md {
+  @apply max-w-3xl;
+}
+
+.container--lg {
+  @apply max-w-5xl;
 }

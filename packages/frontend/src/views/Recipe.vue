@@ -1,5 +1,5 @@
 <template>
-  <div v-if="recipe">
+  <div v-if="recipe" class="container container--md">
     <header class="flex space-x-2 mb-6 md:mb-8">
       <div class="flex-grow">
         <h1 class="h1 mb-1 sm:mb-2 md:mb-3">{{ recipe.title }}</h1>
@@ -23,7 +23,7 @@
             class="text-sm font-bold align-middle"
           >
             <span class="hidden md:inline">{{ $t('common.edit') }}</span>
-            <CIcon id="edit" class="md:ml-2 text-alt-500" />
+            <CIcon id="edit" class="md:ml-2" />
           </CBtn>
         </li>
         <li>
@@ -33,7 +33,7 @@
             @click="confirmToDelete"
           >
             <span class="hidden md:inline">{{ $t('common.delete') }}</span>
-            <CIcon id="bin" class="md:ml-2 text-alt-500" />
+            <CIcon id="bin" class="md:ml-2" />
           </CBtn>
         </li>
       </ul>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container container--md">
     <PageHeader :title="$t('profile.title')">
       <CBtn variant="default small" @click="confirmLogout">{{
         $t('auth.logout')

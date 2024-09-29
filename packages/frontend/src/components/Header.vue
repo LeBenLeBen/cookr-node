@@ -6,12 +6,10 @@
   >
     <header>
       <div class="container">
-        <div
-          class="flex items-center md:grid md:grid-cols-3 lg:grid-cols-4 md:gap-6 lg:gap-14"
-        >
+        <div class="flex items-center justify-between md:gap-6 lg:gap-14">
           <div
             :class="{
-              'w-0 sm:w-auto overflow-hidden': searchIsOpen,
+              'max-sm:w-0 overflow-hidden': searchIsOpen,
               'mr-4': !searchIsOpen,
             }"
             class="flex-shrink-0 sm:mr-6"
@@ -24,24 +22,20 @@
             </router-link>
           </div>
 
-          <div
-            class="flex-grow flex items-center md:col-start-2 md:col-span-2 lg:col-span-3"
-          >
-            <Search
-              :is-open="searchIsOpen"
-              @update:is-open="(val: boolean) => (searchIsOpen = val)"
-            />
-            <div class="ml-8 hidden md:block">
-              <CurrentUser />
-            </div>
+          <Search
+            :is-open="searchIsOpen"
+            @update:is-open="(val: boolean) => (searchIsOpen = val)"
+          />
+
+          <div class="hidden md:block">
+            <CurrentUser />
           </div>
 
           <div
             :class="{
-              'w-0 sm:w-auto overflow-hidden': searchIsOpen,
-              'ml-2 sm:ml-4': !searchIsOpen,
+              'max-sm:w-0 ml-0 overflow-hidden': searchIsOpen,
             }"
-            class="md:hidden flex-shrink-0"
+            class="ml-3 sm:ml-4 md:hidden flex-shrink-0 flex items-center"
           >
             <CCollapseBtn
               class="flex items-center justify-center w-10 h-10 p-1 hover:bg-alt-200 rounded-md"

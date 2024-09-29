@@ -3,12 +3,12 @@
     <Header :menu="menu" />
 
     <div class="container pb-20">
-      <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-14">
-        <div class="md:col-span-1 hidden md:block">
+      <div class="app-layout">
+        <div class="app-layout__sidebar hidden md:block">
           <Nav :menu="menu" />
         </div>
 
-        <main class="min-w-full md:col-start-2 md:col-span-2 lg:col-span-3">
+        <main class="app-layout__main">
           <slot />
         </main>
       </div>
@@ -102,3 +102,14 @@ useQuery<Query>({
   }
 });
 </script>
+
+<style scoped>
+.app-layout {
+  display: grid;
+  column-gap: theme('spacing.8');
+
+  @screen md {
+    grid-template-columns: minmax(150px, max-content) 1fr;
+  }
+}
+</style>

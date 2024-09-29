@@ -1,6 +1,6 @@
 <template>
-  <ul>
-    <li v-for="(tag, i) in tags" :key="i" class="inline-flex mr-2 my-1">
+  <ul class="flex flex-wrap gap-2">
+    <li v-for="(tag, i) in tags" :key="i">
       <Tag :tag="tag" />
     </li>
   </ul>

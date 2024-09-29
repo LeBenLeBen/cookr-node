@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container container--md">
     <PageHeader :title="$t('recipe.new.title')" />
 
     <RecipeForm

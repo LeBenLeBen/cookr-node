@@ -1,5 +1,5 @@
 <template>
-  <div v-if="user">
+  <div v-if="user" class="container container--md">
     <PageHeader :title="user.username">
       <CBtn
         v-if="isCurrentUser"

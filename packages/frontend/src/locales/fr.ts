@@ -51,6 +51,7 @@ const fr: DefineLocaleMessage = {
   },
   home: {
     title: 'Accueil',
+    tags: 'Explorer par tag',
     recentlyAdded: 'Ajoutées en dernier',
     recentlyViewed: 'Consultées récemment',
   },

@@ -11,7 +11,7 @@
     />
 
     <div class="flex flex-col py-3 px-4 sm:px-5 lg:py-5 lg:px-6 w-full">
-      <h2 class="h2 mb-1">
+      <h2 class="h2">
         {{ recipe.title }}
       </h2>
 

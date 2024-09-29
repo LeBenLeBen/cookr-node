@@ -3,10 +3,14 @@
     v-if="isOpen && query"
     class="fixed inset-0 z-30 bg-alt-800 bg-opacity-95"
   ></div>
-  <div v-clickOutside="close" class="relative z-40 w-full" role="search">
+  <div
+    v-clickOutside="close"
+    class="flex justify-center w-full max-w-96 relative z-40"
+    role="search"
+  >
     <label for="search" class="sr-only">{{ $t('search.label') }}</label>
     <div
-      class="relative sm:max-w-xs text-alt-400"
+      class="relative w-full md:max-w-sm text-alt-400"
       role="combobox"
       :aria-expanded="isOpen ? 'true' : 'false'"
       aria-owns="search-results"
