@@ -15,7 +15,6 @@ services:
       - pgdata:/var/lib/postgresql/data
 
   pgadmin:
-    container_name: pgadmin
     image: dpage/pgadmin4
     environment:
       - PGADMIN_DEFAULT_EMAIL=admin@cookr.ch
@@ -24,14 +23,12 @@ services:
       - 5050:80
 
   mailhog:
-    container_name: mailhog
     image: mailhog/mailhog
     ports:
       - 1025
       - 8025:8025
 
   backend:
-    container_name: backend
     build: packages/backend
     command: npm start
     environment:
@@ -46,7 +43,6 @@ services:
       - mailhog
 
   frontend:
-    container_name: frontend
     build: packages/frontend
     command: npm run dev
     volumes:
