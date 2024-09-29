@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import { GraphQLError } from 'graphql';
+import { GraphQLError } from '@0no-co/graphql.web';
 
 defineProps<{
   errors: GraphQLError[] | null;

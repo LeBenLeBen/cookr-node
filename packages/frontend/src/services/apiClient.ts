@@ -1,10 +1,13 @@
 import { authExchange } from '@urql/exchange-auth';
 import { cacheExchange } from '@urql/exchange-graphcache';
 import { simplePagination } from '@urql/exchange-graphcache/extras';
-import { multipartFetchExchange } from '@urql/exchange-multipart-fetch';
-import { createClient, dedupExchange, mapExchange } from '@urql/vue';
+import {
+  CombinedError,
+  createClient,
+  fetchExchange,
+  mapExchange,
+} from '@urql/vue';
 import gql from 'graphql-tag';
-import { watch } from 'vue';
 
 import {
   MutationDelete_Recipes_ItemArgs,
@@ -21,20 +24,15 @@ import store from '@/store';
 export const GRAPHQL_URL = '/api/graphql';
 export const GRAPHQL_SYSTEM_URL = '/api/graphql/system';
 
-let authStateListening = false;
-
-type AuthState = {
-  accessToken?: string;
-  refreshToken?: string;
-  expires?: number;
-};
-
 export default createClient({
   url: GRAPHQL_URL,
 
-  exchanges: [
-    dedupExchange,
+  fetchOptions: {
+    // Prevent potential cookies from Directus admin to be used here
+    credentials: 'omit',
+  },
 
+  exchanges: [
     cacheExchange({
       keys: {
         recipes_aggregated: () => null,
@@ -108,143 +106,96 @@ export default createClient({
       },
     }),
 
-    authExchange<AuthState>({
-      addAuthToOperation: ({ authState, operation }) => {
-        if (!authState?.accessToken) {
-          return operation;
-        }
+    authExchange(async (utils) => {
+      let accessToken = store.state.value.auth?.accessToken;
+      let refreshToken = store.state.value.auth?.refreshToken;
 
-        // Don't add the auth header for the auth_refresh mutation
-        if (
-          operation.kind === 'mutation' &&
-          operation.query.definitions.some((definition) => {
-            return (
-              definition.kind === 'OperationDefinition' &&
-              definition.selectionSet.selections.some((node) => {
-                return (
-                  node.kind === 'Field' && node.name.value === 'auth_refresh'
-                );
-              })
-            );
-          })
-        ) {
-          return operation;
-        }
+      return {
+        addAuthToOperation: (operation) => {
+          if (!accessToken) {
+            return operation;
+          }
 
-        const fetchOptions =
-          typeof operation.context.fetchOptions === 'function'
-            ? operation.context.fetchOptions()
-            : operation.context.fetchOptions || {};
+          // Don't add the auth header for the auth_refresh mutation
+          if (
+            operation.kind === 'mutation' &&
+            operation.query.definitions.some((definition) => {
+              return (
+                definition.kind === 'OperationDefinition' &&
+                definition.selectionSet.selections.some((node) => {
+                  return (
+                    node.kind === 'Field' && node.name.value === 'auth_refresh'
+                  );
+                })
+              );
+            })
+          ) {
+            return operation;
+          }
 
-        return {
-          ...operation,
-          context: {
-            ...operation.context,
-            fetchOptions: {
-              ...fetchOptions,
-              headers: {
-                ...fetchOptions.headers,
-                Authorization: `Bearer ${authState.accessToken}`,
-              },
-            },
-          },
-        };
-      },
+          return utils.appendHeaders(operation, {
+            Authorization: `Bearer ${accessToken}`,
+          });
+        },
 
-      didAuthError: ({ error }) => {
-        const responseContainsAuthError = error.graphQLErrors.some(
-          ({ extensions }) =>
+        didAuthError: (error: CombinedError) => {
+          return error.graphQLErrors.some(({ extensions }) =>
             ['INVALID_TOKEN', 'TOKEN_EXPIRED'].includes(
               extensions.code as string
             )
-        );
+          );
+        },
 
-        return responseContainsAuthError;
-      },
-
-      getAuth: async ({ authState, mutate }) => {
-        if (!authState) {
-          const authState: AuthState = {};
-
-          if (!authStateListening) {
-            authStateListening = true;
-
-            // Ensure the store state is reflected immediately in the authState
-            // for the upcoming requests, since getAuth is not called after the login
-            watch(
-              () => store.state.value.auth,
-              () => {
-                authState.accessToken = store.state.value.auth?.accessToken;
-                authState.refreshToken = store.state.value.auth?.refreshToken;
-                authState.expires = store.state.value.auth?.expires;
+        refreshAuth: async () => {
+          // Try to renew the authentication with the refresh token
+          const result = await utils.mutate<Mutation, MutationAuth_RefreshArgs>(
+            gql`
+              mutation refresh($refresh_token: String!) {
+                auth_refresh(refresh_token: $refresh_token, mode: json) {
+                  access_token
+                  refresh_token
+                  expires
+                }
               }
-            );
-          }
-
-          authState.accessToken = store.state.value.auth?.accessToken;
-          authState.refreshToken = store.state.value.auth?.refreshToken;
-          authState.expires = store.state.value.auth?.expires;
-
-          return Promise.resolve(authState);
-        }
-
-        // Try to renew the authentication with the refresh token
-        const result = await mutate<Mutation, MutationAuth_RefreshArgs>(
-          gql`
-            mutation refresh($refresh_token: String!) {
-              auth_refresh(refresh_token: $refresh_token, mode: json) {
-                access_token
-                refresh_token
-                expires
-              }
+            `,
+            {
+              refresh_token: refreshToken,
+            },
+            {
+              url: GRAPHQL_SYSTEM_URL,
             }
-          `,
-          {
-            refresh_token: authState.refreshToken,
-          },
-          {
-            url: GRAPHQL_SYSTEM_URL,
-          }
-        );
-
-        if (
-          result.data?.auth_refresh?.access_token &&
-          result.data.auth_refresh.refresh_token &&
-          result.data.auth_refresh.expires
-        ) {
-          store.setAuth(
-            result.data.auth_refresh.access_token,
-            result.data.auth_refresh.refresh_token,
-            result.data.auth_refresh.expires
           );
 
-          return {
-            accessToken: result.data.auth_refresh.access_token,
-            refreshToken: result.data.auth_refresh.refresh_token,
-            expires: result.data.auth_refresh.expires,
-          };
-        }
+          if (
+            result.data?.auth_refresh?.access_token &&
+            result.data.auth_refresh.refresh_token &&
+            result.data.auth_refresh.expires
+          ) {
+            store.setAuth(
+              result.data.auth_refresh.access_token,
+              result.data.auth_refresh.refresh_token,
+              result.data.auth_refresh.expires
+            );
 
-        store.resetAuth();
-        router.replace({ name: 'login' });
+            accessToken = result.data.auth_refresh.access_token;
+            refreshToken = result.data.auth_refresh.refresh_token;
+          } else {
+            store.resetAuth();
+            router.replace({ name: 'login' });
+          }
+        },
 
-        return null;
-      },
+        willAuthError: () => {
+          const buffer = 15 * 1000; // 15 seconds
+          const tokenWillExpiresSoon = store.state.value.auth?.expires
+            ? Date.now() >= store.state.value.auth?.expires - buffer
+            : false;
 
-      willAuthError: () => {
-        const buffer = 15 * 1000; // 15 seconds
-        const tokenWillExpiresSoon = store.state.value.auth?.expires
-          ? Date.now() >= store.state.value.auth?.expires - buffer
-          : false;
-
-        if (tokenWillExpiresSoon) {
-          return true;
-        }
-
-        return false;
-      },
+          return tokenWillExpiresSoon;
+        },
+      };
     }),
 
-    multipartFetchExchange,
+    fetchExchange,
   ],
 });

@@ -14,7 +14,7 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  */
 const documents = {
     "\n      query explore(\n        $limit: Int!\n        $offset: Int!\n        $sort: [String]\n        $filter: recipes_filter\n      ) {\n        recipes(limit: $limit, offset: $offset, sort: $sort, filter: $filter) {\n          ...RecipeCard\n        }\n        recipes_aggregated(sort: $sort, filter: $filter) {\n          count {\n            id\n          }\n        }\n      }\n      \n    ": types.ExploreDocument,
-    "\n            mutation refresh($refresh_token: String!) {\n              auth_refresh(refresh_token: $refresh_token, mode: json) {\n                access_token\n                refresh_token\n                expires\n              }\n            }\n          ": types.RefreshDocument,
+    "\n              mutation refresh($refresh_token: String!) {\n                auth_refresh(refresh_token: $refresh_token, mode: json) {\n                  access_token\n                  refresh_token\n                  expires\n                }\n              }\n            ": types.RefreshDocument,
     "\n  fragment Image on directus_files {\n    id\n    filename_disk\n    storage\n  }\n": types.ImageFragmentDoc,
     "\n  fragment RecipeCard on recipes {\n    id\n    title\n    slug\n    time\n    quantity\n    image {\n      ...Image\n    }\n    author {\n      id\n      username\n    }\n  }\n  \n": types.RecipeCardFragmentDoc,
     "\n  fragment RecipeFragment on recipes {\n    id\n    title\n    slug\n    author {\n      id\n      username\n    }\n    time\n    quantity\n    steps\n    notes\n    ingredients\n    tags {\n      id\n      tags_id {\n        id\n        title\n        slug\n      }\n    }\n    image {\n      ...Image\n    }\n  }\n  \n": types.RecipeFragmentFragmentDoc,
@@ -23,12 +23,26 @@ const documents = {
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ *
+ *
+ * @example
+ * ```ts
+ * const query = gql(`query GetUser($id: ID!) { user(id: $id) { name } }`);
+ * ```
+ *
+ * The query argument is unknown!
+ * Please regenerate the types.
+ */
+export function graphql(source: string): unknown;
+
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n      query explore(\n        $limit: Int!\n        $offset: Int!\n        $sort: [String]\n        $filter: recipes_filter\n      ) {\n        recipes(limit: $limit, offset: $offset, sort: $sort, filter: $filter) {\n          ...RecipeCard\n        }\n        recipes_aggregated(sort: $sort, filter: $filter) {\n          count {\n            id\n          }\n        }\n      }\n      \n    "): (typeof documents)["\n      query explore(\n        $limit: Int!\n        $offset: Int!\n        $sort: [String]\n        $filter: recipes_filter\n      ) {\n        recipes(limit: $limit, offset: $offset, sort: $sort, filter: $filter) {\n          ...RecipeCard\n        }\n        recipes_aggregated(sort: $sort, filter: $filter) {\n          count {\n            id\n          }\n        }\n      }\n      \n    "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n            mutation refresh($refresh_token: String!) {\n              auth_refresh(refresh_token: $refresh_token, mode: json) {\n                access_token\n                refresh_token\n                expires\n              }\n            }\n          "): (typeof documents)["\n            mutation refresh($refresh_token: String!) {\n              auth_refresh(refresh_token: $refresh_token, mode: json) {\n                access_token\n                refresh_token\n                expires\n              }\n            }\n          "];
+export function graphql(source: "\n              mutation refresh($refresh_token: String!) {\n                auth_refresh(refresh_token: $refresh_token, mode: json) {\n                  access_token\n                  refresh_token\n                  expires\n                }\n              }\n            "): (typeof documents)["\n              mutation refresh($refresh_token: String!) {\n                auth_refresh(refresh_token: $refresh_token, mode: json) {\n                  access_token\n                  refresh_token\n                  expires\n                }\n              }\n            "];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -45,20 +59,6 @@ export function graphql(source: "\n  fragment RecipeFragment on recipes {\n    i
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  fragment CurrentUser on directus_users {\n    id\n    email\n    username\n    avatar {\n      ...Image\n    }\n  }\n  \n"): (typeof documents)["\n  fragment CurrentUser on directus_users {\n    id\n    email\n    username\n    avatar {\n      ...Image\n    }\n  }\n  \n"];
-
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- *
- *
- * @example
- * ```ts
- * const query = gql(`query GetUser($id: ID!) { user(id: $id) { name } }`);
- * ```
- *
- * The query argument is unknown!
- * Please regenerate the types.
-**/
-export function graphql(source: string): unknown;
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

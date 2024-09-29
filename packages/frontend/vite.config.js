@@ -50,7 +50,6 @@ export default {
     }),
   ],
   optimizeDeps: {
-    exclude: ['graphql'],
     include: [
       'vue-i18n/dist/vue-i18n.runtime.esm-bundler.js',
       'algoliasearch/lite',

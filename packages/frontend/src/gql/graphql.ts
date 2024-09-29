@@ -26,6 +26,12 @@ export type Scalars = {
   Void: any;
 };
 
+export enum EventEnum {
+  Create = 'create',
+  Delete = 'delete',
+  Update = 'update'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   auth_login?: Maybe<Auth_Tokens>;
@@ -33,9 +39,11 @@ export type Mutation = {
   auth_password_request?: Maybe<Scalars['Boolean']>;
   auth_password_reset?: Maybe<Scalars['Boolean']>;
   auth_refresh?: Maybe<Auth_Tokens>;
+  create_collections_item?: Maybe<Directus_Collections>;
   create_comment?: Maybe<Directus_Activity>;
   create_dashboards_item?: Maybe<Directus_Dashboards>;
   create_dashboards_items: Array<Directus_Dashboards>;
+  create_fields_item?: Maybe<Directus_Fields>;
   create_files_item?: Maybe<Directus_Files>;
   create_files_items: Array<Directus_Files>;
   create_flows_item?: Maybe<Directus_Flows>;
@@ -56,23 +64,30 @@ export type Mutation = {
   create_recipes_items: Array<Recipes>;
   create_recipes_tags_item?: Maybe<Recipes_Tags>;
   create_recipes_tags_items: Array<Recipes_Tags>;
+  create_relations_item?: Maybe<Directus_Relations>;
   create_roles_item?: Maybe<Directus_Roles>;
   create_roles_items: Array<Directus_Roles>;
   create_shares_item?: Maybe<Directus_Shares>;
   create_shares_items: Array<Directus_Shares>;
   create_tags_item?: Maybe<Tags>;
   create_tags_items: Array<Tags>;
+  create_translations_item?: Maybe<Directus_Translations>;
+  create_translations_items: Array<Directus_Translations>;
   create_users_favorite_recipes_item?: Maybe<Users_Favorite_Recipes>;
   create_users_favorite_recipes_items: Array<Users_Favorite_Recipes>;
   create_users_item?: Maybe<Directus_Users>;
   create_users_items: Array<Directus_Users>;
   create_users_viewed_recipes_item?: Maybe<Users_Viewed_Recipes>;
   create_users_viewed_recipes_items: Array<Users_Viewed_Recipes>;
+  create_versions_item?: Maybe<Directus_Versions>;
+  create_versions_items: Array<Directus_Versions>;
   create_webhooks_item?: Maybe<Directus_Webhooks>;
   create_webhooks_items: Array<Directus_Webhooks>;
+  delete_collections_item?: Maybe<Delete_Collection>;
   delete_comment?: Maybe<Delete_One>;
   delete_dashboards_item?: Maybe<Delete_One>;
   delete_dashboards_items?: Maybe<Delete_Many>;
+  delete_fields_item?: Maybe<Delete_Field>;
   delete_files_item?: Maybe<Delete_One>;
   delete_files_items?: Maybe<Delete_Many>;
   delete_flows_item?: Maybe<Delete_One>;
@@ -93,25 +108,33 @@ export type Mutation = {
   delete_recipes_items?: Maybe<Delete_Many>;
   delete_recipes_tags_item?: Maybe<Delete_One>;
   delete_recipes_tags_items?: Maybe<Delete_Many>;
+  delete_relations_item?: Maybe<Delete_Relation>;
   delete_roles_item?: Maybe<Delete_One>;
   delete_roles_items?: Maybe<Delete_Many>;
   delete_shares_item?: Maybe<Delete_One>;
   delete_shares_items?: Maybe<Delete_Many>;
   delete_tags_item?: Maybe<Delete_One>;
   delete_tags_items?: Maybe<Delete_Many>;
+  delete_translations_item?: Maybe<Delete_One>;
+  delete_translations_items?: Maybe<Delete_Many>;
   delete_users_favorite_recipes_item?: Maybe<Delete_One>;
   delete_users_favorite_recipes_items?: Maybe<Delete_Many>;
   delete_users_item?: Maybe<Delete_One>;
   delete_users_items?: Maybe<Delete_Many>;
   delete_users_viewed_recipes_item?: Maybe<Delete_One>;
   delete_users_viewed_recipes_items?: Maybe<Delete_Many>;
+  delete_versions_item?: Maybe<Delete_One>;
+  delete_versions_items?: Maybe<Delete_Many>;
   delete_webhooks_item?: Maybe<Delete_One>;
   delete_webhooks_items?: Maybe<Delete_Many>;
   import_file?: Maybe<Directus_Files>;
+  update_collections_item?: Maybe<Directus_Collections>;
   update_comment?: Maybe<Directus_Activity>;
   update_dashboards_batch: Array<Directus_Dashboards>;
   update_dashboards_item?: Maybe<Directus_Dashboards>;
   update_dashboards_items: Array<Directus_Dashboards>;
+  update_extensions_item?: Maybe<Directus_Extensions>;
+  update_fields_item?: Maybe<Directus_Fields>;
   update_files_batch: Array<Directus_Files>;
   update_files_item?: Maybe<Directus_Files>;
   update_files_items: Array<Directus_Files>;
@@ -142,6 +165,7 @@ export type Mutation = {
   update_recipes_tags_batch: Array<Recipes_Tags>;
   update_recipes_tags_item?: Maybe<Recipes_Tags>;
   update_recipes_tags_items: Array<Recipes_Tags>;
+  update_relations_item?: Maybe<Directus_Relations>;
   update_roles_batch: Array<Directus_Roles>;
   update_roles_item?: Maybe<Directus_Roles>;
   update_roles_items: Array<Directus_Roles>;
@@ -152,15 +176,22 @@ export type Mutation = {
   update_tags_batch: Array<Tags>;
   update_tags_item?: Maybe<Tags>;
   update_tags_items: Array<Tags>;
+  update_translations_batch: Array<Directus_Translations>;
+  update_translations_item?: Maybe<Directus_Translations>;
+  update_translations_items: Array<Directus_Translations>;
   update_users_batch: Array<Directus_Users>;
   update_users_favorite_recipes_batch: Array<Users_Favorite_Recipes>;
   update_users_favorite_recipes_item?: Maybe<Users_Favorite_Recipes>;
   update_users_favorite_recipes_items: Array<Users_Favorite_Recipes>;
   update_users_item?: Maybe<Directus_Users>;
   update_users_items: Array<Directus_Users>;
+  update_users_me?: Maybe<Directus_Users>;
   update_users_viewed_recipes_batch: Array<Users_Viewed_Recipes>;
   update_users_viewed_recipes_item?: Maybe<Users_Viewed_Recipes>;
   update_users_viewed_recipes_items: Array<Users_Viewed_Recipes>;
+  update_versions_batch: Array<Directus_Versions>;
+  update_versions_item?: Maybe<Directus_Versions>;
+  update_versions_items: Array<Directus_Versions>;
   update_webhooks_batch: Array<Directus_Webhooks>;
   update_webhooks_item?: Maybe<Directus_Webhooks>;
   update_webhooks_items: Array<Directus_Webhooks>;
@@ -172,6 +203,7 @@ export type Mutation = {
   utils_cache_clear?: Maybe<Scalars['Void']>;
   utils_hash_generate?: Maybe<Scalars['String']>;
   utils_hash_verify?: Maybe<Scalars['Boolean']>;
+  utils_random_string?: Maybe<Scalars['String']>;
   utils_revert?: Maybe<Scalars['Boolean']>;
   utils_sort?: Maybe<Scalars['Boolean']>;
 };
@@ -186,6 +218,7 @@ export type MutationAuth_LoginArgs = {
 
 
 export type MutationAuth_LogoutArgs = {
+  mode?: InputMaybe<Auth_Mode>;
   refresh_token?: InputMaybe<Scalars['String']>;
 };
 
@@ -205,6 +238,11 @@ export type MutationAuth_Password_ResetArgs = {
 export type MutationAuth_RefreshArgs = {
   mode?: InputMaybe<Auth_Mode>;
   refresh_token?: InputMaybe<Scalars['String']>;
+};
+
+
+export type MutationCreate_Collections_ItemArgs = {
+  data: Create_Directus_Collections_Input;
 };
 
 
@@ -228,6 +266,12 @@ export type MutationCreate_Dashboards_ItemsArgs = {
   page?: InputMaybe<Scalars['Int']>;
   search?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type MutationCreate_Fields_ItemArgs = {
+  collection: Scalars['String'];
+  data: Create_Directus_Fields_Input;
 };
 
 
@@ -391,6 +435,11 @@ export type MutationCreate_Recipes_Tags_ItemsArgs = {
 };
 
 
+export type MutationCreate_Relations_ItemArgs = {
+  data: Create_Directus_Relations_Input;
+};
+
+
 export type MutationCreate_Roles_ItemArgs = {
   data: Create_Directus_Roles_Input;
 };
@@ -431,6 +480,22 @@ export type MutationCreate_Tags_ItemArgs = {
 export type MutationCreate_Tags_ItemsArgs = {
   data?: InputMaybe<Array<Create_Tags_Input>>;
   filter?: InputMaybe<Tags_Filter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type MutationCreate_Translations_ItemArgs = {
+  data: Create_Directus_Translations_Input;
+};
+
+
+export type MutationCreate_Translations_ItemsArgs = {
+  data?: InputMaybe<Array<Create_Directus_Translations_Input>>;
+  filter?: InputMaybe<Directus_Translations_Filter>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   page?: InputMaybe<Scalars['Int']>;
@@ -487,6 +552,22 @@ export type MutationCreate_Users_Viewed_Recipes_ItemsArgs = {
 };
 
 
+export type MutationCreate_Versions_ItemArgs = {
+  data: Create_Directus_Versions_Input;
+};
+
+
+export type MutationCreate_Versions_ItemsArgs = {
+  data?: InputMaybe<Array<Create_Directus_Versions_Input>>;
+  filter?: InputMaybe<Directus_Versions_Filter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
 export type MutationCreate_Webhooks_ItemArgs = {
   data: Create_Directus_Webhooks_Input;
 };
@@ -503,6 +584,11 @@ export type MutationCreate_Webhooks_ItemsArgs = {
 };
 
 
+export type MutationDelete_Collections_ItemArgs = {
+  collection: Scalars['String'];
+};
+
+
 export type MutationDelete_CommentArgs = {
   id: Scalars['ID'];
 };
@@ -515,6 +601,12 @@ export type MutationDelete_Dashboards_ItemArgs = {
 
 export type MutationDelete_Dashboards_ItemsArgs = {
   ids: Array<InputMaybe<Scalars['ID']>>;
+};
+
+
+export type MutationDelete_Fields_ItemArgs = {
+  collection: Scalars['String'];
+  field: Scalars['String'];
 };
 
 
@@ -618,6 +710,12 @@ export type MutationDelete_Recipes_Tags_ItemsArgs = {
 };
 
 
+export type MutationDelete_Relations_ItemArgs = {
+  collection: Scalars['String'];
+  field: Scalars['String'];
+};
+
+
 export type MutationDelete_Roles_ItemArgs = {
   id: Scalars['ID'];
 };
@@ -644,6 +742,16 @@ export type MutationDelete_Tags_ItemArgs = {
 
 
 export type MutationDelete_Tags_ItemsArgs = {
+  ids: Array<InputMaybe<Scalars['ID']>>;
+};
+
+
+export type MutationDelete_Translations_ItemArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationDelete_Translations_ItemsArgs = {
   ids: Array<InputMaybe<Scalars['ID']>>;
 };
 
@@ -678,6 +786,16 @@ export type MutationDelete_Users_Viewed_Recipes_ItemsArgs = {
 };
 
 
+export type MutationDelete_Versions_ItemArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationDelete_Versions_ItemsArgs = {
+  ids: Array<InputMaybe<Scalars['ID']>>;
+};
+
+
 export type MutationDelete_Webhooks_ItemArgs = {
   id: Scalars['ID'];
 };
@@ -691,6 +809,12 @@ export type MutationDelete_Webhooks_ItemsArgs = {
 export type MutationImport_FileArgs = {
   data?: InputMaybe<Create_Directus_Files_Input>;
   url: Scalars['String'];
+};
+
+
+export type MutationUpdate_Collections_ItemArgs = {
+  collection: Scalars['String'];
+  data: Update_Directus_Collections_Input;
 };
 
 
@@ -726,6 +850,19 @@ export type MutationUpdate_Dashboards_ItemsArgs = {
   page?: InputMaybe<Scalars['Int']>;
   search?: InputMaybe<Scalars['String']>;
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type MutationUpdate_Extensions_ItemArgs = {
+  data?: InputMaybe<Update_Directus_Extensions_InputInput>;
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+
+export type MutationUpdate_Fields_ItemArgs = {
+  collection: Scalars['String'];
+  data: Update_Directus_Fields_Input;
+  field: Scalars['String'];
 };
 
 
@@ -1019,6 +1156,13 @@ export type MutationUpdate_Recipes_Tags_ItemsArgs = {
 };
 
 
+export type MutationUpdate_Relations_ItemArgs = {
+  collection: Scalars['String'];
+  data: Update_Directus_Relations_Input;
+  field: Scalars['String'];
+};
+
+
 export type MutationUpdate_Roles_BatchArgs = {
   data?: InputMaybe<Array<Update_Directus_Roles_Input>>;
   filter?: InputMaybe<Directus_Roles_Filter>;
@@ -1111,6 +1255,35 @@ export type MutationUpdate_Tags_ItemsArgs = {
 };
 
 
+export type MutationUpdate_Translations_BatchArgs = {
+  data?: InputMaybe<Array<Update_Directus_Translations_Input>>;
+  filter?: InputMaybe<Directus_Translations_Filter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type MutationUpdate_Translations_ItemArgs = {
+  data: Update_Directus_Translations_Input;
+  id: Scalars['ID'];
+};
+
+
+export type MutationUpdate_Translations_ItemsArgs = {
+  data: Update_Directus_Translations_Input;
+  filter?: InputMaybe<Directus_Translations_Filter>;
+  ids: Array<InputMaybe<Scalars['ID']>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
 export type MutationUpdate_Users_BatchArgs = {
   data?: InputMaybe<Array<Update_Directus_Users_Input>>;
   filter?: InputMaybe<Directus_Users_Filter>;
@@ -1169,6 +1342,11 @@ export type MutationUpdate_Users_ItemsArgs = {
 };
 
 
+export type MutationUpdate_Users_MeArgs = {
+  data?: InputMaybe<Update_Directus_Users_Input>;
+};
+
+
 export type MutationUpdate_Users_Viewed_Recipes_BatchArgs = {
   data?: InputMaybe<Array<Update_Users_Viewed_Recipes_Input>>;
   filter?: InputMaybe<Users_Viewed_Recipes_Filter>;
@@ -1189,6 +1367,35 @@ export type MutationUpdate_Users_Viewed_Recipes_ItemArgs = {
 export type MutationUpdate_Users_Viewed_Recipes_ItemsArgs = {
   data: Update_Users_Viewed_Recipes_Input;
   filter?: InputMaybe<Users_Viewed_Recipes_Filter>;
+  ids: Array<InputMaybe<Scalars['ID']>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type MutationUpdate_Versions_BatchArgs = {
+  data?: InputMaybe<Array<Update_Directus_Versions_Input>>;
+  filter?: InputMaybe<Directus_Versions_Filter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type MutationUpdate_Versions_ItemArgs = {
+  data: Update_Directus_Versions_Input;
+  id: Scalars['ID'];
+};
+
+
+export type MutationUpdate_Versions_ItemsArgs = {
+  data: Update_Directus_Versions_Input;
+  filter?: InputMaybe<Directus_Versions_Filter>;
   ids: Array<InputMaybe<Scalars['ID']>>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -1267,6 +1474,11 @@ export type MutationUtils_Hash_VerifyArgs = {
 };
 
 
+export type MutationUtils_Random_StringArgs = {
+  length?: InputMaybe<Scalars['Int']>;
+};
+
+
 export type MutationUtils_RevertArgs = {
   revision: Scalars['ID'];
 };
@@ -1288,7 +1500,7 @@ export type Query = {
   dashboards: Array<Directus_Dashboards>;
   dashboards_aggregated: Array<Directus_Dashboards_Aggregated>;
   dashboards_by_id?: Maybe<Directus_Dashboards>;
-  extensions?: Maybe<Extensions>;
+  extensions: Array<Directus_Extensions>;
   fields: Array<Directus_Fields>;
   fields_by_name?: Maybe<Directus_Fields>;
   fields_in_collection: Array<Directus_Fields>;
@@ -1319,9 +1531,11 @@ export type Query = {
   recipes: Array<Recipes>;
   recipes_aggregated: Array<Recipes_Aggregated>;
   recipes_by_id?: Maybe<Recipes>;
+  recipes_by_version?: Maybe<Version_Recipes>;
   recipes_tags: Array<Recipes_Tags>;
   recipes_tags_aggregated: Array<Recipes_Tags_Aggregated>;
   recipes_tags_by_id?: Maybe<Recipes_Tags>;
+  recipes_tags_by_version?: Maybe<Version_Recipes_Tags>;
   relations: Array<Directus_Relations>;
   relations_by_name?: Maybe<Directus_Relations>;
   relations_in_collection: Array<Directus_Relations>;
@@ -1343,16 +1557,25 @@ export type Query = {
   tags: Array<Tags>;
   tags_aggregated: Array<Tags_Aggregated>;
   tags_by_id?: Maybe<Tags>;
+  tags_by_version?: Maybe<Version_Tags>;
+  translations: Array<Directus_Translations>;
+  translations_aggregated: Array<Directus_Translations_Aggregated>;
+  translations_by_id?: Maybe<Directus_Translations>;
   users: Array<Directus_Users>;
   users_aggregated: Array<Directus_Users_Aggregated>;
   users_by_id?: Maybe<Directus_Users>;
   users_favorite_recipes: Array<Users_Favorite_Recipes>;
   users_favorite_recipes_aggregated: Array<Users_Favorite_Recipes_Aggregated>;
   users_favorite_recipes_by_id?: Maybe<Users_Favorite_Recipes>;
+  users_favorite_recipes_by_version?: Maybe<Version_Users_Favorite_Recipes>;
   users_me?: Maybe<Directus_Users>;
   users_viewed_recipes: Array<Users_Viewed_Recipes>;
   users_viewed_recipes_aggregated: Array<Users_Viewed_Recipes_Aggregated>;
   users_viewed_recipes_by_id?: Maybe<Users_Viewed_Recipes>;
+  users_viewed_recipes_by_version?: Maybe<Version_Users_Viewed_Recipes>;
+  versions: Array<Directus_Versions>;
+  versions_aggregated: Array<Directus_Versions_Aggregated>;
+  versions_by_id?: Maybe<Directus_Versions>;
   webhooks: Array<Directus_Webhooks>;
   webhooks_aggregated: Array<Directus_Webhooks_Aggregated>;
   webhooks_by_id?: Maybe<Directus_Webhooks>;
@@ -1382,6 +1605,7 @@ export type QueryActivity_AggregatedArgs = {
 
 export type QueryActivity_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1413,6 +1637,7 @@ export type QueryDashboards_AggregatedArgs = {
 
 export type QueryDashboards_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1450,6 +1675,7 @@ export type QueryFiles_AggregatedArgs = {
 
 export type QueryFiles_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1476,6 +1702,7 @@ export type QueryFlows_AggregatedArgs = {
 
 export type QueryFlows_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1502,6 +1729,7 @@ export type QueryFolders_AggregatedArgs = {
 
 export type QueryFolders_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1528,6 +1756,7 @@ export type QueryNotifications_AggregatedArgs = {
 
 export type QueryNotifications_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1554,6 +1783,7 @@ export type QueryOperations_AggregatedArgs = {
 
 export type QueryOperations_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1580,6 +1810,7 @@ export type QueryPanels_AggregatedArgs = {
 
 export type QueryPanels_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1606,6 +1837,7 @@ export type QueryPermissions_AggregatedArgs = {
 
 export type QueryPermissions_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1632,6 +1864,7 @@ export type QueryPresets_AggregatedArgs = {
 
 export type QueryPresets_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1658,6 +1891,13 @@ export type QueryRecipes_AggregatedArgs = {
 
 export type QueryRecipes_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryRecipes_By_VersionArgs = {
+  id: Scalars['ID'];
+  version: Scalars['String'];
 };
 
 
@@ -1684,6 +1924,13 @@ export type QueryRecipes_Tags_AggregatedArgs = {
 
 export type QueryRecipes_Tags_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryRecipes_Tags_By_VersionArgs = {
+  id: Scalars['ID'];
+  version: Scalars['String'];
 };
 
 
@@ -1721,6 +1968,7 @@ export type QueryRevisions_AggregatedArgs = {
 
 export type QueryRevisions_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1747,6 +1995,7 @@ export type QueryRoles_AggregatedArgs = {
 
 export type QueryRoles_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1778,6 +2027,7 @@ export type QueryShares_AggregatedArgs = {
 
 export type QueryShares_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1804,6 +2054,40 @@ export type QueryTags_AggregatedArgs = {
 
 export type QueryTags_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryTags_By_VersionArgs = {
+  id: Scalars['ID'];
+  version: Scalars['String'];
+};
+
+
+export type QueryTranslationsArgs = {
+  filter?: InputMaybe<Directus_Translations_Filter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryTranslations_AggregatedArgs = {
+  filter?: InputMaybe<Directus_Translations_Filter>;
+  groupBy?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryTranslations_By_IdArgs = {
+  id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1830,6 +2114,7 @@ export type QueryUsers_AggregatedArgs = {
 
 export type QueryUsers_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1856,6 +2141,13 @@ export type QueryUsers_Favorite_Recipes_AggregatedArgs = {
 
 export type QueryUsers_Favorite_Recipes_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryUsers_Favorite_Recipes_By_VersionArgs = {
+  id: Scalars['ID'];
+  version: Scalars['String'];
 };
 
 
@@ -1882,6 +2174,40 @@ export type QueryUsers_Viewed_Recipes_AggregatedArgs = {
 
 export type QueryUsers_Viewed_Recipes_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryUsers_Viewed_Recipes_By_VersionArgs = {
+  id: Scalars['ID'];
+  version: Scalars['String'];
+};
+
+
+export type QueryVersionsArgs = {
+  filter?: InputMaybe<Directus_Versions_Filter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryVersions_AggregatedArgs = {
+  filter?: InputMaybe<Directus_Versions_Filter>;
+  groupBy?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type QueryVersions_By_IdArgs = {
+  id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -1908,18 +2234,177 @@ export type QueryWebhooks_AggregatedArgs = {
 
 export type QueryWebhooks_By_IdArgs = {
   id: Scalars['ID'];
+  version?: InputMaybe<Scalars['String']>;
+};
+
+export type Subscription = {
+  __typename?: 'Subscription';
+  directus_activity_mutated?: Maybe<Directus_Activity_Mutated>;
+  directus_dashboards_mutated?: Maybe<Directus_Dashboards_Mutated>;
+  directus_files_mutated?: Maybe<Directus_Files_Mutated>;
+  directus_flows_mutated?: Maybe<Directus_Flows_Mutated>;
+  directus_folders_mutated?: Maybe<Directus_Folders_Mutated>;
+  directus_notifications_mutated?: Maybe<Directus_Notifications_Mutated>;
+  directus_operations_mutated?: Maybe<Directus_Operations_Mutated>;
+  directus_panels_mutated?: Maybe<Directus_Panels_Mutated>;
+  directus_permissions_mutated?: Maybe<Directus_Permissions_Mutated>;
+  directus_presets_mutated?: Maybe<Directus_Presets_Mutated>;
+  directus_revisions_mutated?: Maybe<Directus_Revisions_Mutated>;
+  directus_roles_mutated?: Maybe<Directus_Roles_Mutated>;
+  directus_settings_mutated?: Maybe<Directus_Settings_Mutated>;
+  directus_shares_mutated?: Maybe<Directus_Shares_Mutated>;
+  directus_translations_mutated?: Maybe<Directus_Translations_Mutated>;
+  directus_users_mutated?: Maybe<Directus_Users_Mutated>;
+  directus_versions_mutated?: Maybe<Directus_Versions_Mutated>;
+  directus_webhooks_mutated?: Maybe<Directus_Webhooks_Mutated>;
+  recipes_mutated?: Maybe<Recipes_Mutated>;
+  recipes_tags_mutated?: Maybe<Recipes_Tags_Mutated>;
+  tags_mutated?: Maybe<Tags_Mutated>;
+  users_favorite_recipes_mutated?: Maybe<Users_Favorite_Recipes_Mutated>;
+  users_viewed_recipes_mutated?: Maybe<Users_Viewed_Recipes_Mutated>;
+};
+
+
+export type SubscriptionDirectus_Activity_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionDirectus_Dashboards_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionDirectus_Files_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionDirectus_Flows_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionDirectus_Folders_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionDirectus_Notifications_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionDirectus_Operations_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionDirectus_Panels_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionDirectus_Permissions_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionDirectus_Presets_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionDirectus_Revisions_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionDirectus_Roles_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionDirectus_Settings_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionDirectus_Shares_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionDirectus_Translations_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionDirectus_Users_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionDirectus_Versions_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionDirectus_Webhooks_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionRecipes_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionRecipes_Tags_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionTags_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionUsers_Favorite_Recipes_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
+};
+
+
+export type SubscriptionUsers_Viewed_Recipes_MutatedArgs = {
+  event?: InputMaybe<EventEnum>;
 };
 
 export enum Auth_Mode {
   Cookie = 'cookie',
-  Json = 'json'
+  Json = 'json',
+  Session = 'session'
 }
 
 export type Auth_Tokens = {
   __typename?: 'auth_tokens';
   access_token?: Maybe<Scalars['String']>;
-  expires?: Maybe<Scalars['Int']>;
+  expires?: Maybe<Scalars['GraphQLBigInt']>;
   refresh_token?: Maybe<Scalars['String']>;
+};
+
+export type Big_Int_Filter_Operators = {
+  _between?: InputMaybe<Array<InputMaybe<Scalars['GraphQLBigInt']>>>;
+  _eq?: InputMaybe<Scalars['GraphQLBigInt']>;
+  _gt?: InputMaybe<Scalars['GraphQLBigInt']>;
+  _gte?: InputMaybe<Scalars['GraphQLBigInt']>;
+  _in?: InputMaybe<Array<InputMaybe<Scalars['GraphQLBigInt']>>>;
+  _lt?: InputMaybe<Scalars['GraphQLBigInt']>;
+  _lte?: InputMaybe<Scalars['GraphQLBigInt']>;
+  _nbetween?: InputMaybe<Array<InputMaybe<Scalars['GraphQLBigInt']>>>;
+  _neq?: InputMaybe<Scalars['GraphQLBigInt']>;
+  _nin?: InputMaybe<Array<InputMaybe<Scalars['GraphQLBigInt']>>>;
+  _nnull?: InputMaybe<Scalars['Boolean']>;
+  _null?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type Boolean_Filter_Operators = {
@@ -1938,6 +2423,21 @@ export type Count_Functions = {
   count?: Maybe<Scalars['Int']>;
 };
 
+export type Create_Directus_Collections_Fields_Input = {
+  collection?: InputMaybe<Scalars['String']>;
+  field?: InputMaybe<Scalars['String']>;
+  meta?: InputMaybe<Directus_Fields_Meta_Input>;
+  schema?: InputMaybe<Directus_Fields_Schema_Input>;
+  type?: InputMaybe<Scalars['String']>;
+};
+
+export type Create_Directus_Collections_Input = {
+  collection?: InputMaybe<Scalars['String']>;
+  fields?: InputMaybe<Array<Create_Directus_Collections_Fields_Input>>;
+  meta?: InputMaybe<Directus_Collections_Meta_Input>;
+  schema?: InputMaybe<Directus_Collections_Schema_Input>;
+};
+
 export type Create_Directus_Dashboards_Input = {
   color?: InputMaybe<Scalars['String']>;
   date_created?: InputMaybe<Scalars['Date']>;
@@ -1949,6 +2449,14 @@ export type Create_Directus_Dashboards_Input = {
   user_created?: InputMaybe<Create_Directus_Users_Input>;
 };
 
+export type Create_Directus_Fields_Input = {
+  collection?: InputMaybe<Scalars['String']>;
+  field?: InputMaybe<Scalars['String']>;
+  meta?: InputMaybe<Directus_Fields_Meta_Input>;
+  schema?: InputMaybe<Directus_Fields_Schema_Input>;
+  type?: InputMaybe<Scalars['String']>;
+};
+
 export type Create_Directus_Files_Input = {
   charset?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
@@ -1957,6 +2465,8 @@ export type Create_Directus_Files_Input = {
   filename_disk?: InputMaybe<Scalars['String']>;
   filename_download: Scalars['String'];
   filesize?: InputMaybe<Scalars['GraphQLBigInt']>;
+  focal_point_x?: InputMaybe<Scalars['Int']>;
+  focal_point_y?: InputMaybe<Scalars['Int']>;
   folder?: InputMaybe<Create_Directus_Folders_Input>;
   height?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['ID']>;
@@ -2067,6 +2577,14 @@ export type Create_Directus_Presets_Input = {
   user?: InputMaybe<Create_Directus_Users_Input>;
 };
 
+export type Create_Directus_Relations_Input = {
+  collection?: InputMaybe<Scalars['String']>;
+  field?: InputMaybe<Scalars['String']>;
+  meta?: InputMaybe<Directus_Relations_Meta_Input>;
+  related_collection?: InputMaybe<Scalars['String']>;
+  schema?: InputMaybe<Directus_Relations_Schema_Input>;
+};
+
 export type Create_Directus_Roles_Input = {
   admin_access: Scalars['Boolean'];
   app_access?: InputMaybe<Scalars['Boolean']>;
@@ -2080,25 +2598,33 @@ export type Create_Directus_Roles_Input = {
 };
 
 export type Create_Directus_Shares_Input = {
-  collection?: InputMaybe<Scalars['String']>;
+  collection: Scalars['String'];
   date_created?: InputMaybe<Scalars['Date']>;
   /** $t:shared_leave_blank_for_unlimited */
   date_end?: InputMaybe<Scalars['Date']>;
   /** $t:shared_leave_blank_for_unlimited */
   date_start?: InputMaybe<Scalars['Date']>;
   id?: InputMaybe<Scalars['ID']>;
-  item?: InputMaybe<Scalars['String']>;
+  item: Scalars['String'];
   /** $t:shared_leave_blank_for_unlimited */
   max_uses?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
-  /** $t:shared_leave_blank_for_unlimited */
+  /** $t:shared_leave_blank_for_passwordless_access */
   password?: InputMaybe<Scalars['Hash']>;
   role?: InputMaybe<Create_Directus_Roles_Input>;
   times_used?: InputMaybe<Scalars['Int']>;
   user_created?: InputMaybe<Create_Directus_Users_Input>;
 };
 
+export type Create_Directus_Translations_Input = {
+  id?: InputMaybe<Scalars['ID']>;
+  key: Scalars['String'];
+  language: Scalars['String'];
+  value: Scalars['String'];
+};
+
 export type Create_Directus_Users_Input = {
+  appearance?: InputMaybe<Scalars['String']>;
   auth_data?: InputMaybe<Scalars['JSON']>;
   avatar?: InputMaybe<Create_Directus_Files_Input>;
   description?: InputMaybe<Scalars['String']>;
@@ -2118,10 +2644,26 @@ export type Create_Directus_Users_Input = {
   status?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['JSON']>;
   tfa_secret?: InputMaybe<Scalars['Hash']>;
-  theme?: InputMaybe<Scalars['String']>;
+  theme_dark?: InputMaybe<Scalars['String']>;
+  theme_dark_overrides?: InputMaybe<Scalars['JSON']>;
+  theme_light?: InputMaybe<Scalars['String']>;
+  theme_light_overrides?: InputMaybe<Scalars['JSON']>;
   title?: InputMaybe<Scalars['String']>;
   token?: InputMaybe<Scalars['Hash']>;
   username?: InputMaybe<Scalars['String']>;
+};
+
+export type Create_Directus_Versions_Input = {
+  collection: Scalars['String'];
+  date_created?: InputMaybe<Scalars['Date']>;
+  date_updated?: InputMaybe<Scalars['Date']>;
+  hash?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  item: Scalars['String'];
+  key: Scalars['String'];
+  name?: InputMaybe<Scalars['String']>;
+  user_created?: InputMaybe<Create_Directus_Users_Input>;
+  user_updated?: InputMaybe<Create_Directus_Users_Input>;
 };
 
 export type Create_Directus_Webhooks_Input = {
@@ -2218,6 +2760,17 @@ export type Datetime_Functions = {
   year?: Maybe<Scalars['Int']>;
 };
 
+export type Delete_Collection = {
+  __typename?: 'delete_collection';
+  collection?: Maybe<Scalars['String']>;
+};
+
+export type Delete_Field = {
+  __typename?: 'delete_field';
+  collection?: Maybe<Scalars['String']>;
+  field?: Maybe<Scalars['String']>;
+};
+
 export type Delete_Many = {
   __typename?: 'delete_many';
   ids: Array<Maybe<Scalars['ID']>>;
@@ -2226,6 +2779,12 @@ export type Delete_Many = {
 export type Delete_One = {
   __typename?: 'delete_one';
   id: Scalars['ID'];
+};
+
+export type Delete_Relation = {
+  __typename?: 'delete_relation';
+  collection?: Maybe<Scalars['String']>;
+  field?: Maybe<Scalars['String']>;
 };
 
 export type Directus_Activity = {
@@ -2317,6 +2876,13 @@ export type Directus_Activity_Filter = {
   user_agent?: InputMaybe<String_Filter_Operators>;
 };
 
+export type Directus_Activity_Mutated = {
+  __typename?: 'directus_activity_mutated';
+  data?: Maybe<Directus_Activity>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
+};
+
 export type Directus_Collections = {
   __typename?: 'directus_collections';
   collection?: Maybe<Scalars['String']>;
@@ -2339,17 +2905,47 @@ export type Directus_Collections_Meta = {
   icon?: Maybe<Scalars['String']>;
   item_duplication_fields?: Maybe<Scalars['JSON']>;
   note?: Maybe<Scalars['String']>;
+  preview_url?: Maybe<Scalars['String']>;
   singleton: Scalars['Boolean'];
   sort?: Maybe<Scalars['Int']>;
   sort_field?: Maybe<Scalars['String']>;
   translations?: Maybe<Scalars['JSON']>;
   unarchive_value?: Maybe<Scalars['String']>;
+  versioning: Scalars['Boolean'];
+};
+
+export type Directus_Collections_Meta_Input = {
+  accountability?: InputMaybe<Scalars['String']>;
+  archive_app_filter: Scalars['Boolean'];
+  archive_field?: InputMaybe<Scalars['String']>;
+  archive_value?: InputMaybe<Scalars['String']>;
+  collapse: Scalars['String'];
+  collection: Scalars['String'];
+  color?: InputMaybe<Scalars['String']>;
+  display_template?: InputMaybe<Scalars['String']>;
+  group?: InputMaybe<Scalars['String']>;
+  hidden: Scalars['Boolean'];
+  icon?: InputMaybe<Scalars['String']>;
+  item_duplication_fields?: InputMaybe<Scalars['JSON']>;
+  note?: InputMaybe<Scalars['String']>;
+  preview_url?: InputMaybe<Scalars['String']>;
+  singleton: Scalars['Boolean'];
+  sort?: InputMaybe<Scalars['Int']>;
+  sort_field?: InputMaybe<Scalars['String']>;
+  translations?: InputMaybe<Scalars['JSON']>;
+  unarchive_value?: InputMaybe<Scalars['String']>;
+  versioning: Scalars['Boolean'];
 };
 
 export type Directus_Collections_Schema = {
   __typename?: 'directus_collections_schema';
   comment?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+};
+
+export type Directus_Collections_Schema_Input = {
+  comment?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
 };
 
 export type Directus_Dashboards = {
@@ -2421,6 +3017,32 @@ export type Directus_Dashboards_Filter = {
   user_created?: InputMaybe<Directus_Users_Filter>;
 };
 
+export type Directus_Dashboards_Mutated = {
+  __typename?: 'directus_dashboards_mutated';
+  data?: Maybe<Directus_Dashboards>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
+};
+
+export type Directus_Extensions = {
+  __typename?: 'directus_extensions';
+  bundle?: Maybe<Scalars['String']>;
+  meta?: Maybe<Directus_Extensions_Meta>;
+  name: Scalars['String'];
+  schema?: Maybe<Directus_Extensions_Schema>;
+};
+
+export type Directus_Extensions_Meta = {
+  __typename?: 'directus_extensions_meta';
+  enabled?: Maybe<Scalars['Boolean']>;
+};
+
+export type Directus_Extensions_Schema = {
+  __typename?: 'directus_extensions_schema';
+  local?: Maybe<Scalars['Boolean']>;
+  type?: Maybe<Scalars['String']>;
+};
+
 export type Directus_Fields = {
   __typename?: 'directus_fields';
   collection?: Maybe<Scalars['String']>;
@@ -2453,6 +3075,28 @@ export type Directus_Fields_Meta = {
   width?: Maybe<Scalars['String']>;
 };
 
+export type Directus_Fields_Meta_Input = {
+  collection: Scalars['String'];
+  conditions?: InputMaybe<Scalars['JSON']>;
+  display?: InputMaybe<Scalars['String']>;
+  display_options?: InputMaybe<Scalars['JSON']>;
+  field: Scalars['String'];
+  group?: InputMaybe<Scalars['String']>;
+  hidden: Scalars['Boolean'];
+  id: Scalars['Int'];
+  interface?: InputMaybe<Scalars['String']>;
+  note?: InputMaybe<Scalars['String']>;
+  options?: InputMaybe<Scalars['JSON']>;
+  readonly: Scalars['Boolean'];
+  required?: InputMaybe<Scalars['Boolean']>;
+  sort?: InputMaybe<Scalars['Int']>;
+  special?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  translations?: InputMaybe<Scalars['JSON']>;
+  validation?: InputMaybe<Scalars['JSON']>;
+  validation_message?: InputMaybe<Scalars['String']>;
+  width?: InputMaybe<Scalars['String']>;
+};
+
 export type Directus_Fields_Schema = {
   __typename?: 'directus_fields_schema';
   comment?: Maybe<Scalars['String']>;
@@ -2471,6 +3115,23 @@ export type Directus_Fields_Schema = {
   table?: Maybe<Scalars['String']>;
 };
 
+export type Directus_Fields_Schema_Input = {
+  comment?: InputMaybe<Scalars['String']>;
+  data_type?: InputMaybe<Scalars['String']>;
+  default_value?: InputMaybe<Scalars['String']>;
+  foreign_key_column?: InputMaybe<Scalars['String']>;
+  foreign_key_table?: InputMaybe<Scalars['String']>;
+  has_auto_increment?: InputMaybe<Scalars['Boolean']>;
+  is_nullable?: InputMaybe<Scalars['Boolean']>;
+  is_primary_key?: InputMaybe<Scalars['Boolean']>;
+  is_unique?: InputMaybe<Scalars['Boolean']>;
+  max_length?: InputMaybe<Scalars['Int']>;
+  name?: InputMaybe<Scalars['String']>;
+  numeric_precision?: InputMaybe<Scalars['Int']>;
+  numeric_scale?: InputMaybe<Scalars['Int']>;
+  table?: InputMaybe<Scalars['String']>;
+};
+
 export type Directus_Files = {
   __typename?: 'directus_files';
   charset?: Maybe<Scalars['String']>;
@@ -2480,6 +3141,8 @@ export type Directus_Files = {
   filename_disk?: Maybe<Scalars['String']>;
   filename_download: Scalars['String'];
   filesize?: Maybe<Scalars['GraphQLBigInt']>;
+  focal_point_x?: Maybe<Scalars['Int']>;
+  focal_point_y?: Maybe<Scalars['Int']>;
   folder?: Maybe<Directus_Folders>;
   height?: Maybe<Scalars['Int']>;
   id: Scalars['ID'];
@@ -2553,6 +3216,8 @@ export type Directus_Files_Aggregated_Count = {
   filename_disk?: Maybe<Scalars['Int']>;
   filename_download?: Maybe<Scalars['Int']>;
   filesize?: Maybe<Scalars['Int']>;
+  focal_point_x?: Maybe<Scalars['Int']>;
+  focal_point_y?: Maybe<Scalars['Int']>;
   folder?: Maybe<Scalars['Int']>;
   height?: Maybe<Scalars['Int']>;
   id?: Maybe<Scalars['Int']>;
@@ -2573,6 +3238,8 @@ export type Directus_Files_Aggregated_Fields = {
   __typename?: 'directus_files_aggregated_fields';
   duration?: Maybe<Scalars['Float']>;
   filesize?: Maybe<Scalars['Float']>;
+  focal_point_x?: Maybe<Scalars['Float']>;
+  focal_point_y?: Maybe<Scalars['Float']>;
   height?: Maybe<Scalars['Float']>;
   width?: Maybe<Scalars['Float']>;
 };
@@ -2586,7 +3253,9 @@ export type Directus_Files_Filter = {
   embed?: InputMaybe<String_Filter_Operators>;
   filename_disk?: InputMaybe<String_Filter_Operators>;
   filename_download?: InputMaybe<String_Filter_Operators>;
-  filesize?: InputMaybe<Number_Filter_Operators>;
+  filesize?: InputMaybe<Big_Int_Filter_Operators>;
+  focal_point_x?: InputMaybe<Number_Filter_Operators>;
+  focal_point_y?: InputMaybe<Number_Filter_Operators>;
   folder?: InputMaybe<Directus_Folders_Filter>;
   height?: InputMaybe<Number_Filter_Operators>;
   id?: InputMaybe<String_Filter_Operators>;
@@ -2605,6 +3274,13 @@ export type Directus_Files_Filter = {
   uploaded_on?: InputMaybe<Date_Filter_Operators>;
   uploaded_on_func?: InputMaybe<Datetime_Function_Filter_Operators>;
   width?: InputMaybe<Number_Filter_Operators>;
+};
+
+export type Directus_Files_Mutated = {
+  __typename?: 'directus_files_mutated';
+  data?: Maybe<Directus_Files>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
 };
 
 export type Directus_Flows = {
@@ -2703,6 +3379,13 @@ export type Directus_Flows_Filter = {
   user_created?: InputMaybe<Directus_Users_Filter>;
 };
 
+export type Directus_Flows_Mutated = {
+  __typename?: 'directus_flows_mutated';
+  data?: Maybe<Directus_Flows>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
+};
+
 export type Directus_Folders = {
   __typename?: 'directus_folders';
   id: Scalars['ID'];
@@ -2741,6 +3424,13 @@ export type Directus_Folders_Filter = {
   id?: InputMaybe<String_Filter_Operators>;
   name?: InputMaybe<String_Filter_Operators>;
   parent?: InputMaybe<Directus_Folders_Filter>;
+};
+
+export type Directus_Folders_Mutated = {
+  __typename?: 'directus_folders_mutated';
+  data?: Maybe<Directus_Folders>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
 };
 
 export type Directus_Notifications = {
@@ -2822,6 +3512,13 @@ export type Directus_Notifications_Filter = {
   subject?: InputMaybe<String_Filter_Operators>;
   timestamp?: InputMaybe<Date_Filter_Operators>;
   timestamp_func?: InputMaybe<Datetime_Function_Filter_Operators>;
+};
+
+export type Directus_Notifications_Mutated = {
+  __typename?: 'directus_notifications_mutated';
+  data?: Maybe<Directus_Notifications>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
 };
 
 export type Directus_Operations = {
@@ -2937,6 +3634,13 @@ export type Directus_Operations_Filter = {
   user_created?: InputMaybe<Directus_Users_Filter>;
 };
 
+export type Directus_Operations_Mutated = {
+  __typename?: 'directus_operations_mutated';
+  data?: Maybe<Directus_Operations>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
+};
+
 export type Directus_Panels = {
   __typename?: 'directus_panels';
   color?: Maybe<Scalars['String']>;
@@ -3041,12 +3745,19 @@ export type Directus_Panels_Filter = {
   width?: InputMaybe<Number_Filter_Operators>;
 };
 
+export type Directus_Panels_Mutated = {
+  __typename?: 'directus_panels_mutated';
+  data?: Maybe<Directus_Panels>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
+};
+
 export type Directus_Permissions = {
   __typename?: 'directus_permissions';
   action: Scalars['String'];
   collection: Scalars['String'];
   fields?: Maybe<Array<Maybe<Scalars['String']>>>;
-  id: Scalars['ID'];
+  id?: Maybe<Scalars['ID']>;
   permissions?: Maybe<Scalars['JSON']>;
   permissions_func?: Maybe<Count_Functions>;
   presets?: Maybe<Scalars['JSON']>;
@@ -3111,6 +3822,13 @@ export type Directus_Permissions_Filter = {
   role?: InputMaybe<Directus_Roles_Filter>;
   validation?: InputMaybe<String_Filter_Operators>;
   validation_func?: InputMaybe<Count_Function_Filter_Operators>;
+};
+
+export type Directus_Permissions_Mutated = {
+  __typename?: 'directus_permissions_mutated';
+  data?: Maybe<Directus_Permissions>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
 };
 
 export type Directus_Presets = {
@@ -3211,6 +3929,13 @@ export type Directus_Presets_Filter = {
   user?: InputMaybe<Directus_Users_Filter>;
 };
 
+export type Directus_Presets_Mutated = {
+  __typename?: 'directus_presets_mutated';
+  data?: Maybe<Directus_Presets>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
+};
+
 export type Directus_Relations = {
   __typename?: 'directus_relations';
   collection?: Maybe<Scalars['String']>;
@@ -3234,10 +3959,33 @@ export type Directus_Relations_Meta = {
   sort_field?: Maybe<Scalars['String']>;
 };
 
+export type Directus_Relations_Meta_Input = {
+  id?: InputMaybe<Scalars['Int']>;
+  junction_field?: InputMaybe<Scalars['String']>;
+  many_collection?: InputMaybe<Scalars['String']>;
+  many_field?: InputMaybe<Scalars['String']>;
+  one_allowed_collections?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  one_collection?: InputMaybe<Scalars['String']>;
+  one_collection_field?: InputMaybe<Scalars['String']>;
+  one_deselect_action?: InputMaybe<Scalars['String']>;
+  one_field?: InputMaybe<Scalars['String']>;
+  sort_field?: InputMaybe<Scalars['String']>;
+};
+
 export type Directus_Relations_Schema = {
   __typename?: 'directus_relations_schema';
   column: Scalars['String'];
   constraint_name?: Maybe<Scalars['String']>;
+  foreign_key_column: Scalars['String'];
+  foreign_key_table: Scalars['String'];
+  on_delete: Scalars['String'];
+  on_update: Scalars['String'];
+  table: Scalars['String'];
+};
+
+export type Directus_Relations_Schema_Input = {
+  column: Scalars['String'];
+  constraint_name?: InputMaybe<Scalars['String']>;
   foreign_key_column: Scalars['String'];
   foreign_key_table: Scalars['String'];
   on_delete: Scalars['String'];
@@ -3256,6 +4004,7 @@ export type Directus_Revisions = {
   id: Scalars['ID'];
   item: Scalars['String'];
   parent?: Maybe<Directus_Revisions>;
+  version?: Maybe<Directus_Versions>;
 };
 
 
@@ -3271,6 +4020,16 @@ export type Directus_RevisionsActivityArgs = {
 
 export type Directus_RevisionsParentArgs = {
   filter?: InputMaybe<Directus_Revisions_Filter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type Directus_RevisionsVersionArgs = {
+  filter?: InputMaybe<Directus_Versions_Filter>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
   page?: InputMaybe<Scalars['Int']>;
@@ -3301,6 +4060,7 @@ export type Directus_Revisions_Aggregated_Count = {
   id?: Maybe<Scalars['Int']>;
   item?: Maybe<Scalars['Int']>;
   parent?: Maybe<Scalars['Int']>;
+  version?: Maybe<Scalars['Int']>;
 };
 
 export type Directus_Revisions_Aggregated_Fields = {
@@ -3322,6 +4082,14 @@ export type Directus_Revisions_Filter = {
   id?: InputMaybe<Number_Filter_Operators>;
   item?: InputMaybe<String_Filter_Operators>;
   parent?: InputMaybe<Directus_Revisions_Filter>;
+  version?: InputMaybe<Directus_Versions_Filter>;
+};
+
+export type Directus_Revisions_Mutated = {
+  __typename?: 'directus_revisions_mutated';
+  data?: Maybe<Directus_Revisions>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
 };
 
 export type Directus_Roles = {
@@ -3384,6 +4152,13 @@ export type Directus_Roles_Filter = {
   users_func?: InputMaybe<Count_Function_Filter_Operators>;
 };
 
+export type Directus_Roles_Mutated = {
+  __typename?: 'directus_roles_mutated';
+  data?: Maybe<Directus_Roles>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
+};
+
 export type Directus_Settings = {
   __typename?: 'directus_settings';
   auth_login_attempts?: Maybe<Scalars['Int']>;
@@ -3393,7 +4168,10 @@ export type Directus_Settings = {
   custom_aspect_ratios?: Maybe<Scalars['JSON']>;
   custom_aspect_ratios_func?: Maybe<Count_Functions>;
   custom_css?: Maybe<Scalars['String']>;
+  default_appearance?: Maybe<Scalars['String']>;
   default_language?: Maybe<Scalars['String']>;
+  default_theme_dark?: Maybe<Scalars['String']>;
+  default_theme_light?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   mapbox_key?: Maybe<Scalars['String']>;
   module_bar?: Maybe<Scalars['JSON']>;
@@ -3405,14 +4183,17 @@ export type Directus_Settings = {
   project_name?: Maybe<Scalars['String']>;
   project_url?: Maybe<Scalars['String']>;
   public_background?: Maybe<Directus_Files>;
+  public_favicon?: Maybe<Directus_Files>;
   public_foreground?: Maybe<Directus_Files>;
   public_note?: Maybe<Scalars['String']>;
   storage_asset_presets?: Maybe<Scalars['JSON']>;
   storage_asset_presets_func?: Maybe<Count_Functions>;
   storage_asset_transform?: Maybe<Scalars['String']>;
   storage_default_folder?: Maybe<Directus_Folders>;
-  translation_strings?: Maybe<Scalars['JSON']>;
-  translation_strings_func?: Maybe<Count_Functions>;
+  theme_dark_overrides?: Maybe<Scalars['JSON']>;
+  theme_dark_overrides_func?: Maybe<Count_Functions>;
+  theme_light_overrides?: Maybe<Scalars['JSON']>;
+  theme_light_overrides_func?: Maybe<Count_Functions>;
 };
 
 
@@ -3427,6 +4208,16 @@ export type Directus_SettingsProject_LogoArgs = {
 
 
 export type Directus_SettingsPublic_BackgroundArgs = {
+  filter?: InputMaybe<Directus_Files_Filter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type Directus_SettingsPublic_FaviconArgs = {
   filter?: InputMaybe<Directus_Files_Filter>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
@@ -3455,9 +4246,16 @@ export type Directus_SettingsStorage_Default_FolderArgs = {
   sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
+export type Directus_Settings_Mutated = {
+  __typename?: 'directus_settings_mutated';
+  data?: Maybe<Directus_Settings>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
+};
+
 export type Directus_Shares = {
   __typename?: 'directus_shares';
-  collection?: Maybe<Scalars['String']>;
+  collection: Scalars['String'];
   date_created?: Maybe<Scalars['Date']>;
   date_created_func?: Maybe<Datetime_Functions>;
   /** $t:shared_leave_blank_for_unlimited */
@@ -3467,11 +4265,11 @@ export type Directus_Shares = {
   date_start?: Maybe<Scalars['Date']>;
   date_start_func?: Maybe<Datetime_Functions>;
   id: Scalars['ID'];
-  item?: Maybe<Scalars['String']>;
+  item: Scalars['String'];
   /** $t:shared_leave_blank_for_unlimited */
   max_uses?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['String']>;
-  /** $t:shared_leave_blank_for_unlimited */
+  /** $t:shared_leave_blank_for_passwordless_access */
   password?: Maybe<Scalars['Hash']>;
   role?: Maybe<Directus_Roles>;
   times_used?: Maybe<Scalars['Int']>;
@@ -3525,7 +4323,7 @@ export type Directus_Shares_Aggregated_Count = {
   /** $t:shared_leave_blank_for_unlimited */
   max_uses?: Maybe<Scalars['Int']>;
   name?: Maybe<Scalars['Int']>;
-  /** $t:shared_leave_blank_for_unlimited */
+  /** $t:shared_leave_blank_for_passwordless_access */
   password?: Maybe<Scalars['Int']>;
   role?: Maybe<Scalars['Int']>;
   times_used?: Maybe<Scalars['Int']>;
@@ -3559,8 +4357,56 @@ export type Directus_Shares_Filter = {
   user_created?: InputMaybe<Directus_Users_Filter>;
 };
 
+export type Directus_Shares_Mutated = {
+  __typename?: 'directus_shares_mutated';
+  data?: Maybe<Directus_Shares>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
+};
+
+export type Directus_Translations = {
+  __typename?: 'directus_translations';
+  id: Scalars['ID'];
+  key: Scalars['String'];
+  language: Scalars['String'];
+  value: Scalars['String'];
+};
+
+export type Directus_Translations_Aggregated = {
+  __typename?: 'directus_translations_aggregated';
+  count?: Maybe<Directus_Translations_Aggregated_Count>;
+  countAll?: Maybe<Scalars['Int']>;
+  countDistinct?: Maybe<Directus_Translations_Aggregated_Count>;
+  group?: Maybe<Scalars['JSON']>;
+};
+
+export type Directus_Translations_Aggregated_Count = {
+  __typename?: 'directus_translations_aggregated_count';
+  id?: Maybe<Scalars['Int']>;
+  key?: Maybe<Scalars['Int']>;
+  language?: Maybe<Scalars['Int']>;
+  value?: Maybe<Scalars['Int']>;
+};
+
+export type Directus_Translations_Filter = {
+  _and?: InputMaybe<Array<InputMaybe<Directus_Translations_Filter>>>;
+  _or?: InputMaybe<Array<InputMaybe<Directus_Translations_Filter>>>;
+  id?: InputMaybe<String_Filter_Operators>;
+  key?: InputMaybe<String_Filter_Operators>;
+  language?: InputMaybe<String_Filter_Operators>;
+  value?: InputMaybe<String_Filter_Operators>;
+};
+
+export type Directus_Translations_Mutated = {
+  __typename?: 'directus_translations_mutated';
+  data?: Maybe<Directus_Translations>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
+};
+
 export type Directus_Users = {
   __typename?: 'directus_users';
+  appearance?: Maybe<Scalars['String']>;
   auth_data?: Maybe<Scalars['JSON']>;
   auth_data_func?: Maybe<Count_Functions>;
   avatar?: Maybe<Directus_Files>;
@@ -3583,7 +4429,12 @@ export type Directus_Users = {
   tags?: Maybe<Scalars['JSON']>;
   tags_func?: Maybe<Count_Functions>;
   tfa_secret?: Maybe<Scalars['Hash']>;
-  theme?: Maybe<Scalars['String']>;
+  theme_dark?: Maybe<Scalars['String']>;
+  theme_dark_overrides?: Maybe<Scalars['JSON']>;
+  theme_dark_overrides_func?: Maybe<Count_Functions>;
+  theme_light?: Maybe<Scalars['String']>;
+  theme_light_overrides?: Maybe<Scalars['JSON']>;
+  theme_light_overrides_func?: Maybe<Count_Functions>;
   title?: Maybe<Scalars['String']>;
   token?: Maybe<Scalars['Hash']>;
   username?: Maybe<Scalars['String']>;
@@ -3619,6 +4470,7 @@ export type Directus_Users_Aggregated = {
 
 export type Directus_Users_Aggregated_Count = {
   __typename?: 'directus_users_aggregated_count';
+  appearance?: Maybe<Scalars['Int']>;
   auth_data?: Maybe<Scalars['Int']>;
   avatar?: Maybe<Scalars['Int']>;
   description?: Maybe<Scalars['Int']>;
@@ -3638,7 +4490,10 @@ export type Directus_Users_Aggregated_Count = {
   status?: Maybe<Scalars['Int']>;
   tags?: Maybe<Scalars['Int']>;
   tfa_secret?: Maybe<Scalars['Int']>;
-  theme?: Maybe<Scalars['Int']>;
+  theme_dark?: Maybe<Scalars['Int']>;
+  theme_dark_overrides?: Maybe<Scalars['Int']>;
+  theme_light?: Maybe<Scalars['Int']>;
+  theme_light_overrides?: Maybe<Scalars['Int']>;
   title?: Maybe<Scalars['Int']>;
   token?: Maybe<Scalars['Int']>;
   username?: Maybe<Scalars['Int']>;
@@ -3647,6 +4502,7 @@ export type Directus_Users_Aggregated_Count = {
 export type Directus_Users_Filter = {
   _and?: InputMaybe<Array<InputMaybe<Directus_Users_Filter>>>;
   _or?: InputMaybe<Array<InputMaybe<Directus_Users_Filter>>>;
+  appearance?: InputMaybe<String_Filter_Operators>;
   auth_data?: InputMaybe<String_Filter_Operators>;
   auth_data_func?: InputMaybe<Count_Function_Filter_Operators>;
   avatar?: InputMaybe<Directus_Files_Filter>;
@@ -3669,10 +4525,104 @@ export type Directus_Users_Filter = {
   tags?: InputMaybe<String_Filter_Operators>;
   tags_func?: InputMaybe<Count_Function_Filter_Operators>;
   tfa_secret?: InputMaybe<Hash_Filter_Operators>;
-  theme?: InputMaybe<String_Filter_Operators>;
+  theme_dark?: InputMaybe<String_Filter_Operators>;
+  theme_dark_overrides?: InputMaybe<String_Filter_Operators>;
+  theme_dark_overrides_func?: InputMaybe<Count_Function_Filter_Operators>;
+  theme_light?: InputMaybe<String_Filter_Operators>;
+  theme_light_overrides?: InputMaybe<String_Filter_Operators>;
+  theme_light_overrides_func?: InputMaybe<Count_Function_Filter_Operators>;
   title?: InputMaybe<String_Filter_Operators>;
   token?: InputMaybe<Hash_Filter_Operators>;
   username?: InputMaybe<String_Filter_Operators>;
+};
+
+export type Directus_Users_Mutated = {
+  __typename?: 'directus_users_mutated';
+  data?: Maybe<Directus_Users>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
+};
+
+export type Directus_Versions = {
+  __typename?: 'directus_versions';
+  collection: Scalars['String'];
+  date_created?: Maybe<Scalars['Date']>;
+  date_created_func?: Maybe<Datetime_Functions>;
+  date_updated?: Maybe<Scalars['Date']>;
+  date_updated_func?: Maybe<Datetime_Functions>;
+  hash?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  item: Scalars['String'];
+  key: Scalars['String'];
+  name?: Maybe<Scalars['String']>;
+  user_created?: Maybe<Directus_Users>;
+  user_updated?: Maybe<Directus_Users>;
+};
+
+
+export type Directus_VersionsUser_CreatedArgs = {
+  filter?: InputMaybe<Directus_Users_Filter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+
+export type Directus_VersionsUser_UpdatedArgs = {
+  filter?: InputMaybe<Directus_Users_Filter>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  page?: InputMaybe<Scalars['Int']>;
+  search?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+};
+
+export type Directus_Versions_Aggregated = {
+  __typename?: 'directus_versions_aggregated';
+  count?: Maybe<Directus_Versions_Aggregated_Count>;
+  countAll?: Maybe<Scalars['Int']>;
+  countDistinct?: Maybe<Directus_Versions_Aggregated_Count>;
+  group?: Maybe<Scalars['JSON']>;
+};
+
+export type Directus_Versions_Aggregated_Count = {
+  __typename?: 'directus_versions_aggregated_count';
+  collection?: Maybe<Scalars['Int']>;
+  date_created?: Maybe<Scalars['Int']>;
+  date_updated?: Maybe<Scalars['Int']>;
+  hash?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']>;
+  item?: Maybe<Scalars['Int']>;
+  key?: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['Int']>;
+  user_created?: Maybe<Scalars['Int']>;
+  user_updated?: Maybe<Scalars['Int']>;
+};
+
+export type Directus_Versions_Filter = {
+  _and?: InputMaybe<Array<InputMaybe<Directus_Versions_Filter>>>;
+  _or?: InputMaybe<Array<InputMaybe<Directus_Versions_Filter>>>;
+  collection?: InputMaybe<String_Filter_Operators>;
+  date_created?: InputMaybe<Date_Filter_Operators>;
+  date_created_func?: InputMaybe<Datetime_Function_Filter_Operators>;
+  date_updated?: InputMaybe<Date_Filter_Operators>;
+  date_updated_func?: InputMaybe<Datetime_Function_Filter_Operators>;
+  hash?: InputMaybe<String_Filter_Operators>;
+  id?: InputMaybe<String_Filter_Operators>;
+  item?: InputMaybe<String_Filter_Operators>;
+  key?: InputMaybe<String_Filter_Operators>;
+  name?: InputMaybe<String_Filter_Operators>;
+  user_created?: InputMaybe<Directus_Users_Filter>;
+  user_updated?: InputMaybe<Directus_Users_Filter>;
+};
+
+export type Directus_Versions_Mutated = {
+  __typename?: 'directus_versions_mutated';
+  data?: Maybe<Directus_Versions>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
 };
 
 export type Directus_Webhooks = {
@@ -3736,12 +4686,11 @@ export type Directus_Webhooks_Filter = {
   url?: InputMaybe<String_Filter_Operators>;
 };
 
-export type Extensions = {
-  __typename?: 'extensions';
-  displays?: Maybe<Array<Maybe<Scalars['String']>>>;
-  interfaces?: Maybe<Array<Maybe<Scalars['String']>>>;
-  layouts?: Maybe<Array<Maybe<Scalars['String']>>>;
-  modules?: Maybe<Array<Maybe<Scalars['String']>>>;
+export type Directus_Webhooks_Mutated = {
+  __typename?: 'directus_webhooks_mutated';
+  data?: Maybe<Directus_Webhooks>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
 };
 
 export enum Graphql_Sdl_Scope {
@@ -3882,6 +4831,13 @@ export type Recipes_Filter = {
   title?: InputMaybe<String_Filter_Operators>;
 };
 
+export type Recipes_Mutated = {
+  __typename?: 'recipes_mutated';
+  data?: Maybe<Recipes>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
+};
+
 export type Recipes_Tags = {
   __typename?: 'recipes_tags';
   id: Scalars['ID'];
@@ -3945,15 +4901,39 @@ export type Recipes_Tags_Filter = {
   tags_id?: InputMaybe<Tags_Filter>;
 };
 
+export type Recipes_Tags_Mutated = {
+  __typename?: 'recipes_tags_mutated';
+  data?: Maybe<Recipes_Tags>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
+};
+
 export type Server_Info = {
   __typename?: 'server_info';
+  project?: Maybe<Server_Info_Project>;
+  queryLimit?: Maybe<Server_Info_Query_Limit>;
+  rateLimit?: Maybe<Scalars['Boolean']>;
+  rateLimitGlobal?: Maybe<Scalars['Boolean']>;
+  websocket?: Maybe<Scalars['Boolean']>;
+};
+
+export type Server_Info_Project = {
+  __typename?: 'server_info_project';
   custom_css?: Maybe<Scalars['String']>;
-  project_background?: Maybe<Scalars['String']>;
+  default_language?: Maybe<Scalars['String']>;
   project_color?: Maybe<Scalars['String']>;
-  project_foreground?: Maybe<Scalars['String']>;
+  project_descriptor?: Maybe<Scalars['String']>;
   project_logo?: Maybe<Scalars['String']>;
   project_name?: Maybe<Scalars['String']>;
-  project_note?: Maybe<Scalars['String']>;
+  public_background?: Maybe<Scalars['String']>;
+  public_foreground?: Maybe<Scalars['String']>;
+  public_note?: Maybe<Scalars['String']>;
+};
+
+export type Server_Info_Query_Limit = {
+  __typename?: 'server_info_query_limit';
+  default?: Maybe<Scalars['Int']>;
+  max?: Maybe<Scalars['Int']>;
 };
 
 export type String_Filter_Operators = {
@@ -3962,12 +4942,16 @@ export type String_Filter_Operators = {
   _ends_with?: InputMaybe<Scalars['String']>;
   _eq?: InputMaybe<Scalars['String']>;
   _icontains?: InputMaybe<Scalars['String']>;
+  _iends_with?: InputMaybe<Scalars['String']>;
   _in?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  _istarts_with?: InputMaybe<Scalars['String']>;
   _ncontains?: InputMaybe<Scalars['String']>;
   _nempty?: InputMaybe<Scalars['Boolean']>;
   _nends_with?: InputMaybe<Scalars['String']>;
   _neq?: InputMaybe<Scalars['String']>;
+  _niends_with?: InputMaybe<Scalars['String']>;
   _nin?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  _nistarts_with?: InputMaybe<Scalars['String']>;
   _nnull?: InputMaybe<Scalars['Boolean']>;
   _nstarts_with?: InputMaybe<Scalars['String']>;
   _null?: InputMaybe<Scalars['Boolean']>;
@@ -4030,6 +5014,17 @@ export type Tags_Filter = {
   title?: InputMaybe<String_Filter_Operators>;
 };
 
+export type Tags_Mutated = {
+  __typename?: 'tags_mutated';
+  data?: Maybe<Tags>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
+};
+
+export type Update_Directus_Collections_Input = {
+  meta?: InputMaybe<Directus_Collections_Meta_Input>;
+};
+
 export type Update_Directus_Dashboards_Input = {
   color?: InputMaybe<Scalars['String']>;
   date_created?: InputMaybe<Scalars['Date']>;
@@ -4041,6 +5036,22 @@ export type Update_Directus_Dashboards_Input = {
   user_created?: InputMaybe<Update_Directus_Users_Input>;
 };
 
+export type Update_Directus_Extensions_InputInput = {
+  meta?: InputMaybe<Update_Directus_Extensions_Input_MetaInput>;
+};
+
+export type Update_Directus_Extensions_Input_MetaInput = {
+  enabled?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type Update_Directus_Fields_Input = {
+  collection?: InputMaybe<Scalars['String']>;
+  field?: InputMaybe<Scalars['String']>;
+  meta?: InputMaybe<Directus_Fields_Meta_Input>;
+  schema?: InputMaybe<Directus_Fields_Schema_Input>;
+  type?: InputMaybe<Scalars['String']>;
+};
+
 export type Update_Directus_Files_Input = {
   charset?: InputMaybe<Scalars['String']>;
   description?: InputMaybe<Scalars['String']>;
@@ -4049,6 +5060,8 @@ export type Update_Directus_Files_Input = {
   filename_disk?: InputMaybe<Scalars['String']>;
   filename_download?: InputMaybe<Scalars['String']>;
   filesize?: InputMaybe<Scalars['GraphQLBigInt']>;
+  focal_point_x?: InputMaybe<Scalars['Int']>;
+  focal_point_y?: InputMaybe<Scalars['Int']>;
   folder?: InputMaybe<Update_Directus_Folders_Input>;
   height?: InputMaybe<Scalars['Int']>;
   id?: InputMaybe<Scalars['ID']>;
@@ -4159,6 +5172,14 @@ export type Update_Directus_Presets_Input = {
   user?: InputMaybe<Update_Directus_Users_Input>;
 };
 
+export type Update_Directus_Relations_Input = {
+  collection?: InputMaybe<Scalars['String']>;
+  field?: InputMaybe<Scalars['String']>;
+  meta?: InputMaybe<Directus_Relations_Meta_Input>;
+  related_collection?: InputMaybe<Scalars['String']>;
+  schema?: InputMaybe<Directus_Relations_Schema_Input>;
+};
+
 export type Update_Directus_Roles_Input = {
   admin_access?: InputMaybe<Scalars['Boolean']>;
   app_access?: InputMaybe<Scalars['Boolean']>;
@@ -4177,7 +5198,10 @@ export type Update_Directus_Settings_Input = {
   basemaps?: InputMaybe<Scalars['JSON']>;
   custom_aspect_ratios?: InputMaybe<Scalars['JSON']>;
   custom_css?: InputMaybe<Scalars['String']>;
+  default_appearance?: InputMaybe<Scalars['String']>;
   default_language?: InputMaybe<Scalars['String']>;
+  default_theme_dark?: InputMaybe<Scalars['String']>;
+  default_theme_light?: InputMaybe<Scalars['String']>;
   id?: InputMaybe<Scalars['ID']>;
   mapbox_key?: InputMaybe<Scalars['String']>;
   module_bar?: InputMaybe<Scalars['JSON']>;
@@ -4188,12 +5212,14 @@ export type Update_Directus_Settings_Input = {
   project_name?: InputMaybe<Scalars['String']>;
   project_url?: InputMaybe<Scalars['String']>;
   public_background?: InputMaybe<Update_Directus_Files_Input>;
+  public_favicon?: InputMaybe<Update_Directus_Files_Input>;
   public_foreground?: InputMaybe<Update_Directus_Files_Input>;
   public_note?: InputMaybe<Scalars['String']>;
   storage_asset_presets?: InputMaybe<Scalars['JSON']>;
   storage_asset_transform?: InputMaybe<Scalars['String']>;
   storage_default_folder?: InputMaybe<Update_Directus_Folders_Input>;
-  translation_strings?: InputMaybe<Scalars['JSON']>;
+  theme_dark_overrides?: InputMaybe<Scalars['JSON']>;
+  theme_light_overrides?: InputMaybe<Scalars['JSON']>;
 };
 
 export type Update_Directus_Shares_Input = {
@@ -4208,14 +5234,22 @@ export type Update_Directus_Shares_Input = {
   /** $t:shared_leave_blank_for_unlimited */
   max_uses?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
-  /** $t:shared_leave_blank_for_unlimited */
+  /** $t:shared_leave_blank_for_passwordless_access */
   password?: InputMaybe<Scalars['Hash']>;
   role?: InputMaybe<Update_Directus_Roles_Input>;
   times_used?: InputMaybe<Scalars['Int']>;
   user_created?: InputMaybe<Update_Directus_Users_Input>;
 };
 
+export type Update_Directus_Translations_Input = {
+  id?: InputMaybe<Scalars['ID']>;
+  key?: InputMaybe<Scalars['String']>;
+  language?: InputMaybe<Scalars['String']>;
+  value?: InputMaybe<Scalars['String']>;
+};
+
 export type Update_Directus_Users_Input = {
+  appearance?: InputMaybe<Scalars['String']>;
   auth_data?: InputMaybe<Scalars['JSON']>;
   avatar?: InputMaybe<Update_Directus_Files_Input>;
   description?: InputMaybe<Scalars['String']>;
@@ -4235,10 +5269,26 @@ export type Update_Directus_Users_Input = {
   status?: InputMaybe<Scalars['String']>;
   tags?: InputMaybe<Scalars['JSON']>;
   tfa_secret?: InputMaybe<Scalars['Hash']>;
-  theme?: InputMaybe<Scalars['String']>;
+  theme_dark?: InputMaybe<Scalars['String']>;
+  theme_dark_overrides?: InputMaybe<Scalars['JSON']>;
+  theme_light?: InputMaybe<Scalars['String']>;
+  theme_light_overrides?: InputMaybe<Scalars['JSON']>;
   title?: InputMaybe<Scalars['String']>;
   token?: InputMaybe<Scalars['Hash']>;
   username?: InputMaybe<Scalars['String']>;
+};
+
+export type Update_Directus_Versions_Input = {
+  collection?: InputMaybe<Scalars['String']>;
+  date_created?: InputMaybe<Scalars['Date']>;
+  date_updated?: InputMaybe<Scalars['Date']>;
+  hash?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['ID']>;
+  item?: InputMaybe<Scalars['String']>;
+  key?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  user_created?: InputMaybe<Update_Directus_Users_Input>;
+  user_updated?: InputMaybe<Update_Directus_Users_Input>;
 };
 
 export type Update_Directus_Webhooks_Input = {
@@ -4364,6 +5414,13 @@ export type Users_Favorite_Recipes_Filter = {
   user?: InputMaybe<Directus_Users_Filter>;
 };
 
+export type Users_Favorite_Recipes_Mutated = {
+  __typename?: 'users_favorite_recipes_mutated';
+  data?: Maybe<Users_Favorite_Recipes>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
+};
+
 export type Users_Me_Tfa_Generate_Data = {
   __typename?: 'users_me_tfa_generate_data';
   otpauth_url?: Maybe<Scalars['String']>;
@@ -4442,6 +5499,62 @@ export type Users_Viewed_Recipes_Filter = {
   user?: InputMaybe<Directus_Users_Filter>;
 };
 
+export type Users_Viewed_Recipes_Mutated = {
+  __typename?: 'users_viewed_recipes_mutated';
+  data?: Maybe<Users_Viewed_Recipes>;
+  event?: Maybe<EventEnum>;
+  key: Scalars['ID'];
+};
+
+export type Version_Recipes = {
+  __typename?: 'version_recipes';
+  author?: Maybe<Scalars['JSON']>;
+  date_created?: Maybe<Scalars['Date']>;
+  date_updated?: Maybe<Scalars['Date']>;
+  id?: Maybe<Scalars['ID']>;
+  image?: Maybe<Scalars['JSON']>;
+  ingredients?: Maybe<Scalars['JSON']>;
+  notes?: Maybe<Scalars['String']>;
+  quantity?: Maybe<Scalars['Int']>;
+  slug?: Maybe<Scalars['String']>;
+  steps?: Maybe<Scalars['String']>;
+  tags?: Maybe<Scalars['JSON']>;
+  time?: Maybe<Scalars['Int']>;
+  title?: Maybe<Scalars['String']>;
+};
+
+export type Version_Recipes_Tags = {
+  __typename?: 'version_recipes_tags';
+  id?: Maybe<Scalars['ID']>;
+  recipes_id?: Maybe<Scalars['JSON']>;
+  tags_id?: Maybe<Scalars['JSON']>;
+};
+
+export type Version_Tags = {
+  __typename?: 'version_tags';
+  id?: Maybe<Scalars['ID']>;
+  recipes?: Maybe<Scalars['JSON']>;
+  slug?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+};
+
+export type Version_Users_Favorite_Recipes = {
+  __typename?: 'version_users_favorite_recipes';
+  date_created?: Maybe<Scalars['Date']>;
+  id?: Maybe<Scalars['ID']>;
+  recipe?: Maybe<Scalars['JSON']>;
+  user?: Maybe<Scalars['JSON']>;
+};
+
+export type Version_Users_Viewed_Recipes = {
+  __typename?: 'version_users_viewed_recipes';
+  date_created?: Maybe<Scalars['Date']>;
+  date_updated?: Maybe<Scalars['Date']>;
+  id?: Maybe<Scalars['ID']>;
+  recipe?: Maybe<Scalars['JSON']>;
+  user?: Maybe<Scalars['JSON']>;
+};
+
 export type ExploreQueryVariables = Exact<{
   limit: Scalars['Int'];
   offset: Scalars['Int'];
@@ -4460,7 +5573,7 @@ export type RefreshMutationVariables = Exact<{
 }>;
 
 
-export type RefreshMutation = { __typename?: 'Mutation', auth_refresh?: { __typename?: 'auth_tokens', access_token?: string | null, refresh_token?: string | null, expires?: number | null } | null };
+export type RefreshMutation = { __typename?: 'Mutation', auth_refresh?: { __typename?: 'auth_tokens', access_token?: string | null, refresh_token?: string | null, expires?: any | null } | null };
 
 export type ImageFragment = { __typename?: 'directus_files', id: string, filename_disk?: string | null, storage: string } & { ' $fragmentName'?: 'ImageFragment' };
 
@@ -4480,8 +5593,8 @@ export type CurrentUserFragment = { __typename?: 'directus_users', id: string, e
   ) | null } & { ' $fragmentName'?: 'CurrentUserFragment' };
 
 export const ImageFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Image"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"directus_files"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"filename_disk"}},{"kind":"Field","name":{"kind":"Name","value":"storage"}}]}}]} as unknown as DocumentNode<ImageFragment, unknown>;
-export const RecipeCardFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RecipeCard"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"recipes"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Image"}}]}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}},...ImageFragmentDoc.definitions]} as unknown as DocumentNode<RecipeCardFragment, unknown>;
-export const RecipeFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RecipeFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"recipes"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"steps"}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"ingredients"}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"tags_id"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Image"}}]}}]}},...ImageFragmentDoc.definitions]} as unknown as DocumentNode<RecipeFragmentFragment, unknown>;
-export const CurrentUserFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CurrentUser"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"directus_users"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Image"}}]}}]}},...ImageFragmentDoc.definitions]} as unknown as DocumentNode<CurrentUserFragment, unknown>;
-export const ExploreDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"explore"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"recipes_filter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"recipes"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}},{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"RecipeCard"}}]}},{"kind":"Field","name":{"kind":"Name","value":"recipes_aggregated"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}},{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}},...RecipeCardFragmentDoc.definitions]} as unknown as DocumentNode<ExploreQuery, ExploreQueryVariables>;
+export const RecipeCardFragmentDoc = {"kind":"Document", "definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RecipeCard"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"recipes"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Image"}}]}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}}]}}]}},...ImageFragmentDoc.definitions]} as unknown as DocumentNode<RecipeCardFragment, unknown>;
+export const RecipeFragmentFragmentDoc = {"kind":"Document", "definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RecipeFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"recipes"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"author"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}}]}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"quantity"}},{"kind":"Field","name":{"kind":"Name","value":"steps"}},{"kind":"Field","name":{"kind":"Name","value":"notes"}},{"kind":"Field","name":{"kind":"Name","value":"ingredients"}},{"kind":"Field","name":{"kind":"Name","value":"tags"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"tags_id"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Image"}}]}}]}},...ImageFragmentDoc.definitions]} as unknown as DocumentNode<RecipeFragmentFragment, unknown>;
+export const CurrentUserFragmentDoc = {"kind":"Document", "definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CurrentUser"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"directus_users"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"avatar"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Image"}}]}}]}},...ImageFragmentDoc.definitions]} as unknown as DocumentNode<CurrentUserFragment, unknown>;
+export const ExploreDocument = {"kind":"Document", "definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"explore"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"offset"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"recipes_filter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"recipes"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"offset"},"value":{"kind":"Variable","name":{"kind":"Name","value":"offset"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}},{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"RecipeCard"}}]}},{"kind":"Field","name":{"kind":"Name","value":"recipes_aggregated"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}},{"kind":"Argument","name":{"kind":"Name","value":"filter"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}},...RecipeCardFragmentDoc.definitions]} as unknown as DocumentNode<ExploreQuery, ExploreQueryVariables>;
 export const RefreshDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"refresh"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"refresh_token"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"auth_refresh"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"refresh_token"},"value":{"kind":"Variable","name":{"kind":"Name","value":"refresh_token"}}},{"kind":"Argument","name":{"kind":"Name","value":"mode"},"value":{"kind":"EnumValue","value":"json"}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"access_token"}},{"kind":"Field","name":{"kind":"Name","value":"refresh_token"}},{"kind":"Field","name":{"kind":"Name","value":"expires"}}]}}]}}]} as unknown as DocumentNode<RefreshMutation, RefreshMutationVariables>;

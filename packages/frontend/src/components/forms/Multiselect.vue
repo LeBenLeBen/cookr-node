@@ -32,48 +32,75 @@ export default defineComponent({
   cursor: auto;
 }
 
-.multiselect-input {
-  @apply flex items-center w-full px-3 relative border border-alt-300 bg-white shadow-inner rounded-lg cursor-pointer;
+.multiselect-wrapper {
+  @apply flex items-center w-full px-3 py-2 relative border border-alt-300 bg-white shadow-inner rounded-lg cursor-pointer;
   min-height: 50px;
 }
 
-.is-open .multiselect-input {
-  @apply ring-2 ring-primary-400 ring-offset-2 ring-offset-alt-100;
+.multiselect-tags-search-wrapper {
+  display: inline-block;
+  position: relative;
+  flex: 1 1 auto;
+  height: 100%;
 }
 
-.is-tags .multiselect-search {
-  flex-grow: 1;
+.multiselect-tags-search-copy {
+  visibility: hidden;
+  white-space: pre-wrap;
+  display: inline-block;
+  height: 1px;
+  width: 100%;
 }
 
-.is-tags .multiselect-search input {
-  @apply mb-2 ml-2 ring-0;
-  flex-grow: 1;
-  min-width: 100%;
+.multiselect-tags-search {
+  @apply ring-0;
+
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  border: 0;
+  appearance: none;
+  outline: none;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+  box-sizing: border-box;
+  width: 100%;
+  appearance: none;
+
+  &::-webkit-search-decoration,
+  &::-webkit-search-cancel-button,
+  &::-webkit-search-results-button,
+  &::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+  }
 }
 
 .multiselect-tags {
-  @apply flex flex-wrap items-center w-full h-full justify-start mt-2 pr-8;
+  @apply flex flex-wrap items-center gap-2 w-full h-full justify-start;
 }
 
 .multiselect-tag {
-  @apply flex items-center pl-3 mr-2 mb-2 overflow-hidden text-xs sm:text-sm font-medium whitespace-nowrap bg-alt-200 rounded-full;
+  @apply flex items-center pl-3 overflow-hidden text-xs sm:text-sm font-medium whitespace-nowrap bg-alt-200 rounded-full;
 }
 
-.multiselect-tag i {
+.multiselect-tag-remove {
   @apply ml-2;
   cursor: pointer;
 }
 
-.multiselect-tag i::before {
+.multiselect-tag-remove-icon::before {
   content: '✗';
-  @apply flex items-center py-1 pr-3 pl-1 text-alt-500 not-italic;
+  @apply flex items-center py-1 pr-3 text-alt-500 not-italic;
 }
 
-.multiselect-tag i:hover::before {
+.multiselect-tag-remove-icon:hover::before {
   @apply text-alt-800;
 }
 
-.multiselect-options {
+.multiselect-dropdown {
   @apply mt-2 bg-white border border-alt-300 rounded-lg shadow-lg;
 
   position: absolute;
@@ -83,6 +110,10 @@ export default defineComponent({
 
   max-height: 160px;
   overflow: scroll;
+
+  &.is-hidden {
+    display: none;
+  }
 }
 
 .multiselect-option {
@@ -93,11 +124,6 @@ export default defineComponent({
   @apply text-alt-800 bg-alt-100;
 }
 
-.is-tags .multiselect-option.is-selected {
-  color: #999;
-  background: transparent;
-}
-
 .multiselect-no-options,
 .multiselect-no-results {
   display: flex;
@@ -105,27 +131,11 @@ export default defineComponent({
   color: #777;
 }
 
-.multiselect-enter-active {
-  transition: all 0.15s ease;
+.multiselect-clear {
+  display: none;
 }
 
-.multiselect-leave-active {
-  transition: all 0s;
-}
-
-.multiselect-enter,
-.multiselect-leave-active {
-  opacity: 0;
-}
-
-.multiselect-loading-enter-active,
-.multiselect-loading-leave-active {
-  transition: opacity 0.4s ease-in-out;
-  opacity: 1;
-}
-
-.multiselect-loading-enter,
-.multiselect-loading-leave-active {
-  opacity: 0;
+.multiselect-assistive-text {
+  @apply sr-only;
 }
 </style>
