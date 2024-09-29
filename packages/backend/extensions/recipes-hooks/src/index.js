@@ -1,4 +1,4 @@
-module.exports = ({ action }, { services }) => {
+export default ({ action }, { services }) => {
   action(
     'recipes.items.read',
     /**
